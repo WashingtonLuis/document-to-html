@@ -423,7 +423,7 @@ function clear() {
 				.replace(/(\\\; ?){2,}/gi, "\\;")
 
 				.replace(/(?<=\d)(?=(\d{3})+(?!\d))/g, "\\,")
-				.replace(/(\d),(\d)/g, "$1,\!$2")
+				.replace(/(\d),(\d)/g, "$1,\\!$2")
 				.replace(/(?<=kg|g|u|dm|mm|cm|m|ml|l)(2|3)/gi, "^{$1}")
 
 				.replace(/(\\(?:\'|\~|\^).)|\\c\{c\}/g, (match) => nLatexAcentuacao[match])
