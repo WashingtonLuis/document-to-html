@@ -1,0 +1,93 @@
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<title>Clear</title>
+		<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+		<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet" />
+		<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+		<style>
+			#result {
+				width: 100%;
+				height: 150px;
+				overflow-y: scroll;
+				border: solid 2px #000;
+				padding: 10px;
+				background-color: aliceblue;
+				box-sizing: border-box;
+			}
+
+			.menu {
+				display: flex;
+				align-items: center;
+				width: 98%;
+				height: 5%;
+				padding: 5px;
+			}
+
+			.opcao {
+				float: center;
+				padding: 5px;
+				margin: 0px 5px;
+			}
+
+			#bloco {
+				width: 40px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="menu">
+			<div class="opcao">
+				<input type="checkbox" id="latex" name="eq" value="latex"  />
+				<label for="latex">Latex</label>
+			</div>
+
+			<div class="opcao">
+				<input type="checkbox" id="nLatex" name="eq" value="nLatex" />
+				<label for="nLatex">nLatex</label>
+			</div>
+
+			<div class="opcao">
+				<input type="checkbox" id="semQuebra" name="checkbox1" value="semQuebra"  />
+				<label for="semQuebra">semQuebra</label>
+			</div>
+
+			<div class="opcao">
+				<input type="checkbox" id="semTag" name="checkbox2" value="semTag"  />
+				<label for="semTag">semTag</label>
+			</div>
+
+			<div class="opcao">
+				<input type="checkbox" id="facilidades" name="checkbox3" value="facilidades" checked/>
+				<label for="facilidades">Facilidades</label>
+			</div>
+
+			<div class="opcao">
+				<input type="checkbox" id="manual" name="checkbox4" value="manual" checked/>
+				<label for="manual">Manual</label>
+			</div>
+
+			<div class="opcao">
+				<input type="checkbox" id="IniMaiusc" name="checkbox5" value="IniMaiusc" />
+				<label for="IniMaiusc">IniMaiusc</label>
+			</div>
+		</div>
+
+		<div id="summernote"></div>
+
+		<p id="result"></p>
+
+		<button type="button" id="clear">Play</button>
+		<button type="button" id="eqTag">eqTag</button>
+		<button type="button" id="eqHtml">eqHtml</button>
+		<button type="button" id="eqGrande">eqGrande</button>
+		<button type="button" id="AjustEqSalvaEq">AjustEqSalvaEq</button>
+		<button type="button" id="ImgSvg">ImgSvg</button>
+		<button type="button" id="ImgJpgPng">ImgJpgPng</button>
+
+		<input type="number" name="bloco" id="bloco" value="1" />
+
+		<script src="script.js"></script>
+	</body>
+</html>
