@@ -478,7 +478,7 @@ function clear() {
 				.replace(/<p>(?:<br>)?(?:<b>)?(\d+)\s?[-.)](?![0-9])\s?(?:<b>)?(?:Resolução:|Resposta:|Resposta: Letra|Alternativa correta:|Resolução: Letra|Letra)?\s?([^<]*?)?(?:<\/b>)?(.*?)?(?:<\/b>)?<\/p>/gi, "<p><br><b>$1)</b> $2$3</p>")
 				.replace(/<p><b>Questão 0?(\d)<\/b>\./gi, "<p><br><b>$1)</b> ")
 				.replace(/<p>(?:<br>)?\s?(\d+)\s?[-.)](?![0-9])\s?(?:Resolução:|Resposta:|Resposta: Letra|Resolução: Letra|Letra)?\s?(.*?)?<\/p>/gi, "<p><br><b>$1)</b> $2</p>")
-				.replace(/<ol><li>(?:<p>)?(?:<b>)?Resolução:\s?(?:<\/b>)(.*?)(?:<\/p>)?<\/li>\s*<\/ol>/gi, "<p><br><b>@@)</b> $1</p>")
+				.replace(/<ol><li>(?:<p>)?(?:<b>)?Resolução:\s?(?:<\/b>)(.*?)(?:<\/p>)?<\/li>\s*<\/ol>/gi, "<p><br><b>$$)</b> $1</p>")
 				.replace(/(?<!<p>)<br><\/p>/gi, "</p>")
 				.replace(/(Comentário:)/gi, "<br><b>Resolução comentada:</b> ")
 				.replace(/<p><br><\/p>\s+(<p><br><b>Resolução comentada:<\/b><\/p>)/gi, "$1")
@@ -684,6 +684,7 @@ $(document).ready(function () {
 			let bloco = $("#bloco").val();
 
 			textareaValueEq = textareaValueEq
+				.replace(/<p>@@<\/p>/gi, "@@")
 				.replace(/(<div class="img-(?:center|left|right) mx-\d{3} text-center">)?<img src="blo\d\-\d{2,3}\.(jpg|png)"(?: \/)?>(?:<\/div)?/gi, "@@$1#$2")
 				.replace(/@@/g, (match, offset, string) => {
 					// Extrai o formato (jpg ou png) do nome da imagem original
