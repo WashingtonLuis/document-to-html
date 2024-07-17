@@ -509,7 +509,7 @@ function clear() {
 			.replace(/[ ]{2,}/gi, " ")
 			.replace(/ <(\/)?(p|div|ol|ul|li|td|tr)/gi, "<$1$2")
 			.replace(/(?<!<tr><td>|<td>)<(div|h1|h2|h5|p|table|tr|\/tr|td|th|blockquote|script|iframe|\/div|ol|ul|hr)([^>]*)>/gi, "\n<$1$2>")
-			.replace(/<((?:\/(?:div|h1|h2|h5|p|table|tr|ol|li|ul|blockquote))|(?:ol|hr)[^>]*)>(?!<\/td>)/gi, "<$1>\n")
+			.replace(/<((?:\/(?:div|h1|h2|h5|p|table|tr|ol|li|ul|blockquote))|(?:ol|ul|hr)[^>]*)>(?!<\/td>)/gi, "<$1>\n")
 			.replace(/\n{2,}/gi, "\n")
 			.replace(/<(li|script|iframe|tr|\/tr)([^>]*)>/gi, "\t<$1$2>")
 			.replace(/(<tr>|<\/td>|<\/th>)\n<(td|th)>/gi, "$1\n\t\t<$2>")
