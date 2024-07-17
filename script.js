@@ -134,6 +134,8 @@ function nLatex(str) {
 		.replace(/\\Delta\b/g, " Δ ")
 		.replace(/\\neq\b/g, " ≠ ")
 		.replace(/\\ell\b/g, "ℓ")
+		.replace(/\\alpha\b/g, "α")
+		.replace(/\\beta\b/g, "β")
 		.replace(/\\Omega\b/g, "Ω")
 		.replace(/\\cup\b/g, "∪")
 		.replace(/\\cap\b/g, "∩")
@@ -315,6 +317,8 @@ function clear() {
 				.replace(/π|\\pi\b/g, " \\pi ")
 				.replace(/μ|\\mu\b/g, " \\mu ")
 				.replace(/ℓ/g, " \\ell ")
+				.replace(/α/g, "\\alpha")
+				.replace(/β/g, "\\beta")
 				.replace(/Ω/g, " \\Omega ")
 				.replace(/∪/g, " \\cup ")
 				.replace(/∩/g, " \\cap ")
@@ -423,7 +427,7 @@ function clear() {
 				.replace(/(\\\; ?){2,}/gi, "\\;")
 
 				.replace(/(?<=\d)(?=(\d{3})+(?!\d))/g, "\\,")
-				.replace(/(\d),(\d)/g, "$1,\\\!$2")
+				.replace(/(\d),(\d)/g, "$1,\\!$2")
 				.replace(/(?<=kg|g|u|dm|mm|cm|m|ml|l)(2|3)/gi, "^{$1}")
 
 				.replace(/(\\(?:\'|\~|\^).)|\\c\{c\}/g, (match) => nLatexAcentuacao[match])
@@ -539,7 +543,8 @@ function clear() {
 			.replace(/<\/p>\n{2}<p>(?!<br>)/g, "</p>\n<p>")
 			.replace(/<p><br><\/p>\n+(?=<p><br><b>\d+\)<\/b>)/g, "")
 			.replace(/:<\/b> ?:/gi, ":</b>")
-			.replace(/<div><br>\s?<\/div>\s?<br>/gi, "");
+			.replace(/<div><br>\s?<\/div>\s?<br>/gi, "")
+			.replace(/<img width="\d+".*?v:shapes=".*?">/gi, "##");
 
 		// if (document.getElementById('semQuebra').checked) {
 		if (document.getElementById("latex").checked) {
@@ -682,14 +687,14 @@ $(document).ready(function () {
 				.replace(/(<div class="img-(?:center|left|right) mx-\d{3} text-center">)?<img src="blo\d\-\d{2,3}\.(jpg|png)"(?: \/)?>(?:<\/div)?/gi, "@@$1#$2")
 				.replace(/@@/g, (match, offset, string) => {
 					// Extrai o formato (jpg ou png) do nome da imagem original
-					
+
 					let format = string.match(/(?<=@@)(?:(?:<div class="img-(?:center|left|right) mx-\d{3} text-center">)?#?(?:jpg|png))?/gi);
 
-					console.log(format[counter-1]);
+					console.log(format[counter - 1]);
 
-					let imageName = `blo${bloco}-${counter.toString().padStart(2, "0")}.${format[counter-1] != "" ? format[counter-1].split('#')[1] : "jpg"}`;
-					let _position = `${format[counter-1] != "" ? format[counter-1].split('#')[0] : "<div class='img-center mx-400 text-center'>"}`;
-					
+					let imageName = `blo${bloco}-${counter.toString().padStart(2, "0")}.${format[counter - 1] != "" ? format[counter - 1].split("#")[1] : "jpg"}`;
+					let _position = `${format[counter - 1] != "" ? format[counter - 1].split("#")[0] : "<div class='img-center mx-400 text-center'>"}`;
+
 					counter++;
 					return `${_position}<img src='${imageName}'></div>`;
 				})
