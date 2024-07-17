@@ -137,6 +137,7 @@ function nLatex(str) {
 		.replace(/\\alpha\b/g, "α")
 		.replace(/\\beta\b/g, "β")
 		.replace(/\\Omega\b/g, "Ω")
+		.replace(/\\gamma\b/g, "γ")
 		.replace(/\\cup\b/g, "∪")
 		.replace(/\\cap\b/g, "∩")
 		// .replace(/≅|\\cong/g, " ≅ ")
@@ -320,6 +321,7 @@ function clear() {
 				.replace(/α/g, "\\alpha")
 				.replace(/β/g, "\\beta")
 				.replace(/Ω/g, " \\Omega ")
+				.replace(/γ/g, "\\gamma")
 				.replace(/∪/g, " \\cup ")
 				.replace(/∩/g, " \\cap ")
 				.replace(/(?<!\\)%/g, "\\%")
@@ -684,7 +686,7 @@ $(document).ready(function () {
 			let bloco = $("#bloco").val();
 
 			textareaValueEq = textareaValueEq
-				.replace(/<p>@@<\/p>/gi, "@@")
+				.replace(/<p(?: class="text-center")?>@@<\/p>/gi, "@@")
 				.replace(/(<div class="img-(?:center|left|right) mx-\d{3} text-center">)?<img src="blo\d\-\d{2,3}\.(jpg|png)"(?: \/)?>(?:<\/div)?/gi, "@@$1#$2")
 				.replace(/@@/g, (match, offset, string) => {
 					// Extrai o formato (jpg ou png) do nome da imagem original
