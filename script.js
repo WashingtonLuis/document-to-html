@@ -506,7 +506,7 @@ function clear() {
 				.replace(/<(p|br)>Resolução: /gi, "<$1><b>Resolução:</b> ")
 				.replace(/<p><b> ?Resolução:<\/b> ?(?:Resolução:)?/gi, "<p><b>Resolução:</b> ")
 				.replace(/<ol><li><b>(.*?)<\/b><\/li><\/ol>/gi, "<h5>$1</h5>")
-				.replace(/<p><br><b>0(\d))/gi, "<p><br><b>$1)");
+				.replace(/<p><br><b>0(\d)\)/gi, "<p><br><b>$1)");
 		}
 
 		if (document.getElementById("IniMaiusc").checked) {
