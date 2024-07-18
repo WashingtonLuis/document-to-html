@@ -153,13 +153,7 @@ function nLatex(str) {
 }
 
 function semTag(str) {
-	return str
-		.replace(/<p\s?>/gi, "")
-		.replace(/<p.*?>/gi, "")
-		.replace(/<\/p>/gi, "")
-		.replace(/<font\s?>/gi, "")
-		.replace(/<\/font>/gi, "")
-		.replace(/<br>/gi, "");
+	return str.replace(/<(?:\/)?(?:b|i|u|p|font|br)\s?.*?>/gi, " ").replace(/[ ]{2,}/gi, " ");
 }
 
 function _clear(str) {
@@ -263,10 +257,6 @@ function clear() {
 
 		// Limpar espaços, estilos e tags indesejados
 		textareaValue = _clear(textareaValue);
-
-		if (document.getElementById("semTag").checked) {
-			textareaValue = semTag(textareaValue);
-		}
 
 		if (document.getElementById("latex").checked) {
 			textareaValue = removerParenteses(textareaValue);
@@ -530,7 +520,6 @@ function clear() {
 			.replace(/<div><br>\s?<\/div>\s?<br>/gi, "")
 			.replace(/<img width="\d+".*?v:shapes=".*?">/gi, "##");
 
-		// if (document.getElementById('semQuebra').checked) {
 		if (document.getElementById("latex").checked) {
 			textareaValue = textareaValue
 				.replace(/\n+/gi, " ")
