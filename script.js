@@ -27,36 +27,18 @@ const nLatexAcentuacao = {
 
 function removerParenteses(input) {
 	const output = input.replace(/(?<![■█┴#_]|left)\(([^()<.]*)\)/gi, "#[$1]#");
-	if (output === input) {
-		// Se não houver mais alterações, retorne o resultado
-		return output;
-	} else {
-		// Se houver alterações, chame a função recursivamente com o novo resultado
-		return removerParenteses(output);
-	}
+	return output === input ? output : removerParenteses(output);
 }
 
 function voltaParenteses(input) {
 	const output = input.replace(/\#\[([^#]*)\]\#/gi, "\\left( $1 \\right)");
-	if (output === input) {
-		// Se não houver mais alterações, retorne o resultado
-		return output;
-	} else {
-		// Se houver alterações, chame a função recursivamente com o novo resultado
-		return voltaParenteses(output);
-	}
+	return output === input ? output : voltaParenteses(output);
 }
 
 function removeSpan(input) {
 	const output = input.replace(/<span(?! class="d-none)[^<]*?>(?!<span)(.*?)<\/span>/gi, "$1");
 	// const output = input.replace(/<span[^<]*?>(.*?[^<span>].*?)<\/span>/gi, "$1");
-	if (output === input) {
-		// Se não houver mais alterações, retorne o resultado
-		return output;
-	} else {
-		// Se houver alterações, chame a função recursivamente com o novo resultado
-		return removeSpan(output);
-	}
+	return output === input ? output : removeSpan(output);
 }
 
 function textNLatex(input) {
@@ -510,10 +492,6 @@ function clear() {
 				.replace(/(?<=<p><br><b>\d+\)<\/b>) Resolução:?/gi, "");
 		}
 
-		if (document.getElementById("IniMaiusc").checked) {
-			textareaValue = textareaValue.toLowerCase().replace(/\b[^ <>/]{4,}\b/g, (match) => match.charAt(0).toUpperCase() + match.slice(1));
-		}
-
 		textareaValue = textareaValue
 			.replace(/\s+/g, " ")
 			.replace(/[ ]{2,}/gi, " ")
@@ -620,6 +598,24 @@ $(document).ready(function () {
 		}
 	});
 
+	$("#iniMaiusc").click(function () {
+		try {
+			// Obter o texto do editor de texto
+			let textareaValue = $("#summernote").summernote("code");
+
+			textareaValue = _clear(textareaValue);
+			textareaValue = semTag(textareaValue);
+			textareaValue = textareaValue.toLowerCase().replace(/\b[^ <>/]{4,}\b/g, (match) => match.charAt(0).toUpperCase() + match.slice(1));
+
+			// Definir o texto formatado em outro elemento
+			$("#result").text(textareaValue);
+
+			navigator.clipboard.writeText(textareaValue);
+		} catch (error) {
+			console.error("Erro ao formatar o texto:", error);
+		}
+	});
+
 	$("#eqHtml").click(function () {
 		try {
 			let textareaValueEq = $("#summernote").summernote("code");
@@ -638,7 +634,7 @@ $(document).ready(function () {
 		}
 	});
 
-	$("#AjustEqSalvaEq").click(function () {
+	$("#ajustEqSalvaEq").click(function () {
 		try {
 			let textareaValueEq = $("#summernote").summernote("code");
 
@@ -662,7 +658,7 @@ $(document).ready(function () {
 		}
 	});
 
-	$("#ImgSvg").click(function () {
+	$("#imgSvg").click(function () {
 		try {
 			let textareaValueEq = $("#summernote").summernote("code");
 			let counter = 1;
@@ -683,7 +679,7 @@ $(document).ready(function () {
 		}
 	});
 
-	$("#ImgJpgPng").click(function () {
+	$("#imgJpgPng").click(function () {
 		try {
 			let textareaValueEq = $("#summernote").summernote("code");
 			let counter = 1;
