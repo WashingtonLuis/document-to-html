@@ -216,7 +216,7 @@ function _clear(str) {
 		.replace(/(\s*<p><br><\/p>\s*)+/gi, "<p><br></p>")
 		.replace(/(?:<b>)+(.*?)( )?(?:<\/b>)+/gi, "<b>$1</b>$2")
 
-		.replace(/<b>(\s|<br>*)<\/b>/gi, "$1")
+		.replace(/<b>(\s|<br>)*<\/b>/gi, "$1")
 		.replace(/<\/b>\s?<b>/gi, " ")
 		.replace(/<b><\/b>/gi, "")
 		.replace(/<div>(\s|<br>)*<\/div>/gi, "$1")
@@ -428,16 +428,16 @@ function clear() {
 
 		if (document.getElementById("facilidades").checked) {
 			textareaValue = textareaValue
-				.replace(/(<p>[\s\S]*?)(<img>)([\s\S]*?<\/p>)/gi, "$1$3<div class='img-center mx-400 text-center'><img src='blo2-01.jpg'><div class='legend'><b>#$</b><br>Fonte: . Disponível em: <a href='##' class='url' target='_blank'>##</a>. Acesso em: .</div></div>")
-				.replace(/(<p>[\s\S]*?)(https?:\/\/(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+))([\s\S]*?<\/p>)/gi, "$1$4<div class='youtube'><div><div><iframe src='https://www.youtube.com/embed/$3?rel=0' frameborder='0' allowfullscreen=''></iframe></div></div></div><p class='d-none d-print-block'><span><a href='https://youtu.be/$3' target='blank'>https://youtu.be/$3</a></span></p>")
+				.replace(/(<p>[\s\S]*?)(<img>)([\s\S]*?<\/p>)/gi, "$1$3<div class='img-center mx-400 text-center'><img src='blo2-01.jpg'><div class='legend'><b>#$</b><br>Fonte: . Disponível em: <a href='##' class='url' target='_blank' rel='nofollow'>##</a>. Acesso em: .</div></div>")
+				.replace(/(<p>[\s\S]*?)(https?:\/\/(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+))([\s\S]*?<\/p>)/gi, "$1$4<div class='youtube'><div><div><iframe src='https://www.youtube.com/embed/$3?rel=0' frameborder='0' allowfullscreen=''></iframe></div></div></div><p class='d-none d-print-block'><span><a href='https://youtu.be/$3' target='blank' rel='nofollow'>https://youtu.be/$3</a></span></p>")
 				.replace(/<table>(.*?)<\/table>/gi, "<div class='table-responsive mx-auto'><table class='data-table'>$1</table></div>")
 				.replace(/(?<=<tbody><tr>)(<td><p(?: class="text-center")?><b>.*?<\/b><\/p><\/td>)(?=<\/tr>)/, (match) => {
 					return match.replace(/<td><p(?: class="text-center")?><b>(.*?)<\/b><\/p><\/td>/gi, "<th>$1</th>");
 				})
-				.replace(/<(a)\s*href="(.*?)".*?>(.*?)<\/\1>/gi, "<a href='$2' class='url' target='_blank'>$3</a>")
-				.replace(/<a>(\s)?(.*?)(\s)?<\/a>/gi, "$1<a href='$2' class='url' target='_blank'>$2</a>$3")
+				.replace(/<(a)\s*href="(.*?)".*?>(.*?)<\/\1>/gi, "<a href='$2' class='url' target='_blank' rel='nofollow'>$3</a>")
+				.replace(/<a>(\s)?(.*?)(\s)?<\/a>/gi, "$1<a href='$2' class='url' target='_blank' rel='nofollow'>$2</a>$3")
 				.replace(/(?<!["'>])\<?\b(https?:\/\/.*?\.(?:html?|pdf))(?!\.\w)\>?/gi, (match, link) => `${link.replace(/ /g, "")}`)
-				.replace(/(?<!["'>])\b(https?:\/\/\S+\.(?:html?|pdf))(?!\.\w)\b/gi, "<a href='$1' class='url' target='_blank'>$1</a>");
+				.replace(/(?<!["'>])\b(https?:\/\/\S+\.(?:html?|pdf))(?!\.\w)\b/gi, "<a href='$1' class='url' target='_blank' rel='nofollow'>$1</a>");
 		}
 
 		if (document.getElementById("manual").checked) {
@@ -461,8 +461,8 @@ function clear() {
 				.replace(/ ?<\/b> ?<b> ?/gi, " ")
 				.replace(/<p>(?:<b>)(?:Competência Específica|Competência) (\d+)[:.]?(.*?)?(?:<\/b>)?[:]?(.*?)?(?:<\/b>)?<\/p>/gi, "<p><b>Competência Específica $1:</b> $2$3</p>")
 				.replace(/<p>(?:Competência Específica|Competência) (\d+)[:.]?(.*?)?<\/p>/gi, "<p><b>Competência Específica $1:</b> $2</p>")
-				.replace(/^<hr>/gi, "")
-				.replace(/(<br>\s*)$/gi, "")
+				.replace(/^(?:<hr>)/gi, "")
+				.replace(/(<br>\s*)*$/gi, "")
 				.replace(/<p><b>(\d+)\)/gi, "<p><br><b>$1)")
 				.replace(/<p><b>Orientação\/Sugestão<\/b><\/p>/gi, "<p><b><br>Orientação e Sugestão</b></p>")
 				.replace(/<p><br><b>(\d+)\)<\/b> (?:Resposta: Letra|Resposta:) /gi, "<p><br><b>$1)</b> ")
@@ -520,13 +520,15 @@ function clear() {
 			.replace(/<p><br><\/p>\n+(?=<p><br><b>\d+\)<\/b>)/g, "")
 			.replace(/:<\/b> ?:/gi, ":</b>")
 			.replace(/<div><br>\s?<\/div>\s?<br>/gi, "")
-			.replace(/<img width="\d+".*?v:shapes=".*?">/gi, "##");
+			.replace(/<img width="\d+".*?v:shapes=".*?">/gi, "##")
+			.replace(/^\s*/g, "")
+			.replace(/(<br>\s*)*$/gi, "");
 
 		if (document.getElementById("latex").checked) {
 			textareaValue = textareaValue
 				.replace(/\n+/gi, " ")
 				.replace(/[ ]{2,}/gi, " ")
-				.replace(/^ /g, "");
+				.replace(/^\s*/g, "");
 		}
 
 		// Definir o texto formatado em outro elemento
