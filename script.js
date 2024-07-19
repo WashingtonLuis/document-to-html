@@ -472,7 +472,7 @@ function clear() {
 				.replace(/<p>([abcde]\))\s*(?:<b>)?\s*(?:corret|cert)[ao][.,:]?\s*(?:<\/b>)?[.,:]?/gi, "<p>$1 <b>Correta.</b> ")
 				.replace(/<br>\s+<p><br>/gi, "<p><br>")
 				.replace(/(?:<br>)?(?:<b>)?\((EM\d{2}[A-Z]{3}\d{3}|EM[A-Z]{4}\d{2}|EM[A-Z]{6}\d{2})\)(?:<\/b>)?/g, "<b>($1)</b>")
-				.replace(/<p><br><\/p>(?=<p><b>\((?:EM\d{2}[A-Z]{3}\d{3}|EM[A-Z]{4}\d{2}|EM[A-Z]{6}\d{2})\))/g, "")
+				.replace(/\n?<p><br><\/p>\n?(?=<p><b>\((?:EM\d{2}[A-Z]{3}\d{3}|EM[A-Z]{4}\d{2}|EM[A-Z]{6}\d{2})\))/g, "")
 				.replace(/<p>(?:<br>)?<b>(\d+)\)<\/b>\./gi, "<p><br><b>$1)</b>")
 				.replace(/<br><p><br>/gi, "<p><br>")
 				.replace(/<(p|br)>Resolução: /gi, "<$1><b>Resolução:</b> ")
