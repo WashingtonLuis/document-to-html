@@ -480,7 +480,7 @@ function clear() {
 				.replace(/<p><br><b>0(\d)\)/gi, "<p><br><b>$1)")
 				.replace(/(?<=<p><br><b>\d+\)<\/b>) Resolução:?/gi, "")
 				.replace(/\s*(?:<p><br><\/p>|<br>)\s*(?=<p><b>\((?:EM\d{2}[A-Z]{3}\d{3}|EM[A-Z]{4}\d{2}|EM[A-Z]{6}\d{2})\))/g, "")
-				.replace(/<ol>\s*<li>(Trilha de aprendizagem|Objetivo de aprendizagem do capítulo|Situação-problema|Habilidades utilizadas nessa situação-problema:|Resolvendo a situação-problema)<\/li>\s*<\/ol>/g, "<p><b>$1</b></p>");
+				.replace(/<ol>\s*<li>\s*(Trilha de aprendizagem|Objetivo de aprendizagem do capítulo|Situação-problema|Habilidades utilizadas nessa situação-problema:|Resolvendo a situação-problema)\s*<\/li>\s*<\/ol>/g, "<p><b>$1</b></p>");
 		}
 
 		textareaValue = textareaValue
