@@ -627,6 +627,23 @@ $(document).ready(function () {
 		}
 	});
 
+	$("#textoSimples").click(function () {
+		try {
+			let textareaValueEq = $("#summernote").summernote("code");
+
+			textareaValueEq = _clear(textareaValueEq);
+			textareaValueEq = semTag(textareaValueEq);
+			textareaValueEq = textareaValueEq.replace(/[ ]{2,}/gi, " ");
+
+			// Definir o texto formatado em outro elemento
+			$("#result").text(textareaValueEq);
+
+			navigator.clipboard.writeText(textareaValueEq);
+		} catch (error) {
+			console.error("Erro ao formatar o texto:", error);
+		}
+	});
+
 	$("#ajustEqSalvaEq").click(function () {
 		try {
 			let textareaValueEq = $("#summernote").summernote("code");
