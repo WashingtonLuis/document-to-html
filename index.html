@@ -18,7 +18,7 @@
 
 			<div class="opcao">
 				<input type="checkbox" id="nLatex" name="eq" value="nLatex" />
-				<label for="nLatex">Não LaTeX</label>
+				<label for="nLatex">Não-LaTeX</label>
 			</div>
 
 			<div class="opcao">
@@ -37,16 +37,16 @@
 		<p id="result"></p>
 
 		<div class="button-container">
-			<button type="button" id="clear" title="Limpar o conteúdo">Limpar</button>
-			<button type="button" id="eqTag" title="Inserir tag de equação">tag Equação</button>
-			<button type="button" id="eqHtml" title="Converter para HTML">Converter para HTML</button>
-			<button type="button" id="eqGrande" title="Inserir dentro de Matriz">Equação Grande</button>
-			<button type="button" id="textoSimples" title="Texto sem quebras">Texto sem quebras</button>
-			<button type="button" id="ajustEqSalvaEq" title="Ajustar e salvar equação">Ajustar Equação para script SalvarEqn</button>
-			<button type="button" id="imgSvg" title="Ajustar nome das Equações e substituir seletor '##'">Ajustar Equações SVG</button>
-			<button type="button" id="imgJpgPng" title="Ajustar imagens JPG/PNG e substituir seletor '@@'">Ajustar imagens JPG/PNG</button>
-			<button type="button" id="iniMaiusc" title="Iniciar com letra maiúscula">Inicial Maiúscula</button>
-			<input type="number" name="bloco" id="bloco" value="1" min="1" max="9" title="Escolher número de blocos" />
+			<button type="button" id="clear" title="Aplica todas as alterações de acordo com os seletores marcados e as alterações padrão">Limpar</button>
+			<button type="button" id="eqTag" title="Insere a tag '$$' nas equações para que sejam salvas em um arquivo">Tag Equação</button>
+			<button type="button" id="eqHtml" title="Converte as equações e texto para HTML">Converter para HTML</button>
+			<button type="button" id="eqGrande" title="Insere a tag de Matriz para uma leve redução na equação">Equação Grande</button>
+			<button type="button" id="textoSimples" title="Remove todas as tags e retira as quebras de linha">Texto sem quebras</button>
+			<button type="button" id="ajustEqSalvaEq" title="Ajusta todas as equações que estão no padrão LaTeX dentro da tag '$$ equação $$' para que sejam utilizadas em um script para criar e salvar as imagens no padrão SVG no site 'https://csdn.codecogs.com/eqneditor/editor.php'">Ajustar Equação para script SalvarEqn</button>
+			<button type="button" id="imgSvg" title="Ajusta imagens nos formatos SVG e substitui o seletor '##' para imagens SVG">Ajustar Equações SVG</button>
+			<button type="button" id="imgJpgPng" title="Ajusta imagens nos formatos JPG e PNG e substitui o seletor '@@' para imagens JPG">Ajustar imagens JPG/PNG</button>
+			<button type="button" id="iniMaiusc" title="Formata o texto para começar com letra maiúscula todas as palavras com mais de 3 letras">Inicial Maiúscula</button>
+			<input type="number" name="bloco" id="bloco" value="1" min="1" max="9" title="Seleciona o número do bloco/capítulo para nomeação das imagens" />
 		</div>
 	</body>
 </html>
