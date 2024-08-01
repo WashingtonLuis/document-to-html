@@ -132,7 +132,7 @@ function nLatex(str) {
 		.replace(/\\mathrm\{(.*?)\}/g, "$1")
 		.replace(/\\left\\?(\(|\{|\[)/g, "$1")
 		.replace(/\\right\\?(\)|\}|\])/g, "$1")
-		.replace(/(?<![a-z]{3,}|[ (=>])-/g, " – ")
+		.replace(/(?<![a-z]{3,}|[ (=>])-(?![a-z]{3,}|[ )=<])/g, " – ")
 		.replace(/(?<![a-z]{3,})-/g, "–")
 		.replace(/#\[([^[]*)\]/gi, "($1)")
 
