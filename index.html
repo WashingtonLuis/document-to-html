@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
-		<title>Clear</title>
+		<title>Limpar texto</title>
 		<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
 		<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet" />
 		<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
@@ -13,12 +13,12 @@
 		<div class="menu">
 			<div class="opcao">
 				<input type="checkbox" id="latex" name="eq" value="latex" />
-				<label for="latex">Latex</label>
+				<label for="latex">LaTeX</label>
 			</div>
 
 			<div class="opcao">
 				<input type="checkbox" id="nLatex" name="eq" value="nLatex" />
-				<label for="nLatex">nLatex</label>
+				<label for="nLatex">Não LaTeX</label>
 			</div>
 
 			<div class="opcao">
@@ -37,16 +37,16 @@
 		<p id="result"></p>
 
 		<div class="button-container">
-			<button type="button" id="clear">Play</button>
-			<button type="button" id="eqTag">eqTag</button>
-			<button type="button" id="eqHtml">eqHtml</button>
-			<button type="button" id="eqGrande">eqGrande</button>
-			<button type="button" id="textoSimples">textoSimples</button>
-			<button type="button" id="ajustEqSalvaEq">AjustEqSalvaEq</button>
-			<button type="button" id="imgSvg">ImgSvg</button>
-			<button type="button" id="imgJpgPng">ImgJpgPng</button>
-			<button type="button" id="iniMaiusc">IniMaiusc</button>
-			<input type="number" name="bloco" id="bloco" value="1" min="1" max="9" />
+			<button type="button" id="clear" title="Limpar o conteúdo">Limpar</button>
+			<button type="button" id="eqTag" title="Inserir tag de equação">Inserir Equação</button>
+			<button type="button" id="eqHtml" title="Converter para HTML">Converter para HTML</button>
+			<button type="button" id="eqGrande" title="Inserir dentro de Matriz">Equação Grande</button>
+			<button type="button" id="textoSimples" title="Texto sem quebras">Texto sem quebras</button>
+			<button type="button" id="ajustEqSalvaEq" title="Ajustar e salvar equação">Ajustar Equação para script SalvarEqn</button>
+			<button type="button" id="imgSvg" title="Ajustar nome das Equações e substituir seletor '##'">Ajustar Equações SVG</button>
+			<button type="button" id="imgJpgPng" title="Ajustar imagens JPG/PNG">Ajustar imagens JPG/PNG</button>
+			<button type="button" id="iniMaiusc" title="Iniciar com letra maiúscula">Inicial Maiúscula</button>
+			<input type="number" name="bloco" id="bloco" value="1" min="1" max="9" title="Escolher número de blocos" />
 		</div>
 	</body>
 </html>
