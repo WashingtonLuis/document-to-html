@@ -158,8 +158,8 @@ function semTag(str) {
 
 function exerciciosMaterial(str) {
 	let text = str
+	.replace(/<p>\s?(?:<b>)?\d+[.)-] ?(.*?)(?:<\/b>)?\s?<\/p>/gi, '<div class="exercise"><p>$1</p></div>')
 	.replace(/\(Enem\)/gi, '<b>(ENEM)</b>')
-	.replace(/<p>(<b>)?\d+[.)-] ?/gi, '<div class=" exercise"></div><p>$1')
 	.replace(/<p>[a-e]\) (.*?)<\/p>/gi, "<div class='d-print-none'><!-- h5p --></div><div class='d-none d-print-block'><ol class='options'><li>$1</li></ol></div>")
 	.replace(/(?<=<\/li>)<\/ol><\/div>\s*<div class='d-print-none'>\s*<!-- h5p --><\/div><div class='d-none d-print-block'><ol class='options'>(?=<li>)/gi, '')
 ;
@@ -513,8 +513,7 @@ function clear() {
 			.replace(/(<div class="youtube">)/gi, "$1\n\t")
 			.replace(/(<div class='d-print-none'>)/gi, "\n$1\n\t")
 			.replace(/<p><br>/gi, "\n<p><br>")
-			.replace(/(?<=<\/ol>)\s*<br>\s*(?=<\/div>)/gi, '\n')
-			.replace(/<div class=" exercise">\s*<\/div>\s*<br>\s*/gi, '<div class=" exercise">\n</div>\n');
+			.replace(/(?<=<\/ol>)\s*<br>\s*(?=<\/div>)/gi, '\n');
 
 		textareaValue = textareaValue
 			.replace(/<font\s?>/gi, "")
