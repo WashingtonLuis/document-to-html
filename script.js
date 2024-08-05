@@ -407,7 +407,7 @@ function _clear(str) {
 		.replace(/∙/g, " · ")
 		.replace(/\s+(!|\?|\.|\,)/g, "$1 ")
 		.replace(/[ ]{2,}/gi, " ")
-		.replace(/(<(?:\/)?(?!b|i|u)[^>]*>) (<(?:\/)?(?!b|i|u)[^>]*>)/gi, "$1$2")
+		// .replace(/(<(?:\/)?(?!b|i|u|span)[^>]*>) (<(?:\/)?(?!b|i|u|span)[^>]*>)/gi, "$1$2")
 
 		.replace(/(<(\w+)\s+style="[^"]*font-weight:\s*700[^"]*"[^>]*>)(.*?)(<\/\2>)/gi, "$1<b>$3</b>$4")
 		.replace(/(<(\w+)\s+style="[^"]*font-weight:\s*bolder[^"]*"[^>]*>)(.*?)(<\/\2>)/gi, "$1<b>$3</b>$4")
