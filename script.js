@@ -83,9 +83,170 @@ function textLatex(input) {
 	}
 }
 
+function latex(str) {
+	text = str
+		.replace(/<p\s?>/gi, "")
+		.replace(/<p/gi, "")
+		.replace(/<\/p>/gi, "")
+		.replace(/<font\s?>/gi, "")
+		.replace(/<\/font>/gi, "")
+		.replace(/<br>/gi, "")
+
+		.replace(/\=/g, " = ")
+		.replace(/\+/g, " + ")
+		.replace(/≠/g, " ≠ ")
+		.replace(/∶/g, " : ")
+		.replace(/(d+)\-(d+)/g, "$1 – $2")
+
+		.replace(/&amp;/g, " & ")
+		// .replace(/\.{3}|\\cdots/g, " \\cdots ") ????????
+		.replace(/·|⋅|\\bullet\b|\\cdot\b/g, " \\cdot ")
+		.replace(/→|\\rightarrow\b/g, " \\rightarrow ")
+		.replace(/⇒|\\Rightarrow\b/g, " \\Rightarrow ")
+		.replace(/△|Δ|\\Delta\b/g, " \\Delta ")
+		.replace(/δ/g, " \\delta ")
+		.replace(/θ|\\theta\b/g, " \\theta ")
+		.replace(/≠|\\neq\b/g, " \\neq ")
+		.replace(/≥|\\geq\b/g, " \\geq ")
+		.replace(/≤|\\leq\b/g, " \\leq ")
+		// .replace(/≅|\\cong/g, " \\cong ")
+		// .replace(/≈|\\approx/g, " \\approx ")
+		.replace(/≅|\\cong\b|≈|\\approx\b|≃|\\simeq\b/g, " \\simeq ")
+		.replace(/π|\\pi\b/g, " \\pi ")
+		.replace(/μ|\\mu\b/g, " \\mu ")
+		.replace(/ℓ/g, " \\ell ")
+		.replace(/α/g, "\\alpha")
+		.replace(/β/g, "\\beta")
+		.replace(/Ω/g, " \\Omega ")
+		.replace(/γ/g, "\\gamma")
+		.replace(/∪/g, " \\cup ")
+		.replace(/∩/g, " \\cap ")
+		.replace(/(?<!\\)%/g, "\\%")
+		.replace(/\\(mathbf|mathbit)/g, " \\textbf")
+		.replace(/\$/g, " \\$\\; ")
+		.replace(/⬚/g, " ")
+
+		// .replace(/(?<!(?:\\\w+)|\}|\_|\^|\])\{(.*?)\}/g, "$1")
+		.replace(/(?<!(?:\\\w+)|\}|\_|\^|\])\{([^\^\}]*)\}(?:\^|\_)(?!\w)( |\.|\,|:|;|!|\?|=|\+)/g, "$1$2")
+
+		.replace(/√(\d+)/g, " \\sqrt{$1}")
+		.replace(/°/g, " ^{\\circ}")
+		.replace(/(\\rightarrow)/gi, " $1 ")
+
+		.replace(/(?<!\\)(\d+)\\ (\d+)/g, "$1$2")
+		.replace(/(?<!\\)\\ /g, " ")
+		.replace(/\\prime/g, "'")
+
+		.replace(/(\d+) (\d+)/g, "$1\\,$2")
+
+		.replace(/\(\s*I\s*\)/g, "#1#")
+		.replace(/\(\s*II\s*\)/g, "#2#")
+		.replace(/\(\s*III\s*\)/g, "#3#")
+		.replace(/\(\s*IV\s*\)/g, "#4#")
+		.replace(/\(\s*V\s*\)/g, "#5#")
+		.replace(/\(\s*VI\s*\)/g, "#6#")
+		.replace(/\(\s*VII\s*\)/g, "#7#")
+		.replace(/\(\s*VIII\s*\)/g, "#8#")
+
+		.replace(/\\left\(\\begin\{matrix\}/gi, " \\begin{pmatrix} ")
+		.replace(/\\end\{matrix\}\\right\)/gi, " \\end{pmatrix} ")
+
+		.replace(/@■\(/gi, "@")
+		// .replace(/(?<![■█┴#t])\(([^()<.]*)\)/gi, '#[$1]#')
+
+		.replace(/\\buildrel(.*?)\\frac\\Rightarrow/g, " \\xrightarrow{$1} ")
+		.replace(/(?:□\()?(?:⇒|\\Rightarrow\s)┴\((.*?)\)\)?/g, " \\xrightarrow{$1} ")
+
+		.replace(/\{[█■]\((.*?)\)┤?/gi, " \\left\\{\\begin{matrix} $1 \\end{matrix}\\right. ")
+		.replace(/\{[█■]\(([^\)]+)\)┤?/gi, " \\left\\{\\begin{matrix} $1 \\end{matrix}\\right. ")
+
+		.replace(/(?<!@)\(■\((.*?)\)\)/gi, " \\begin{pmatrix} $1 \\end{pmatrix} ")
+		.replace(/(?<!@)■\((.*?)\)/g, " \\begin{matrix} $1 \\end{matrix} ")
+
+		.replace(/(?<!\\left)\\\{/g, " \\left\\{")
+		.replace(/(?<!\\right)\\\}/g, " \\right\\}")
+		.replace(/(?<!\\left)\\\[/g, " \\left [")
+		.replace(/(?<!\\right)\\\]/g, " \\right ]")
+
+		.replace(/(?<!\\left|\\right)\|/g, " | ")
+		// .replace(/(?<!\\left)\|(.*?)\|/g, " \\left| $1\\right| ")
+
+		.replace(/(_|\^)(?![a-zA-Z0-9{])/gi, " ")
+
+		.replace(/_\(([^()<.\-\+\^\]#]*)\)/gi, "_{$1}")
+		.replace(/_\(([^()<.\-\+\^\]#]*)\)/gi, "_{$1}")
+		.replace(/_([^\s{}()<.\-\+\^\\Rightarrow\\rightarrow\]#]+)/gi, "_{$1}")
+		.replace(/_([A-Za-záéíóúàèìòùâêîôûäëïöüãẽĩõũç]+)/g, "_{$1}")
+		.replace(/\<sub\>(.*?)\<\/sub\>/g, "_{$1}")
+
+		.replace(/¹/g, "^1")
+		.replace(/²/g, "^2")
+		.replace(/³/g, "^3")
+		.replace(/ª/g, "^a")
+		.replace(/º/g, "^o")
+		.replace(/\^\(([^()<.\-\+_\]#]*)\)/gi, "^{$1}")
+		.replace(/\^\(([^()<.\-\+_\]#]*)\)/gi, "^{$1}")
+		.replace(/\^([^\s{}()<.\-\+_\\Rightarrow\\rightarrow\]#]+)/gi, "^{$1}")
+		.replace(/\<sup\>(.*?)\<\/sup\>/g, "^{$1}")
+
+		.replace(/(?<!Dia \d?)(#\[.*?\]|[a-z\d]+)\/(#\[.*?\]|[a-z\d]+)/gi, " \\frac{$1}{$2} ")
+
+		// .replace(/#\[([^#]*)\]#/gi, '\\left( $1 \\right)')
+		// .replace(/(?<!\\left)\(([^#[]*)\)/gi, '\\left( $1 \\right)')
+		.replace(/(?<!\\left)\((.*?(?:[^(]))\)/gi, " \\left( $1 \\right) ")
+
+		.replace(/\\frac\{((?:\\left\()?.*?(?:\\right\))?)\}\{((?:\\left\()?.*?(?:\\right\))?)\}/gi, " \\frac{$1}{$2} ")
+
+		.replace(/(?<![t])\)/gi, "")
+		.replace(/[┤■■]/gi, "")
+		.replace(/□\(/gi, "")
+
+		.replace(/#1#/g, "\\; (I)")
+		.replace(/#2#/g, "\\; (II)")
+		.replace(/#3#/g, "\\; (III)")
+		.replace(/#4#/g, "\\; (IV)")
+		.replace(/#5#/g, "\\; (V)")
+		.replace(/#6#/g, "\\; (VI)")
+		.replace(/#7#/g, "\\; (VII)")
+		.replace(/#8#/g, "\\; (VIII)")
+
+		.replace(/@/g, " \\\\\n")
+
+		.replace(/\\begin\{pmatrix\}/g, "\n\\begin{pmatrix}")
+		.replace(/\\left\\\{\\begin\{matrix\}/g, "\n\\left\\{\\begin{matrix}")
+		.replace(/\\begin\{matrix\}/g, "\n\\begin{matrix}")
+		.replace(/\\end\{pmatrix\}/g, "\n\\end{pmatrix}")
+		.replace(/\\end\{matrix\}\\right\./g, "\n\\end{matrix}\\right.")
+		.replace(/\\end\{matrix\}/g, "\n\\end{matrix}")
+		.replace(/(?<!\\)det/gi, " \\det ")
+		.replace(/underline/g, "overline")
+		.replace(/\\\\/g, "\\\\ ")
+
+		.replace(/[ ]{2,}/gi, " ")
+		.replace(/(\\\; ?){2,}/gi, "\\;")
+
+		.replace(/(?<=\d)(?=(\d{3})+(?!\d))/g, "\\,")
+		.replace(/(\d),(\d)/g, "$1,\\!$2")
+		.replace(/(?<=kg|g|u|dm|mm|cm|m|ml|l)(2|3)/gi, "^{$1}")
+
+		.replace(/(\\(?:\'|\~|\^).)|\\c\{c\}/g, (match) => nLatexAcentuacao[match])
+
+		.replace(/(?<!\\|\\textrm\{|\\textrm\{ |\\textbf\{|\\textbf\{ |\\begin\{|\\begin\{ |\\end\{|\\end\{ |\{\\color\{|\{\\color\{ )(?<=\d|\b| )([A-Za-záéíóúàèìòùâêîôûäëïöüãẽĩõũç ]+)/g, "\\textrm{$1}")
+		.replace(/\\textrm\{(kg|g|u|dm|mm|cm|m|ml|l)\}/g, " \\textrm{ $1}")
+		.replace(/\\textrm\{(sen|cos|tag)\}/g, " \\textrm{$1 }")
+
+		.replace(/[ ]{2,}/gi, " ")
+		.replace(/\\\;\\textrm\{ /g, " \\textrm{ ")
+		.replace(/\\textrm\{(e|de) ?\}/g, " \\textrm{ $1 }")
+		.replace(/(?<=\\textrm\{R\} \\\$\\\;)( ?\d+)\\;(\d+(?:,\d+)?)/gi, "$1.$2")
+		.replace(/[áéíóúçãõâêô]/g, (match) => latexAcentuacao[match]);
+
+	return text;
+}
+
 function nLatex(str) {
-	str = textNLatex(str);
-	str = str
+	let text = textNLatex(str);
+	text = text
 		.replace(/(?<![a-v(=>]{3,})\=/g, " = ")
 		.replace(/\+/g, " + ")
 		.replace(/÷/g, " ÷ ")
@@ -149,7 +310,71 @@ function nLatex(str) {
 		.replace(/\( ?(.*?) ?\)/g, "($1)")
 		.replace(/(?<=[A-Za-z]) \(/g, "(");
 
-	return str;
+	return text;
+}
+
+function facilidades(str) {
+	let text = str;
+	text = text
+		.replace(/(<p>[\s\S]*?)(<img>)([\s\S]*?<\/p>)/gi, "$1$3<div class='img-center mx-400 text-center'><img src='blo2-01.jpg'><div class='legend'><b>#$</b><br>Fonte: . Disponível em: <a href='##' class='url' target='_blank' rel='nofollow'>##</a>. Acesso em: .</div></div>")
+		.replace(/(<p>[\s\S]*?)(https?:\/\/(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+))([\s\S]*?<\/p>)/gi, "$1$4<div class='youtube'><div><div><iframe src='https://www.youtube.com/embed/$3?rel=0' frameborder='0' allowfullscreen=''></iframe></div></div></div><p class='d-none d-print-block'><span><a href='https://youtu.be/$3' target='blank' rel='nofollow'>https://youtu.be/$3</a></span></p>")
+		.replace(/<table>(.*?)<\/table>/gi, "<div class='table-responsive mx-auto'><table class='data-table'>$1</table></div>")
+		.replace(/(?<=<tbody><tr>)(<td><p(?: class="text-center")?><b>.*?<\/b><\/p><\/td>)(?=<\/tr>)/, (match) => {
+			return match.replace(/<td><p(?: class="text-center")?><b>(.*?)<\/b><\/p><\/td>/gi, "<th>$1</th>");
+		})
+		.replace(/<(a)\s*href="(.*?)".*?>(.*?)<\/\1>/gi, "<a href='$2' class='url' target='_blank' rel='nofollow'>$3</a>")
+		.replace(/<a>(\s)?(.*?)(\s)?<\/a>/gi, "$1<a href='$2' class='url' target='_blank' rel='nofollow'>$2</a>$3")
+		.replace(/(?<!["'>])\<?\b(https?:\/\/.*?\.(?:html?|pdf))(?!\.\w)\>?/gi, (match, link) => `${link.replace(/ /g, "")}`)
+		.replace(/(?<!["'>])\b(https?:\/\/\S+\.(?:html?|pdf))(?!\.\w)\b/gi, "<a href='$1' class='url' target='_blank' rel='nofollow'>$1</a>");
+
+	return text;
+}
+
+function manual(str) {
+	let text = str;
+	text = text
+		.replace(/<(\w) >/g, "<$1>")
+		.replace(/<p> ?(<b>) ?/gi, "<p>$1")
+		.replace(/<(?!b)([\w]+)>\s*(?:<b>\s*)?(Atividades? Resolvidas?|Atividades de sala|Atividade de sala|Resolução de problemas?|Mão na massa|Vamos pesquisar|Cinefórum|Visita técnica|Ponto de partida|Conectando ideias)(?:\s*<\/b>)?\s*<\/\1>/gi, "<hr>\n<h5><b>$2</b></h5><br>")
+		.replace(/(?<![>])(Atividades? resolvidas?|Atividades de sala|Atividade de sala|Resolução de problemas?|Mão na massa|Vamos pesquisar|Cinefórum|Visita técnica|Conectando ideias|Ponto de partida)/gi, "<b>$1</b>")
+		.replace(/<p>(?:<b>\s*)?(?:Resolução Comentada|Resposta|Resolução)\s*:(?:<\/b>\s*)?<\/p>/gi, "<p><br><b>Resolução Comentada:</b></p>")
+		.replace(/<p>(?:<b>)?(\d+)\s?[-.)](?![0-9])\s?(\d+)\s?[-.)](?![0-9])\s?(\d+)\s?[-.)](?![0-9])\s?(?:<\/b>)?\s?Professor, es(?:.*?)?<\/p>/gi, "<p><br><b>$1)</b>, <b>$2)</b> e <b>$3)</b> Professor, essas atividades encontram-se resolvidas no material didático. Sugerimos que as utilize durante as explicações do tema ao qual elas se referem a fim de aprofundar os conceitos abordados na parte teórica.</p>")
+		.replace(/<p>(?:<b>)?(\d+)\s?[-.)](?![0-9])\s?(\d+)\s?[-.)](?![0-9])\s?(?:<\/b>)?\s?Professor, es(?:.*?)?<\/p>/gi, "<p><br><b>$1)</b> e <b>$2)</b> Professor, essas atividades encontram-se resolvidas no material didático. Sugerimos que as utilize durante as explicações do tema ao qual elas se referem a fim de aprofundar os conceitos abordados na parte teórica.</p>")
+		.replace(/<p>(?:<b>)?(\d+)\s?[-.)](?![0-9])\s?(?:<\/b>)?\s?Professor, es(?:.*?)?<\/p>/gi, "<p><br><b>$1)</b> Professor, essa atividade encontra-se resolvida no material didático. Sugerimos que a utilize durante as explicações do tema ao qual ela se refere a fim de aprofundar os conceitos abordados na parte teórica.</p>")
+		.replace(/<\/p>/gi, "</p>\n")
+		.replace(/<p>(?:<br>)?(?:<b>)?(\d+)\s?[-.)](?![0-9])\s?(?:<b>)?(?:Resolução:|Resposta:|Resposta: Letra|Alternativa correta:|Resolução: Letra|Letra)?\s?([^<]*?)?(?:<\/b>)?(.*?)?(?:<\/b>)?<\/p>/gi, "<p><br><b>$1)</b> $2$3</p>")
+		.replace(/<p><b>Questão 0?(\d)<\/b>\./gi, "<p><br><b>$1)</b> ")
+		.replace(/<p>(?:<br>)?\s?(\d+)\s?[-.)](?![0-9])\s?(?:Resolução:|Resposta:|Resposta: Letra|Resolução: Letra|Letra)?\s?(.*?)?<\/p>/gi, "<p><br><b>$1)</b> $2</p>")
+		.replace(/<ol><li>(?:<p>)?(?:<b>)?Resolução:\s?(?:<\/b>)(.*?)(?:<\/p>)?<\/li>\s*<\/ol>/gi, "<p><br><b>$$)</b> $1</p>")
+		.replace(/(?<!<p>)<br><\/p>/gi, "</p>")
+		.replace(/(Comentário:)/gi, "<br><b>Resolução comentada:</b> ")
+		.replace(/<p><br><\/p>\s+(<p><br><b>Resolução comentada:<\/b><\/p>)/gi, "$1")
+		.replace(/ ?<\/b> ?<b> ?/gi, " ")
+		.replace(/<p>(?:<b>)(?:Competência Específica|Competência) (\d+)[:.]?(.*?)?(?:<\/b>)?[:]?(.*?)?(?:<\/b>)?<\/p>/gi, "<p><b>Competência Específica $1:</b> $2$3</p>")
+		.replace(/<p>(?:Competência Específica|Competência) (\d+)[:.]?(.*?)?<\/p>/gi, "<p><b>Competência Específica $1:</b> $2</p>")
+		.replace(/^(?:<hr>)/gi, "")
+		.replace(/(<br>\s*)*$/gi, "")
+		.replace(/<p><b>(\d+)\)/gi, "<p><br><b>$1)")
+		.replace(/<p><b>Orientação\/Sugestão<\/b><\/p>/gi, "<p><b><br>Orientação e Sugestão</b></p>")
+		.replace(/<p><br><b>(\d+)\)<\/b> (?:Resposta: Letra|Resposta:) /gi, "<p><br><b>$1)</b> ")
+		.replace(/<p><b>([abcde]\))<\/b>/gi, "<p>$1")
+		.replace(/<p><b><br>Orientação e Sugestão<\/b><\/p>\s?<p><br>/gi, "<p><b><br>Orientação e Sugestão</b></p><p>")
+		.replace(/<p>([abcde]\))\s*(?:<b>)?\s*(?:Incorret|Errad)[ao][.,:]?\s*(?:<\/b>)?[.,:]?/gi, "<p>$1 <b>Incorreta.</b> ")
+		.replace(/<p>([abcde]\))\s*(?:<b>)?\s*(?:corret|cert)[ao][.,:]?\s*(?:<\/b>)?[.,:]?/gi, "<p>$1 <b>Correta.</b> ")
+		.replace(/<br>\s+<p><br>/gi, "<p><br>")
+		.replace(/(?:<br>)?(?:<b>)?\((EM\d{2}[A-Z]{3}\d{3}|EM[A-Z]{4}\d{2}|EM[A-Z]{6}\d{2})\)(?:<\/b>)?/g, "<b>($1)</b>")
+		.replace(/<p>(?:<br>)?<b>(\d+)\)<\/b>\./gi, "<p><br><b>$1)</b>")
+		.replace(/<br><p><br>/gi, "<p><br>")
+		.replace(/<(p|br)>Resolução: /gi, "<$1><b>Resolução:</b> ")
+		.replace(/<p><b> ?Resolução:<\/b> ?(?:Resolução:)?/gi, "<p><b>Resolução:</b> ")
+		.replace(/<ol><li><b>(.*?)<\/b><\/li><\/ol>/gi, "<h5>$1</h5>")
+		.replace(/<p><br><b>0(\d)\)/gi, "<p><br><b>$1)")
+		.replace(/(?<=<p><br><b>\d+\)<\/b>) Resolução:?/gi, "")
+		.replace(/\s*(?:<p><br><\/p>|<br>)\s*(?=<p><b>\((?:EM\d{2}[A-Z]{3}\d{3}|EM[A-Z]{4}\d{2}|EM[A-Z]{6}\d{2})\))/g, "")
+		.replace(/[ ]{2,}/gi, " ")
+		.replace(/<ol>\s*<li>\s*(Trilha de aprendizagem|Objetivo de aprendizagem do capítulo|Situação-problema|Habilidades utilizadas nessa situação-problema:|Resolvendo a situação-problema)\s*<\/li>\s*<\/ol>/g, "<p><b>$1</b></p>");
+
+	return text;
 }
 
 function semTag(str) {
@@ -158,12 +383,11 @@ function semTag(str) {
 
 function exerciciosMaterial(str) {
 	let text = str
-	.replace(/<p>\s?(?:<b>)?\d+[.)-] ?(.*?)(?:<\/b>)?\s?<\/p>/gi, '<div class="exercise"><p>$1</p></div>')
-	.replace(/\(Enem\)/gi, '<b>(ENEM)</b>')
-	.replace(/<p>[a-e]\) (.*?)<\/p>/gi, '<div class="d-print-none"><!-- h5p --></div><div class="d-none d-print-block"><ol class="options"><li>$1</li></ol></div>')
-	.replace(/(?<=<\/li>)<\/ol><\/div>\s*<div class="d-print-none">\s*<!-- h5p --><\/div><div class="d-none d-print-block"><ol class="options">(?=<li>)/gi, '')
-	.replace(/(?<=<div class="exercise">)((?:(?!<div class="exercise">)[\s\S])*?)<\/div>((?:(?!<div class="exercise">)[\s\S])*?)(<div class="d-print-none"><!-- h5p --><\/div>)(?=<div class="d-none d-print-block"><ol class="options"><li>)/gi, '$1$2$3</div>')
-;
+		.replace(/<p>\s?(?:<b>)?\d+[.)-] ?(.*?)(?:<\/b>)?\s?<\/p>/gi, '<div class="exercise"><p>$1</p></div>')
+		.replace(/\(Enem\)/gi, "<b>(ENEM)</b>")
+		.replace(/<p>[a-e]\) (.*?)<\/p>/gi, '<div class="d-print-none"><!-- h5p --></div><div class="d-none d-print-block"><ol class="options"><li>$1</li></ol></div>')
+		.replace(/(?<=<\/li>)<\/ol><\/div>\s*<div class="d-print-none">\s*<!-- h5p --><\/div><div class="d-none d-print-block"><ol class="options">(?=<li>)/gi, "")
+		.replace(/(?<=<div class="exercise">)((?:(?!<div class="exercise">)[\s\S])*?)<\/div>((?:(?!<div class="exercise">)[\s\S])*?)(<div class="d-print-none"><!-- h5p --><\/div>)(?=<div class="d-none d-print-block"><ol class="options"><li>)/gi, "$1$2$3</div>");
 	return text;
 }
 
@@ -271,164 +495,7 @@ function clear() {
 
 		if (document.getElementById("latex").checked) {
 			textareaValue = removerParenteses(textareaValue);
-
-			textareaValue = textareaValue
-				.replace(/<p\s?>/gi, "")
-				.replace(/<p/gi, "")
-				.replace(/<\/p>/gi, "")
-				.replace(/<font\s?>/gi, "")
-				.replace(/<\/font>/gi, "")
-				.replace(/<br>/gi, "")
-
-				.replace(/\=/g, " = ")
-				.replace(/\+/g, " + ")
-				.replace(/≠/g, " ≠ ")
-				.replace(/∶/g, " : ")
-				.replace(/(d+)\-(d+)/g, "$1 – $2")
-
-				.replace(/&amp;/g, " & ")
-				// .replace(/\.{3}|\\cdots/g, " \\cdots ") ????????
-				.replace(/·|⋅|\\bullet\b|\\cdot\b/g, " \\cdot ")
-				.replace(/→|\\rightarrow\b/g, " \\rightarrow ")
-				.replace(/⇒|\\Rightarrow\b/g, " \\Rightarrow ")
-				.replace(/△|Δ|\\Delta\b/g, " \\Delta ")
-				.replace(/δ/g, " \\delta ")
-				.replace(/θ|\\theta\b/g, " \\theta ")
-				.replace(/≠|\\neq\b/g, " \\neq ")
-				.replace(/≥|\\geq\b/g, " \\geq ")
-				.replace(/≤|\\leq\b/g, " \\leq ")
-				// .replace(/≅|\\cong/g, " \\cong ")
-				// .replace(/≈|\\approx/g, " \\approx ")
-				.replace(/≅|\\cong\b|≈|\\approx\b|≃|\\simeq\b/g, " \\simeq ")
-				.replace(/π|\\pi\b/g, " \\pi ")
-				.replace(/μ|\\mu\b/g, " \\mu ")
-				.replace(/ℓ/g, " \\ell ")
-				.replace(/α/g, "\\alpha")
-				.replace(/β/g, "\\beta")
-				.replace(/Ω/g, " \\Omega ")
-				.replace(/γ/g, "\\gamma")
-				.replace(/∪/g, " \\cup ")
-				.replace(/∩/g, " \\cap ")
-				.replace(/(?<!\\)%/g, "\\%")
-				.replace(/\\(mathbf|mathbit)/g, " \\textbf")
-				.replace(/\$/g, " \\$\\; ")
-				.replace(/⬚/g, " ")
-
-				// .replace(/(?<!(?:\\\w+)|\}|\_|\^|\])\{(.*?)\}/g, "$1")
-				.replace(/(?<!(?:\\\w+)|\}|\_|\^|\])\{([^\^\}]*)\}(?:\^|\_)(?!\w)( |\.|\,|:|;|!|\?|=|\+)/g, "$1$2")
-
-				.replace(/√(\d+)/g, " \\sqrt{$1}")
-				.replace(/°/g, " ^{\\circ}")
-				.replace(/(\\rightarrow)/gi, " $1 ")
-
-				.replace(/(?<!\\)(\d+)\\ (\d+)/g, "$1$2")
-				.replace(/(?<!\\)\\ /g, " ")
-				.replace(/\\prime/g, "'")
-
-				.replace(/(\d+) (\d+)/g, "$1\\,$2")
-
-				.replace(/\(\s*I\s*\)/g, "#1#")
-				.replace(/\(\s*II\s*\)/g, "#2#")
-				.replace(/\(\s*III\s*\)/g, "#3#")
-				.replace(/\(\s*IV\s*\)/g, "#4#")
-				.replace(/\(\s*V\s*\)/g, "#5#")
-				.replace(/\(\s*VI\s*\)/g, "#6#")
-				.replace(/\(\s*VII\s*\)/g, "#7#")
-				.replace(/\(\s*VIII\s*\)/g, "#8#")
-
-				.replace(/\\left\(\\begin\{matrix\}/gi, " \\begin{pmatrix} ")
-				.replace(/\\end\{matrix\}\\right\)/gi, " \\end{pmatrix} ")
-
-				.replace(/@■\(/gi, "@")
-				// .replace(/(?<![■█┴#t])\(([^()<.]*)\)/gi, '#[$1]#')
-
-				.replace(/\\buildrel(.*?)\\frac\\Rightarrow/g, " \\xrightarrow{$1} ")
-				.replace(/(?:□\()?(?:⇒|\\Rightarrow\s)┴\((.*?)\)\)?/g, " \\xrightarrow{$1} ")
-
-				.replace(/\{[█■]\((.*?)\)┤?/gi, " \\left\\{\\begin{matrix} $1 \\end{matrix}\\right. ")
-				.replace(/\{[█■]\(([^\)]+)\)┤?/gi, " \\left\\{\\begin{matrix} $1 \\end{matrix}\\right. ")
-
-				.replace(/(?<!@)\(■\((.*?)\)\)/gi, " \\begin{pmatrix} $1 \\end{pmatrix} ")
-				.replace(/(?<!@)■\((.*?)\)/g, " \\begin{matrix} $1 \\end{matrix} ")
-
-				.replace(/(?<!\\left)\\\{/g, " \\left\\{")
-				.replace(/(?<!\\right)\\\}/g, " \\right\\}")
-				.replace(/(?<!\\left)\\\[/g, " \\left [")
-				.replace(/(?<!\\right)\\\]/g, " \\right ]")
-
-				.replace(/(?<!\\left|\\right)\|/g, " | ")
-				// .replace(/(?<!\\left)\|(.*?)\|/g, " \\left| $1\\right| ")
-
-				.replace(/(_|\^)(?![a-zA-Z0-9{])/gi, " ")
-
-				.replace(/_\(([^()<.\-\+\^\]#]*)\)/gi, "_{$1}")
-				.replace(/_\(([^()<.\-\+\^\]#]*)\)/gi, "_{$1}")
-				.replace(/_([^\s{}()<.\-\+\^\\Rightarrow\\rightarrow\]#]+)/gi, "_{$1}")
-				.replace(/_([A-Za-záéíóúàèìòùâêîôûäëïöüãẽĩõũç]+)/g, "_{$1}")
-				.replace(/\<sub\>(.*?)\<\/sub\>/g, "_{$1}")
-
-				.replace(/¹/g, "^1")
-				.replace(/²/g, "^2")
-				.replace(/³/g, "^3")
-				.replace(/ª/g, "^a")
-				.replace(/º/g, "^o")
-				.replace(/\^\(([^()<.\-\+_\]#]*)\)/gi, "^{$1}")
-				.replace(/\^\(([^()<.\-\+_\]#]*)\)/gi, "^{$1}")
-				.replace(/\^([^\s{}()<.\-\+_\\Rightarrow\\rightarrow\]#]+)/gi, "^{$1}")
-				.replace(/\<sup\>(.*?)\<\/sup\>/g, "^{$1}")
-
-				.replace(/(?<!Dia \d?)(#\[.*?\]|[a-z\d]+)\/(#\[.*?\]|[a-z\d]+)/gi, " \\frac{$1}{$2} ")
-
-				// .replace(/#\[([^#]*)\]#/gi, '\\left( $1 \\right)')
-				// .replace(/(?<!\\left)\(([^#[]*)\)/gi, '\\left( $1 \\right)')
-				.replace(/(?<!\\left)\((.*?(?:[^(]))\)/gi, " \\left( $1 \\right) ")
-
-				.replace(/\\frac\{((?:\\left\()?.*?(?:\\right\))?)\}\{((?:\\left\()?.*?(?:\\right\))?)\}/gi, " \\frac{$1}{$2} ")
-
-				.replace(/(?<![t])\)/gi, "")
-				.replace(/[┤■■]/gi, "")
-				.replace(/□\(/gi, "")
-
-				.replace(/#1#/g, "\\; (I)")
-				.replace(/#2#/g, "\\; (II)")
-				.replace(/#3#/g, "\\; (III)")
-				.replace(/#4#/g, "\\; (IV)")
-				.replace(/#5#/g, "\\; (V)")
-				.replace(/#6#/g, "\\; (VI)")
-				.replace(/#7#/g, "\\; (VII)")
-				.replace(/#8#/g, "\\; (VIII)")
-
-				.replace(/@/g, " \\\\\n")
-
-				.replace(/\\begin\{pmatrix\}/g, "\n\\begin{pmatrix}")
-				.replace(/\\left\\\{\\begin\{matrix\}/g, "\n\\left\\{\\begin{matrix}")
-				.replace(/\\begin\{matrix\}/g, "\n\\begin{matrix}")
-				.replace(/\\end\{pmatrix\}/g, "\n\\end{pmatrix}")
-				.replace(/\\end\{matrix\}\\right\./g, "\n\\end{matrix}\\right.")
-				.replace(/\\end\{matrix\}/g, "\n\\end{matrix}")
-				.replace(/(?<!\\)det/gi, " \\det ")
-				.replace(/underline/g, "overline")
-				.replace(/\\\\/g, "\\\\ ")
-
-				.replace(/[ ]{2,}/gi, " ")
-				.replace(/(\\\; ?){2,}/gi, "\\;")
-
-				.replace(/(?<=\d)(?=(\d{3})+(?!\d))/g, "\\,")
-				.replace(/(\d),(\d)/g, "$1,\\!$2")
-				.replace(/(?<=kg|g|u|dm|mm|cm|m|ml|l)(2|3)/gi, "^{$1}")
-
-				.replace(/(\\(?:\'|\~|\^).)|\\c\{c\}/g, (match) => nLatexAcentuacao[match])
-
-				.replace(/(?<!\\|\\textrm\{|\\textrm\{ |\\textbf\{|\\textbf\{ |\\begin\{|\\begin\{ |\\end\{|\\end\{ |\{\\color\{|\{\\color\{ )(?<=\d|\b| )([A-Za-záéíóúàèìòùâêîôûäëïöüãẽĩõũç ]+)/g, "\\textrm{$1}")
-				.replace(/\\textrm\{(kg|g|u|dm|mm|cm|m|ml|l)\}/g, " \\textrm{ $1}")
-				.replace(/\\textrm\{(sen|cos|tag)\}/g, " \\textrm{$1 }")
-
-				.replace(/[ ]{2,}/gi, " ")
-				.replace(/\\\;\\textrm\{ /g, " \\textrm{ ")
-				.replace(/\\textrm\{(e|de) ?\}/g, " \\textrm{ $1 }")
-				.replace(/(?<=\\textrm\{R\} \\\$\\\;)( ?\d+)\\;(\d+(?:,\d+)?)/gi, "$1.$2")
-				.replace(/[áéíóúçãõâêô]/g, (match) => latexAcentuacao[match]);
-
+			textareaValue = latex(textareaValue);
 			textareaValue = voltaParenteses(textareaValue);
 			textareaValue = textLatex(textareaValue);
 		}
@@ -438,67 +505,17 @@ function clear() {
 		}
 
 		if (document.getElementById("facilidades").checked) {
-			textareaValue = textareaValue
-				.replace(/(<p>[\s\S]*?)(<img>)([\s\S]*?<\/p>)/gi, "$1$3<div class='img-center mx-400 text-center'><img src='blo2-01.jpg'><div class='legend'><b>#$</b><br>Fonte: . Disponível em: <a href='##' class='url' target='_blank' rel='nofollow'>##</a>. Acesso em: .</div></div>")
-				.replace(/(<p>[\s\S]*?)(https?:\/\/(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+))([\s\S]*?<\/p>)/gi, "$1$4<div class='youtube'><div><div><iframe src='https://www.youtube.com/embed/$3?rel=0' frameborder='0' allowfullscreen=''></iframe></div></div></div><p class='d-none d-print-block'><span><a href='https://youtu.be/$3' target='blank' rel='nofollow'>https://youtu.be/$3</a></span></p>")
-				.replace(/<table>(.*?)<\/table>/gi, "<div class='table-responsive mx-auto'><table class='data-table'>$1</table></div>")
-				.replace(/(?<=<tbody><tr>)(<td><p(?: class="text-center")?><b>.*?<\/b><\/p><\/td>)(?=<\/tr>)/, (match) => {
-					return match.replace(/<td><p(?: class="text-center")?><b>(.*?)<\/b><\/p><\/td>/gi, "<th>$1</th>");
-				})
-				.replace(/<(a)\s*href="(.*?)".*?>(.*?)<\/\1>/gi, "<a href='$2' class='url' target='_blank' rel='nofollow'>$3</a>")
-				.replace(/<a>(\s)?(.*?)(\s)?<\/a>/gi, "$1<a href='$2' class='url' target='_blank' rel='nofollow'>$2</a>$3")
-				.replace(/(?<!["'>])\<?\b(https?:\/\/.*?\.(?:html?|pdf))(?!\.\w)\>?/gi, (match, link) => `${link.replace(/ /g, "")}`)
-				.replace(/(?<!["'>])\b(https?:\/\/\S+\.(?:html?|pdf))(?!\.\w)\b/gi, "<a href='$1' class='url' target='_blank' rel='nofollow'>$1</a>");
+			textareaValue = facilidades(textareaValue);
 		}
 
 		if (document.getElementById("manual").checked) {
-			textareaValue = textareaValue
-			.replace(/<(\w) >/g, "<$1>")
-			.replace(/<p> ?(<b>) ?/gi, "<p>$1")
-			.replace(/<(?!b)([\w]+)>\s*(?:<b>\s*)?(Atividades? Resolvidas?|Atividades de sala|Atividade de sala|Resolução de problemas?|Mão na massa|Vamos pesquisar|Cinefórum|Visita técnica|Ponto de partida|Conectando ideias)(?:\s*<\/b>)?\s*<\/\1>/gi, "<hr>\n<h5><b>$2</b></h5><br>")
-			.replace(/(?<![>])(Atividades? resolvidas?|Atividades de sala|Atividade de sala|Resolução de problemas?|Mão na massa|Vamos pesquisar|Cinefórum|Visita técnica|Conectando ideias|Ponto de partida)/gi, "<b>$1</b>")
-			.replace(/<p>(?:<b>\s*)?(?:Resolução Comentada|Resposta|Resolução)\s*:(?:<\/b>\s*)?<\/p>/gi, "<p><br><b>Resolução Comentada:</b></p>")
-			.replace(/<p>(?:<b>)?(\d+)\s?[-.)](?![0-9])\s?(\d+)\s?[-.)](?![0-9])\s?(\d+)\s?[-.)](?![0-9])\s?(?:<\/b>)?\s?Professor, es(?:.*?)?<\/p>/gi, "<p><br><b>$1)</b>, <b>$2)</b> e <b>$3)</b> Professor, essas atividades encontram-se resolvidas no material didático. Sugerimos que as utilize durante as explicações do tema ao qual elas se referem a fim de aprofundar os conceitos abordados na parte teórica.</p>")
-			.replace(/<p>(?:<b>)?(\d+)\s?[-.)](?![0-9])\s?(\d+)\s?[-.)](?![0-9])\s?(?:<\/b>)?\s?Professor, es(?:.*?)?<\/p>/gi, "<p><br><b>$1)</b> e <b>$2)</b> Professor, essas atividades encontram-se resolvidas no material didático. Sugerimos que as utilize durante as explicações do tema ao qual elas se referem a fim de aprofundar os conceitos abordados na parte teórica.</p>")
-			.replace(/<p>(?:<b>)?(\d+)\s?[-.)](?![0-9])\s?(?:<\/b>)?\s?Professor, es(?:.*?)?<\/p>/gi, "<p><br><b>$1)</b> Professor, essa atividade encontra-se resolvida no material didático. Sugerimos que a utilize durante as explicações do tema ao qual ela se refere a fim de aprofundar os conceitos abordados na parte teórica.</p>")
-			.replace(/<\/p>/gi, "</p>\n")
-			.replace(/<p>(?:<br>)?(?:<b>)?(\d+)\s?[-.)](?![0-9])\s?(?:<b>)?(?:Resolução:|Resposta:|Resposta: Letra|Alternativa correta:|Resolução: Letra|Letra)?\s?([^<]*?)?(?:<\/b>)?(.*?)?(?:<\/b>)?<\/p>/gi, "<p><br><b>$1)</b> $2$3</p>")
-			.replace(/<p><b>Questão 0?(\d)<\/b>\./gi, "<p><br><b>$1)</b> ")
-			.replace(/<p>(?:<br>)?\s?(\d+)\s?[-.)](?![0-9])\s?(?:Resolução:|Resposta:|Resposta: Letra|Resolução: Letra|Letra)?\s?(.*?)?<\/p>/gi, "<p><br><b>$1)</b> $2</p>")
-			.replace(/<ol><li>(?:<p>)?(?:<b>)?Resolução:\s?(?:<\/b>)(.*?)(?:<\/p>)?<\/li>\s*<\/ol>/gi, "<p><br><b>$$)</b> $1</p>")
-			.replace(/(?<!<p>)<br><\/p>/gi, "</p>")
-			.replace(/(Comentário:)/gi, "<br><b>Resolução comentada:</b> ")
-			.replace(/<p><br><\/p>\s+(<p><br><b>Resolução comentada:<\/b><\/p>)/gi, "$1")
-			.replace(/ ?<\/b> ?<b> ?/gi, " ")
-			.replace(/<p>(?:<b>)(?:Competência Específica|Competência) (\d+)[:.]?(.*?)?(?:<\/b>)?[:]?(.*?)?(?:<\/b>)?<\/p>/gi, "<p><b>Competência Específica $1:</b> $2$3</p>")
-			.replace(/<p>(?:Competência Específica|Competência) (\d+)[:.]?(.*?)?<\/p>/gi, "<p><b>Competência Específica $1:</b> $2</p>")
-			.replace(/^(?:<hr>)/gi, "")
-			.replace(/(<br>\s*)*$/gi, "")
-			.replace(/<p><b>(\d+)\)/gi, "<p><br><b>$1)")
-			.replace(/<p><b>Orientação\/Sugestão<\/b><\/p>/gi, "<p><b><br>Orientação e Sugestão</b></p>")
-			.replace(/<p><br><b>(\d+)\)<\/b> (?:Resposta: Letra|Resposta:) /gi, "<p><br><b>$1)</b> ")
-			.replace(/<p><b>([abcde]\))<\/b>/gi, "<p>$1")
-			.replace(/<p><b><br>Orientação e Sugestão<\/b><\/p>\s?<p><br>/gi, "<p><b><br>Orientação e Sugestão</b></p><p>")
-			.replace(/<p>([abcde]\))\s*(?:<b>)?\s*(?:Incorret|Errad)[ao][.,:]?\s*(?:<\/b>)?[.,:]?/gi, "<p>$1 <b>Incorreta.</b> ")
-			.replace(/<p>([abcde]\))\s*(?:<b>)?\s*(?:corret|cert)[ao][.,:]?\s*(?:<\/b>)?[.,:]?/gi, "<p>$1 <b>Correta.</b> ")
-			.replace(/<br>\s+<p><br>/gi, "<p><br>")
-			.replace(/(?:<br>)?(?:<b>)?\((EM\d{2}[A-Z]{3}\d{3}|EM[A-Z]{4}\d{2}|EM[A-Z]{6}\d{2})\)(?:<\/b>)?/g, "<b>($1)</b>")
-			.replace(/<p>(?:<br>)?<b>(\d+)\)<\/b>\./gi, "<p><br><b>$1)</b>")
-			.replace(/<br><p><br>/gi, "<p><br>")
-			.replace(/<(p|br)>Resolução: /gi, "<$1><b>Resolução:</b> ")
-			.replace(/<p><b> ?Resolução:<\/b> ?(?:Resolução:)?/gi, "<p><b>Resolução:</b> ")
-			.replace(/<ol><li><b>(.*?)<\/b><\/li><\/ol>/gi, "<h5>$1</h5>")
-			.replace(/<p><br><b>0(\d)\)/gi, "<p><br><b>$1)")
-			.replace(/(?<=<p><br><b>\d+\)<\/b>) Resolução:?/gi, "")
-			.replace(/\s*(?:<p><br><\/p>|<br>)\s*(?=<p><b>\((?:EM\d{2}[A-Z]{3}\d{3}|EM[A-Z]{4}\d{2}|EM[A-Z]{6}\d{2})\))/g, "")
-			.replace(/[ ]{2,}/gi, " ")
-			.replace(/<ol>\s*<li>\s*(Trilha de aprendizagem|Objetivo de aprendizagem do capítulo|Situação-problema|Habilidades utilizadas nessa situação-problema:|Resolvendo a situação-problema)\s*<\/li>\s*<\/ol>/g, "<p><b>$1</b></p>");
+			textareaValue = manual(textareaValue);
 		}
 
 		if (document.getElementById("exerciciosMaterial").checked) {
 			textareaValue = exerciciosMaterial(textareaValue);
 		}
-		
+
 		textareaValue = textareaValue
 			.replace(/\s+/g, " ")
 			.replace(/[ ]{2,}/gi, " ")
@@ -514,7 +531,10 @@ function clear() {
 			.replace(/(<div class="youtube">)/gi, "$1\n\t")
 			.replace(/(<div class='d-print-none'>)/gi, "\n$1\n\t")
 			.replace(/<p><br>/gi, "\n<p><br>")
-			.replace(/(?<=<\/ol>)\s*<br>\s*(?=<\/div>)/gi, '\n');
+			.replace(/(?<=<\/ol>)\s*<br>\s*(?=<\/div>)/gi, "\n")
+			.replace(/<img\s+src="[^"]*"\s+(?:(?:width|height)="[^"]*"\s*)+>/gi, "@@")
+			.replace(/<p>(?:<b>)?(?:<br\s*\/?>)?@@(?:<br\s*\/?>)?(?:<\/b>)?<\/p>/gi, "@@")
+			.replace(/@@((?:<br\s*\/?>)?(?:<\/b>)?<\/p>)/gi, "$1@@");
 
 		textareaValue = textareaValue
 			.replace(/<font\s?>/gi, "")
@@ -726,10 +746,11 @@ $(document).ready(function () {
 					let _position = `${format[counter - 1] != "" ? format[counter - 1].split("#")[0] : "<div class='img-center mx-400 text-center'>"}`;
 
 					counter++;
-					return `${_position}<img src='${imageName}'></div>`;
+					return `\n${_position}<img src='${imageName}'></div>`;
 				})
 				.replace(/(?<=(?:jpg|png)'><\/div>)(<div class="img-(?:center|left|right) mx-\d{3} text-center">)#(jpg|png)>/gi, "")
-				.replace(/<p>(<div.*?<\/div>)<\/p>/gi, "$1");
+				.replace(/<p>(<div.*?<\/div>)<\/p>/gi, "$1")
+				.replace(/\n\n/gi, "\n");
 
 			// Definir o texto formatado em outro elemento
 			$("#result").text(textareaValueEq);
