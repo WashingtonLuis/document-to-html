@@ -160,8 +160,9 @@ function exerciciosMaterial(str) {
 	let text = str
 	.replace(/<p>\s?(?:<b>)?\d+[.)-] ?(.*?)(?:<\/b>)?\s?<\/p>/gi, '<div class="exercise"><p>$1</p></div>')
 	.replace(/\(Enem\)/gi, '<b>(ENEM)</b>')
-	.replace(/<p>[a-e]\) (.*?)<\/p>/gi, "<div class='d-print-none'><!-- h5p --></div><div class='d-none d-print-block'><ol class='options'><li>$1</li></ol></div>")
-	.replace(/(?<=<\/li>)<\/ol><\/div>\s*<div class='d-print-none'>\s*<!-- h5p --><\/div><div class='d-none d-print-block'><ol class='options'>(?=<li>)/gi, '')
+	.replace(/<p>[a-e]\) (.*?)<\/p>/gi, '<div class="d-print-none"><!-- h5p --></div><div class="d-none d-print-block"><ol class="options"><li>$1</li></ol></div>')
+	.replace(/(?<=<\/li>)<\/ol><\/div>\s*<div class="d-print-none">\s*<!-- h5p --><\/div><div class="d-none d-print-block"><ol class="options">(?=<li>)/gi, '')
+	.replace(/(?<=<div class="exercise">)((?:(?!<div class="exercise">)[\s\S])*?)<\/div>((?:(?!<div class="exercise">)[\s\S])*?)(<div class="d-print-none"><!-- h5p --><\/div>)(?=<div class="d-none d-print-block"><ol class="options"><li>)/gi, '$1$2$3</div>')
 ;
 	return text;
 }
