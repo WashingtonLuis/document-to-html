@@ -559,7 +559,8 @@ function clear() {
 			.replace(/<div><br>\s?<\/div>\s?<br>/gi, "")
 			.replace(/<img width="\d+".*?v:shapes=".*?">/gi, "##")
 			.replace(/^\s*/g, "")
-			.replace(/(<br>\s*)*$/gi, "");
+			.replace(/(<br>\s*)*$/gi, "")
+			.replace(/(<br><\/p>\s*)$/gi, '</p>');
 
 		if (document.getElementById("latex").checked) {
 			textareaValue = textareaValue
