@@ -383,7 +383,7 @@ function semTag(str) {
 
 function exerciciosMaterial(str) {
 	let text = str
-		.replace(/<p>\s?(?:<b>)?\d+[.)-] ?(.*?)(?:<\/b>)?\s?<\/p>/gi, '<div class="exercise"><p>$1</p></div>')
+		.replace(/<p>\s?(?:<b>)?\d+[.)-](?:\s?<b>|\s?<\/b>| )*(.*?)(?:<\/b>)?\s?<\/p>/gi, '<div class="exercise"><p>$1</p></div>')
 		.replace(/\(Enem\)/gi, "<b>(ENEM)</b>")
 		.replace(/<p>[a-e]\) (.*?)<\/p>/gi, '<div class="d-print-none"><!-- h5p --></div><div class="d-none d-print-block"><ol class="options"><li>$1</li></ol></div>')
 		.replace(/(?<=<\/li>)<\/ol><\/div>\s*<div class="d-print-none">\s*<!-- h5p --><\/div><div class="d-none d-print-block"><ol class="options">(?=<li>)/gi, "")
@@ -560,7 +560,8 @@ function clear() {
 			.replace(/<img width="\d+".*?v:shapes=".*?">/gi, "##")
 			.replace(/^\s*/g, "")
 			.replace(/(<br>\s*)*$/gi, "")
-			.replace(/(<br><\/p>\s*)$/gi, '</p>');
+			.replace(/(?:<br><\/p>\s*)$/gi, "</p>")
+			.replace(/(?:\s*<p><\/p>\s*)$/gi, "");
 
 		if (document.getElementById("latex").checked) {
 			textareaValue = textareaValue
