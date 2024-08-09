@@ -251,7 +251,7 @@ function nLatex(str) {
 		.replace(/\+/g, " + ")
 		.replace(/÷/g, " ÷ ")
 		.replace(/→/g, " → ")
-		.replace(/·|⋅/g, " · ")
+		.replace(/·|⋅|\\bullet\b|\\cdot\b/g, " · ")
 		.replace(/⇒/g, " ⇒ ")
 		.replace(/△|Δ/g, " Δ ")
 		.replace(/≠/g, " ≠ ")
