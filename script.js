@@ -655,7 +655,7 @@ $(document).ready(function () {
 			textareaValueEq = _clear(textareaValueEq);
 			textareaValueEq = nLatex(textareaValueEq);
 			textareaValueEq = semTag(textareaValueEq);
-			textareaValueEq = textareaValueEq.replace(/[ ]{2,}/gi, " ").replace(/\s?(.*?)\s?/gi, "$1");
+			textareaValueEq = textareaValueEq.replace(/[ ]{2,}/gi, " ").replace(/^\s+|\s+$/g, "");
 
 			// Definir o texto formatado em outro elemento
 			$("#result").text(textareaValueEq);
