@@ -307,9 +307,8 @@ function nLatex(str) {
 		.replace(/(?<!R\$ )(?<=\d)(?=(\d{3})+(?!\d))/g, " ")
 		.replace(/(?<=R\$ \d)(?=(\d{3})+(?!\d))/g, ".")
 		.replace(/\{(.*?)\}\^ /g, "$1 ")
-		.replace(/\( ?(.*?) ?\)/g, "($1)")
-		// .replace(/(?<=\b[A-Za-z]) \(/g, "(")
-		;
+		.replace(/\( ?(.*?) ?\)/g, "($1)");
+	// .replace(/(?<=\b[A-Za-z]) \(/g, "(")
 
 	return text;
 }
@@ -656,7 +655,7 @@ $(document).ready(function () {
 			textareaValueEq = _clear(textareaValueEq);
 			textareaValueEq = nLatex(textareaValueEq);
 			textareaValueEq = semTag(textareaValueEq);
-			textareaValueEq = textareaValueEq.replace(/[ ]{2,}/gi, " ");
+			textareaValueEq = textareaValueEq.replace(/[ ]{2,}/gi, " ").replace(/\s?(.*?)\s?/gi, "$1");
 
 			// Definir o texto formatado em outro elemento
 			$("#result").text(textareaValueEq);
