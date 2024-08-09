@@ -100,7 +100,7 @@ function latex(str) {
 
 		.replace(/&amp;/g, " & ")
 		// .replace(/\.{3}|\\cdots/g, " \\cdots ") ????????
-		.replace(/·|⋅|\\bullet\b|\\cdot\b/g, " \\cdot ")
+		.replace(/·|⋅|\\bullet|\\cdot\b/g, " \\cdot ")
 		.replace(/→|\\rightarrow\b/g, " \\rightarrow ")
 		.replace(/⇒|\\Rightarrow\b/g, " \\Rightarrow ")
 		.replace(/△|Δ|\\Delta\b/g, " \\Delta ")
@@ -247,11 +247,11 @@ function latex(str) {
 function nLatex(str) {
 	let text = textNLatex(str);
 	text = text
-		.replace(/(?<![a-v(=>]{3,})\=/g, " = ")
+		.replace(/(?:(?<![a-v(=>]{3,})|(?<=<p>[a-zA-Z]{1,2}))\=/g, " = ")
 		.replace(/\+/g, " + ")
 		.replace(/÷/g, " ÷ ")
 		.replace(/→/g, " → ")
-		.replace(/·|⋅|\\bullet\b|\\cdot\b/g, " · ")
+		.replace(/·|⋅|\\bullet|\\cdot\b/g, " · ")
 		.replace(/⇒/g, " ⇒ ")
 		.replace(/△|Δ/g, " Δ ")
 		.replace(/≠/g, " ≠ ")
