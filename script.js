@@ -47,7 +47,7 @@ function textNLatex(input) {
 		return output
 			.replace(/[ ]{2, }/gi, " ")
 			.replace(/\( ?(.*?) ?\)/g, "($1)")
-			.replace(/(?<=[A-Za-z]) \(/g, "(");
+			.replace(/(?<=\b[A-Za-z]) \(/g, "(");
 	} else {
 		return textNLatex(output);
 	}
@@ -308,7 +308,8 @@ function nLatex(str) {
 		.replace(/(?<=R\$ \d)(?=(\d{3})+(?!\d))/g, ".")
 		.replace(/\{(.*?)\}\^ /g, "$1 ")
 		.replace(/\( ?(.*?) ?\)/g, "($1)")
-		.replace(/(?<=[A-Za-z]) \(/g, "(");
+		// .replace(/(?<=\b[A-Za-z]) \(/g, "(")
+		;
 
 	return text;
 }
