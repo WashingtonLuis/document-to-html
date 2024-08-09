@@ -738,7 +738,7 @@ $(document).ready(function () {
 			let bloco = $("#bloco").val();
 
 			textareaValueEq = textareaValueEq
-				.replace(/<p(?: class="text-center")?>@@<\/p>/gi, "@@")
+				.replace(/<p(?: class="text-center")?>(?:<b>\s?|\s)?@@(?:\s?<\/b>|\s)?<\/p>/gi, "@@")
 				.replace(/(<div class="img-(?:center|left|right) mx-\d{3} text-center">)?<img src="blo\d\-\d{2,3}\.(jpg|png)"(?: \/)?>(?:<\/div)?/gi, "@@$1#$2")
 				.replace(/@@/g, (match, offset, string) => {
 					// Extrai o formato (jpg ou png) do nome da imagem original
