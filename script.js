@@ -713,7 +713,7 @@ $(document).ready(function () {
 	$("#imgSvg").click(function () {
 		try {
 			let textareaValueEq = $("#summernote").summernote("code");
-			let counter = 1;
+			let counter = parseInt($("#numSvg").val(), 10);
 			let bloco = $("#bloco").val();
 
 			textareaValueEq = textareaValueEq.replace(/\<img src\=\"eqn?\d\-\d{0,3}\.svg\"\>/gi, "##").replace(/##/g, () => {
@@ -722,10 +722,18 @@ $(document).ready(function () {
 				return `<img src='${imageName}'>`;
 			});
 
+			$("#numSvg").val(counter);
 			// Definir o texto formatado em outro elemento
 			$("#result").text(textareaValueEq);
 
-			navigator.clipboard.writeText(textareaValueEq);
+			navigator.clipboard
+				.writeText(textareaValueEq)
+				.then(() => {
+					console.log("Texto copiado com sucesso!");
+				})
+				.catch((err) => {
+					console.error("Erro ao copiar o texto:", err);
+				});
 		} catch (error) {
 			console.error("Erro ao formatar o texto:", error);
 		}
@@ -734,33 +742,43 @@ $(document).ready(function () {
 	$("#imgJpgPng").click(function () {
 		try {
 			let textareaValueEq = $("#summernote").summernote("code");
-			let counter = 1;
+			let counter = parseInt($("#numImg").val(), 10);
 			let bloco = $("#bloco").val();
 
 			textareaValueEq = textareaValueEq
 				.replace(/<p(?: class="text-center")?>(?:<b>\s?|\s)?@@(?:\s?<\/b>|\s)?<\/p>/gi, "@@")
-				.replace(/(<div class="img-(?:center|left|right) mx-\d{3} text-center">)?<img src="blo\d\-\d{2,3}\.(jpg|png)"(?: \/)?>(?:<\/div)?/gi, "@@$1#$2")
+				.replace(/(<div class="img-(?:center|left|right) mx-\d{3} text-center">)?<img src="blo\d{1,2}\-\d{2,3}\.(jpg|png)"(?: \/)?>(?:<\/div)?/gi, "@@$1#$2")
 				.replace(/@@/g, (match, offset, string) => {
 					// Extrai o formato (jpg ou png) do nome da imagem original
 
-					let format = string.match(/(?<=@@)(?:(?:<div class="img-(?:center|left|right) mx-\d{3} text-center">)?#?(?:jpg|png))?/gi);
+					let formatMatch = string.slice(offset).match(/#(jpg|png)/i);
+					let format = formatMatch ? formatMatch[1] : "jpg";
 
-					console.log(format[counter - 1]);
+					let positionMatch = string.slice(offset).match(/<div class="img-(center|left|right) mx-\d{3} text-center">/i);
+					let position = positionMatch ? positionMatch[0] : "<div class='img-center mx-400 text-center'>";
 
-					let imageName = `blo${bloco}-${counter.toString().padStart(2, "0")}.${format[counter - 1] != "" ? format[counter - 1].split("#")[1] : "jpg"}`;
-					let _position = `${format[counter - 1] != "" ? format[counter - 1].split("#")[0] : "<div class='img-center mx-400 text-center'>"}`;
+					// Construindo o nome da nova imagem
+					let imageName = `blo${bloco}-${counter.toString().padStart(2, "0")}.${format}`;
 
 					counter++;
-					return `\n${_position}<img src='${imageName}'></div>`;
+					return `\n${position}<img src='${imageName}'></div>`;
 				})
 				.replace(/(?<=(?:jpg|png)'><\/div>)(<div class="img-(?:center|left|right) mx-\d{3} text-center">)#(jpg|png)>/gi, "")
 				.replace(/<p>(<div.*?<\/div>)<\/p>/gi, "$1")
 				.replace(/\n\n/gi, "\n");
 
+			$("#numImg").val(counter);
 			// Definir o texto formatado em outro elemento
 			$("#result").text(textareaValueEq);
 
-			navigator.clipboard.writeText(textareaValueEq);
+			navigator.clipboard
+				.writeText(textareaValueEq)
+				.then(() => {
+					console.log("Texto copiado com sucesso!");
+				})
+				.catch((err) => {
+					console.error("Erro ao copiar o texto:", err);
+				});
 		} catch (error) {
 			console.error("Erro ao formatar o texto:", error);
 		}
