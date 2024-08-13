@@ -2,61 +2,67 @@
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Limpar texto</title>
-		<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
 		<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet" />
-		<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
-		<script src="script.js"></script>
 		<link rel="stylesheet" href="style.css" />
+		<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
 	</head>
 	<body>
-		<div class="menu">
-			<div class="opcao">
-				<input type="checkbox" id="latex" name="eq" value="latex" />
-				<label for="latex">LaTeX</label>
+		<header>
+			<div class="menu">
+				<div class="opcao">
+					<input type="checkbox" id="latex" name="eq" value="latex" />
+					<label for="latex">LaTeX</label>
+				</div>
+
+				<div class="opcao">
+					<input type="checkbox" id="nLatex" name="eq" value="nLatex" />
+					<label for="nLatex">Não-LaTeX</label>
+				</div>
+
+				<div class="opcao">
+					<input type="checkbox" id="facilidades" name="checkbox3" value="facilidades" />
+					<label for="facilidades">Facilidades</label>
+				</div>
+
+				<div class="opcao">
+					<input type="checkbox" id="manual" name="checkbox4" value="manual" />
+					<label for="manual">Manual</label>
+				</div>
+
+				<div class="opcao">
+					<input type="checkbox" id="exerciciosMaterial" name="checkbox4" value="exerciciosMaterial" />
+					<label for="exerciciosMaterial">Exercícios/Material</label>
+				</div>
 			</div>
+		</header>
 
-			<div class="opcao">
-				<input type="checkbox" id="nLatex" name="eq" value="nLatex" />
-				<label for="nLatex">Não-LaTeX</label>
+		<main>
+			<div id="summernote"></div>
+
+			<p id="result"></p>
+
+			<div class="button-container">
+				<button type="button" id="clear" title="Aplica todas as alterações de acordo com os seletores marcados e as alterações padrão">Limpar</button>
+				<button type="button" id="eqTag" title="Insere a tag '$$' nas equações para que sejam salvas em um arquivo">Tag Equação</button>
+				<button type="button" id="eqHtml" title="Converte as equações e texto para HTML">Converter para HTML</button>
+				<button type="button" id="eqGrande" title="Insere a tag de Matriz para uma leve redução na equação">Equação Grande</button>
+				<button type="button" id="textoSimples" title="Remove todas as tags e retira as quebras de linha">Texto sem quebras</button>
+				<button type="button" id="ajustEqSalvaEq" title="Ajusta todas as equações que estão no padrão LaTeX dentro da tag '$$ equação $$' para que sejam utilizadas em um script para criar e salvar as imagens no padrão SVG no site 'https://csdn.codecogs.com/eqneditor/editor.php'">Ajustar Equação para script SalvarEqn</button>
+				<button type="button" id="imgSvg" title="Ajusta imagens nos formatos SVG e substitui o seletor '##' para imagens SVG">Ajustar Equações SVG</button>
+				<button type="button" id="imgJpgPng" title="Ajusta imagens nos formatos JPG e PNG e substitui o seletor '@@' para imagens JPG">Ajustar imagens JPG/PNG</button>
+				<button type="button" id="iniMaiusc" title="Formata o texto para começar com letra maiúscula todas as palavras com mais de 3 letras">Inicial Maiúscula</button>
+				<label for="bloco">Bloco:</label>
+				<input type="number" name="bloco" id="bloco" value="1" min="1" max="15" title="Seleciona o número do bloco/capítulo para nomeação das imagens" />
+				<label for="numImg">Img:</label>
+				<input type="number" name="numImg" id="numImg" value="1" min="1" title="Seleciona o número inicial da imgagem para nomeação das imagens" />
+				<label for="numSvg">Svg:</label>
+				<input type="number" name="numSvg" id="numSvg" value="1" min="1" title="Seleciona o número inicial da imgagem SVG para nomeação das imagens" />
 			</div>
+		</main>
 
-			<div class="opcao">
-				<input type="checkbox" id="facilidades" name="checkbox3" value="facilidades" />
-				<label for="facilidades">Facilidades</label>
-			</div>
-
-			<div class="opcao">
-				<input type="checkbox" id="manual" name="checkbox4" value="manual" />
-				<label for="manual">Manual</label>
-			</div>
-
-			<div class="opcao">
-				<input type="checkbox" id="exerciciosMaterial" name="checkbox4" value="exerciciosMaterial" />
-				<label for="exerciciosMaterial">Exercícios/Material</label>
-			</div>
-		</div>
-
-		<div id="summernote"></div>
-
-		<p id="result"></p>
-
-		<div class="button-container">
-			<button type="button" id="clear" title="Aplica todas as alterações de acordo com os seletores marcados e as alterações padrão">Limpar</button>
-			<button type="button" id="eqTag" title="Insere a tag '$$' nas equações para que sejam salvas em um arquivo">Tag Equação</button>
-			<button type="button" id="eqHtml" title="Converte as equações e texto para HTML">Converter para HTML</button>
-			<button type="button" id="eqGrande" title="Insere a tag de Matriz para uma leve redução na equação">Equação Grande</button>
-			<button type="button" id="textoSimples" title="Remove todas as tags e retira as quebras de linha">Texto sem quebras</button>
-			<button type="button" id="ajustEqSalvaEq" title="Ajusta todas as equações que estão no padrão LaTeX dentro da tag '$$ equação $$' para que sejam utilizadas em um script para criar e salvar as imagens no padrão SVG no site 'https://csdn.codecogs.com/eqneditor/editor.php'">Ajustar Equação para script SalvarEqn</button>
-			<button type="button" id="imgSvg" title="Ajusta imagens nos formatos SVG e substitui o seletor '##' para imagens SVG">Ajustar Equações SVG</button>
-			<button type="button" id="imgJpgPng" title="Ajusta imagens nos formatos JPG e PNG e substitui o seletor '@@' para imagens JPG">Ajustar imagens JPG/PNG</button>
-			<button type="button" id="iniMaiusc" title="Formata o texto para começar com letra maiúscula todas as palavras com mais de 3 letras">Inicial Maiúscula</button>
-			<label for="bloco">Bloco:</label>
-			<input type="number" name="bloco" id="bloco" value="1" min="1" max="15" title="Seleciona o número do bloco/capítulo para nomeação das imagens" />
-			<label for="numImg">Img:</label>
-			<input type="number" name="numImg" id="numImg" value="1" min="1" title="Seleciona o número inicial da imgagem para nomeação das imagens" />
-			<label for="numSvg">Svg:</label>
-			<input type="number" name="numSvg" id="numSvg" value="1" min="1" title="Seleciona o número inicial da imgagem SVG para nomeação das imagens" />
-		</div>
+		<script src="script.js" defer></script>
 	</body>
 </html>

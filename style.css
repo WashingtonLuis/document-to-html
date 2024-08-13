@@ -52,10 +52,13 @@ button {
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s;
+  font-size: 16px;
+  transition: background-color 0.3s, transform 0.2s;
 }
 
 button:hover {
   background-color: #0056b3;
+  transform: scale(1.05);
 }
 
 input[type="number"] {
@@ -67,4 +70,20 @@ input[type="number"] {
   border-radius: 5px;
   font-size: 18px;
   text-align: center;
+}
+
+input[type="number"]:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+@media (max-width: 500px) {
+  .menu {
+    flex-direction: column;
+  }
+
+  button {
+    width: 100%;
+    box-sizing: border-box;
+  }
 }
