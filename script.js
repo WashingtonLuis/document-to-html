@@ -100,7 +100,7 @@ function latex(str) {
 
 		.replace(/&amp;/g, " & ")
 		// .replace(/\.{3}|\\cdots/g, " \\cdots ") ????????
-		.replace(/·|⋅|\\bullet|\\cdot\b/g, " \\cdot ")
+		.replace(/\\\.|·|⋅|\\bullet|\\cdot\b/g, " \\cdot ")
 		.replace(/→|\\rightarrow\b/g, " \\rightarrow ")
 		.replace(/⇒|\\Rightarrow\b/g, " \\Rightarrow ")
 		.replace(/△|Δ|\\Delta\b/g, " \\Delta ")
