@@ -316,21 +316,97 @@ function nLatex(str) {
 	return text;
 }
 
-function facilidades(str) {
+/* function facilidades(str) {
 	let text = str;
 	text = text
 		.replace(/(<p>[\s\S]*?)(<img>)([\s\S]*?<\/p>)/gi, "$1$3<div class='img-center mx-400 text-center'><img src='blo2-01.jpg'><div class='legend'><b>#$</b><br>Fonte: . Disponível em: <a href='##' class='url' target='_blank' rel='nofollow'>##</a>. Acesso em: .</div></div>")
 		.replace(/(<p>[\s\S]*?)(https?:\/\/(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+))([\s\S]*?<\/p>)/gi, "$1$4<div class='youtube'><div><div><iframe src='https://www.youtube.com/embed/$3?rel=0' frameborder='0' allowfullscreen=''></iframe></div></div></div><p class='d-none d-print-block'><span><a href='https://youtu.be/$3' target='blank' rel='nofollow'>https://youtu.be/$3</a></span></p>")
 		.replace(/<table>(.*?)<\/table>/gi, "<div class='table-responsive mx-auto'><table class='data-table'>$1</table></div>")
-		.replace(/(?<=<tbody><tr>)(<td><p(?: class="text-center")?><b>.*?<\/b><\/p><\/td>)(?=<\/tr>)/, (match) => {
-			return match.replace(/<td><p(?: class="text-center")?><b>(.*?)<\/b><\/p><\/td>/gi, "<th>$1</th>");
+
+		.replace(/(?<=<tbody>\s*<tr[^>]*>)(\s*<td>\s*<p(?:\s+class="text-center")?\s*><b>.*?<\/b>\s*<\/p>\s*<\/td>\s*)(?=<\/tr>)/gi, (match) => {
+			return match.replace(/<td>\s*<p(?:\s+class="text-center")?\s*><b>(.*?)<\/b>\s*<\/p>\s*<\/td>/gi, "<th>$1</th>");
 		})
+
 		.replace(/<(a)\s*href="(.*?)".*?>(.*?)<\/\1>/gi, "<a href='$2' class='url' target='_blank' rel='nofollow'>$3</a>")
 		.replace(/<a>(\s)?(.*?)(\s)?<\/a>/gi, "$1<a href='$2' class='url' target='_blank' rel='nofollow'>$2</a>$3")
 		.replace(/(?<!["'>])\<?\b(https?:\/\/.*?\.(?:html?|pdf))(?!\.\w)\>?/gi, (match, link) => `${link.replace(/ /g, "")}`)
 		.replace(/(?<!["'>])\b(https?:\/\/\S+\.(?:html?|pdf))(?!\.\w)\b/gi, "<a href='$1' class='url' target='_blank' rel='nofollow'>$1</a>");
 
 	return text;
+} */
+
+function facilidades(str) {
+	let text = str;
+
+	text = removeTagU(text);
+	text = removeImgFromParagraphs(text);
+	text = replaceYoutubeLinks(text);
+	text = wrapTablesWithResponsiveDiv(text);
+	text = convertTableCellsToHeaders(text);
+	text = formatLinks(text);
+	text = fixMalformedLinks(text);
+
+	return text;
+}
+
+function removeTagU(text) {
+	// Criar um elemento temporário
+	var tempDiv = $("<div>");
+
+	// Inserir o conteúdo de text no elemento temporário
+	tempDiv.html(text);
+
+	// Aplicar o unwrap() para remover as tags <u> mas preservar o conteúdo
+	tempDiv.find("u").contents().unwrap();
+
+	// Extrair o HTML modificado de volta para text
+	return tempDiv.html();
+}
+
+function removeImgFromParagraphs(text) {
+	return text.replace(/(<p>[\s\S]*?)(<img>)([\s\S]*?<\/p>)/gi, "$1$3<div class='img-center mx-400 text-center'><img src='blo2-01.jpg'><div class='legend'><b>#$</b><br>Fonte: . Disponível em: <a href='##' class='url' target='_blank' rel='nofollow'>##</a>. Acesso em: .</div></div>");
+}
+
+function replaceYoutubeLinks(text) {
+	return text.replace(/(<p>[\s\S]*?)(https?:\/\/(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+))([\s\S]*?<\/p>)/gi, "$1$4<div class='youtube'><div><div><iframe src='https://www.youtube.com/embed/$3?rel=0' frameborder='0' allowfullscreen=''></iframe></div></div></div><p class='d-none d-print-block'><span><a href='https://youtu.be/$3' target='blank' rel='nofollow'>https://youtu.be/$3</a></span></p>");
+}
+
+function wrapTablesWithResponsiveDiv(text) {
+	return text.replace(/<table>(.*?)<\/table>/gi, "<div class='table-responsive mx-auto'><table class='data-table'>$1</table></div>");
+}
+
+function convertTableCellsToHeaders(text) {
+	return text.replace(/(?<=<tbody>\s*<tr[^>]*>)(\s*<td>\s*<p(?:\s+class="text-center")?\s*><b>.*?<\/b>\s*<\/p>\s*<\/td>\s*)(?=<\/tr>)/gi, (match) => {
+		return match.replace(/<td>\s*<p(?:\s+class="text-center")?\s*><b>(.*?)<\/b>\s*<\/p>\s*<\/td>/gi, "<th>$1</th>");
+	});
+}
+
+function formatLinks(text) {
+	return text.replace(/<(a)\s*href="(.*?)".*?>(.*?)<\/\1>/gi, "<a href='$2' class='url' target='_blank' rel='nofollow'>$3</a>").replace(/<a>(\s)?(.*?)(\s)?<\/a>/gi, "$1<a href='$2' class='url' target='_blank' rel='nofollow'>$2</a>$3");
+}
+
+/* function fixMalformedLinks(text) {
+	return text
+		.replace(/(?<!["'>])\<?\b(https?:\/\/.*?\.(?:html?|pdf))(?!\.\w)\>?/gi, (match, link) => `${link
+		.replace(/ /g, "")}`)
+		.replace(/(?<!["'>])\b(https?:\/\/\S+\.(?:html?|pdf))(?!\.\w)\b/gi, "<a href='$1' class='url' target='_blank' rel='nofollow'>$1</a>");
+} */
+function fixMalformedLinks(text) {
+	return text
+		.replace(/(?<!["'>])\<?\b(https?:\/\/[^\s<>]+\.(?:html?|pdf))(?!\.\w)\>?/gi, (match, link) => {
+			if (link) {
+				return link.replace(/ /g, ""); // Remove espaços em branco no link
+			}
+			return match;
+		})
+		.replace(/(?<!["'>])\b(https?:\/\/[^\s<>]+\.(?:html?|pdf))(?!\.\w)\b/gi, (match, link) => {
+			// Verifica se o link já está dentro de uma tag <a> para evitar duplicação
+			const isAlreadyLinked = /<a[^>]*href=['"]?https?:\/\/[^\s<>]+\.(?:html?|pdf)['"]?[^>]*>/i.test(match);
+			if (!isAlreadyLinked) {
+				return `<a href='${link}' class='url' target='_blank' rel='nofollow'>${link}</a>`;
+			}
+			return match;
+		});
 }
 
 function manual(str) {
@@ -521,7 +597,6 @@ function clear() {
 
 		textareaValue = textareaValue
 			.replace(/\s+/g, " ")
-			.replace(/[ ]{2,}/gi, " ")
 			.replace(/ <(\/)?(p|div|ol|ul|li|td|tr)/gi, "<$1$2")
 			.replace(/(?<!<tr><td>|<td>)<(div|h1|h2|h5|p|table|tr|\/tr|td|th|blockquote|script|iframe|\/div|ol|ul|hr)([^>]*)>/gi, "\n<$1$2>")
 			.replace(/<((?:\/(?:div|h1|h2|h5|p|table|tr|ol|li|ul|blockquote))|(?:ol|ul|hr)[^>]*)>(?!<\/td>)/gi, "<$1>\n")
@@ -537,7 +612,8 @@ function clear() {
 			.replace(/(?<=<\/ol>)\s*<br>\s*(?=<\/div>)/gi, "\n")
 			.replace(/<img\s+src="[^"]*"\s+(?:(?:width|height)="[^"]*"\s*)+>/gi, "@@")
 			.replace(/<p>(?:<b>)?(?:<br\s*\/?>)?@@(?:<br\s*\/?>)?(?:<\/b>)?<\/p>/gi, "@@")
-			.replace(/@@((?:<br\s*\/?>)?(?:<\/b>)?<\/p>)/gi, "$1@@");
+			.replace(/@@((?:<br\s*\/?>)?(?:<\/b>)?<\/p>)/gi, "$1@@")
+			.replace(/<p[^>]*>\s*<\/p>/gis, "");
 
 		textareaValue = textareaValue
 			.replace(/<font\s?>/gi, "")
