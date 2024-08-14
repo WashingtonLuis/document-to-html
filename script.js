@@ -566,7 +566,7 @@ function clear() {
 		if (document.getElementById("latex").checked) {
 			textareaValue = textareaValue
 				// .replace(/(?<!\\|\\textrm\{|\\textrm\{ |\\textbf\{|\\textbf\{ |\\begin\{|\\begin\{ |\\end\{|\\end\{ |\{\\color\{|\{\\color\{ |\\left)\\?\{([^{}<.]*)\\?\}/gi, '\\left\\{$1\\right\\}')
-				.replace(/<(\w+)[^>]*(?:color: ?rgb\(255, ?0, ?0\);|color:#ff0000;).*?>(.*?)<\/\1>/gi, "{\\color{Red} $2}");
+				.replace(/<(\w+)[^>]*(?:color: ?rgb\(255, ?0, ?0\);|color:#ff0000;).*?>(.*?)<\/\1>/gi, "{\\color{Red}$2}");
 		}
 
 		// Limpar espaços, estilos e tags indesejados
@@ -752,6 +752,33 @@ $(document).ready(function () {
 			textareaValueEq = _clear(textareaValueEq);
 			textareaValueEq = semTag(textareaValueEq);
 			textareaValueEq = textareaValueEq.replace(/[ ]{2,}/gi, " ");
+
+			// Definir o texto formatado em outro elemento
+			$("#result").text(textareaValueEq);
+
+			navigator.clipboard.writeText(textareaValueEq);
+		} catch (error) {
+			console.error("Erro ao formatar o texto:", error);
+		}
+	});
+
+	$("#codecogsToMathcha").click(function () {
+		try {
+			let textareaValueEq = $("#summernote").summernote("code");
+
+			textareaValueEq = semTag(textareaValueEq);
+			textareaValueEq = textareaValueEq.replace(/(\\(?:\'|\~|\^).)|\\c\{c\}/g, (match) => nLatexAcentuacao[match]);
+			textareaValueEq = textNLatex(textareaValueEq);
+			textareaValueEq = textareaValueEq
+				.replace(/[ ]{2,}/gi, " ")
+				.replace(/(?<!\\(?:\w+))(?<=(?:[A-Za-záéíóúàèìòùâêîôûäëïöüãẽĩõũç| ]+))\s(?!\\left|\\right|\(|\)|\}|\]|\\|\*|\-|\+|\.|\=|\^|_|:)/g, "\\ ")
+				.replace(/\{\\color\{Red\}([^}]*)\}/gi, "$1")
+				.replace(/(?<!\\|\w|[({]) (e|a|ou|de|da)/g, "\\ $1")
+				.replace(/(e|a|ou|de|da)\s/g, "$1\\ ")
+				.replace(/(?<=\d) (?=\w)/gi, '\\ ')
+				.replace(/(?<=[A-Za-z])\ \,/gi, ',')
+				.replace(/(\d),(\d)/g, "$1,\\!$2")
+				.replace(/\\ \\right\)/gi, '\\right\)');
 
 			// Definir o texto formatado em outro elemento
 			$("#result").text(textareaValueEq);
