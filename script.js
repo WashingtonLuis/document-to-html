@@ -42,7 +42,7 @@ function removeSpan(input) {
 }
 
 function textNLatex(input) {
-	const output = input.replace(/(\^|_)\\textrm\{([^}]*)\}/gi, " $1$2 ").replace(/\\textrm\{([^}]*)\}/gi, " $1 ");
+	const output = input.replace(/(\^|_)\\(?:textrm|text)\{([^}]*)\}/gi, " $1$2 ").replace(/\\(?:textrm|text)\{([^}]*)\}/gi, " $1 ");
 	if (output === input) {
 		return output
 			.replace(/[ ]{2, }/gi, " ")
