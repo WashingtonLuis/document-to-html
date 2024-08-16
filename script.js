@@ -245,6 +245,23 @@ function latex(str) {
 	return text;
 }
 
+function convertCodecogsToMathcha(text) {
+	text = semTag(text);
+	text = text.replace(/(\\(?:\'|\~|\^).)|\\c\{c\}/g, (match) => nLatexAcentuacao[match]);
+	text = textNLatex(text);
+	text = text
+		.replace(/[ ]{2,}/gi, " ")
+		.replace(/(?<!\\(?:\w+))(?<=(?:[A-Za-záéíóúàèìòùâêîôûäëïöüãẽĩõũç| ]+))\s(?!\\left|\\right|\(|\)|\}|\]|\\|\*|\-|\+|\.|\=|\^|_|:)/g, "\\ ")
+		.replace(/\{\\color\{Red\}([^}]*)\}/gi, "$1")
+		.replace(/(?<!\\|\w|[({]) (e|a|ou|de|da)/g, "\\ $1")
+		.replace(/(e|a|ou|de|da)\s/g, "$1\\ ")
+		.replace(/(?<=\d) (?=\w)/gi, "\\ ")
+		.replace(/(?<=[A-Za-z])\ \,/gi, ",")
+		.replace(/(\d),(\d)/g, "$1,\\!$2")
+		.replace(/\\ (?=\\right|$)/gi, "");
+	return text;
+}
+
 function nLatex(str) {
 	let text = textNLatex(str);
 	text = text
@@ -315,25 +332,6 @@ function nLatex(str) {
 
 	return text;
 }
-
-/* function facilidades(str) {
-	let text = str;
-	text = text
-		.replace(/(<p>[\s\S]*?)(<img>)([\s\S]*?<\/p>)/gi, "$1$3<div class='img-center mx-400 text-center'><img src='blo2-01.jpg'><div class='legend'><b>#$</b><br>Fonte: . Disponível em: <a href='##' class='url' target='_blank' rel='nofollow'>##</a>. Acesso em: .</div></div>")
-		.replace(/(<p>[\s\S]*?)(https?:\/\/(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+))([\s\S]*?<\/p>)/gi, "$1$4<div class='youtube'><div><div><iframe src='https://www.youtube.com/embed/$3?rel=0' frameborder='0' allowfullscreen=''></iframe></div></div></div><p class='d-none d-print-block'><span><a href='https://youtu.be/$3' target='blank' rel='nofollow'>https://youtu.be/$3</a></span></p>")
-		.replace(/<table>(.*?)<\/table>/gi, "<div class='table-responsive mx-auto'><table class='data-table'>$1</table></div>")
-
-		.replace(/(?<=<tbody>\s*<tr[^>]*>)(\s*<td>\s*<p(?:\s+class="text-center")?\s*><b>.*?<\/b>\s*<\/p>\s*<\/td>\s*)(?=<\/tr>)/gi, (match) => {
-			return match.replace(/<td>\s*<p(?:\s+class="text-center")?\s*><b>(.*?)<\/b>\s*<\/p>\s*<\/td>/gi, "<th>$1</th>");
-		})
-
-		.replace(/<(a)\s*href="(.*?)".*?>(.*?)<\/\1>/gi, "<a href='$2' class='url' target='_blank' rel='nofollow'>$3</a>")
-		.replace(/<a>(\s)?(.*?)(\s)?<\/a>/gi, "$1<a href='$2' class='url' target='_blank' rel='nofollow'>$2</a>$3")
-		.replace(/(?<!["'>])\<?\b(https?:\/\/.*?\.(?:html?|pdf))(?!\.\w)\>?/gi, (match, link) => `${link.replace(/ /g, "")}`)
-		.replace(/(?<!["'>])\b(https?:\/\/\S+\.(?:html?|pdf))(?!\.\w)\b/gi, "<a href='$1' class='url' target='_blank' rel='nofollow'>$1</a>");
-
-	return text;
-} */
 
 function facilidades(str) {
 	let text = str;
@@ -473,9 +471,8 @@ function exerciciosResolvidos(str) {
 		.replace(/<p>[a-e]\) (.*?)<\/p>/gi, '<ol class="options"><li>$1</li></ol>')
 		.replace(/(?<=<\/li>)<\/ol>\s*<ol class="options">(?=<li>)/gi, "")
 		.replace(/(?<=<div class="exercise">)((?:(?!<div class="exercise">)[\s\S])*?)<\/div>((?:(?!<div class="exercise">)[\s\S])*?)(?=<ol class="options"><li>)/gi, "$1$2</div>")
-		.replace(/<p>Letra ([A-E])(?:(?!<\/p>)[\s\S])*?<\/p>\s*<p>Resolução:/gi, '<p><b>Resolução: $1</b></p><p><b>Comentário:</b> ')
-		.replace(/(?<=Resolução: )[a-e]/g, (match) => match.toUpperCase())
-		;
+		.replace(/<p>Letra ([A-E])(?:(?!<\/p>)[\s\S])*?<\/p>\s*<p>Resolução:/gi, "<p><b>Resolução: $1</b></p><p><b>Comentário:</b> ")
+		.replace(/(?<=Resolução: )[a-e]/g, (match) => match.toUpperCase());
 	return text;
 }
 
@@ -594,6 +591,7 @@ function clear() {
 			textareaValue = latex(textareaValue);
 			textareaValue = voltaParenteses(textareaValue);
 			textareaValue = textLatex(textareaValue);
+			textareaValue = convertCodecogsToMathcha(textareaValue);
 		}
 
 		if (document.getElementById("nLatex").checked) {
@@ -789,19 +787,7 @@ $(document).ready(function () {
 		try {
 			let textareaValueEq = $("#summernote").summernote("code");
 
-			textareaValueEq = semTag(textareaValueEq);
-			textareaValueEq = textareaValueEq.replace(/(\\(?:\'|\~|\^).)|\\c\{c\}/g, (match) => nLatexAcentuacao[match]);
-			textareaValueEq = textNLatex(textareaValueEq);
-			textareaValueEq = textareaValueEq
-				.replace(/[ ]{2,}/gi, " ")
-				.replace(/(?<!\\(?:\w+))(?<=(?:[A-Za-záéíóúàèìòùâêîôûäëïöüãẽĩõũç| ]+))\s(?!\\left|\\right|\(|\)|\}|\]|\\|\*|\-|\+|\.|\=|\^|_|:)/g, "\\ ")
-				.replace(/\{\\color\{Red\}([^}]*)\}/gi, "$1")
-				.replace(/(?<!\\|\w|[({]) (e|a|ou|de|da)/g, "\\ $1")
-				.replace(/(e|a|ou|de|da)\s/g, "$1\\ ")
-				.replace(/(?<=\d) (?=\w)/gi, "\\ ")
-				.replace(/(?<=[A-Za-z])\ \,/gi, ",")
-				.replace(/(\d),(\d)/g, "$1,\\!$2")
-				.replace(/\\ \\right\)/gi, "\\right)");
+			textareaValueEq = convertCodecogsToMathcha(textareaValueEq);
 
 			// Definir o texto formatado em outro elemento
 			$("#result").text(textareaValueEq);
