@@ -41,6 +41,11 @@ function removeSpan(input) {
 	return output === input ? output : removeSpan(output);
 }
 
+function removeQuebras(input) {
+	const output = input.replace(/(?:<p><br><\/p>|<br>|\s)+(?=@@|<ol class="options">|(?:<\/div>\s*<ol class="options">))/gi, "\n").replace(/(?=@@)(?:<p><br><\/p>|<br>|\s)+/gi, "\n");
+	return output === input ? output : removeQuebras(output);
+}
+
 function textNLatex(input) {
 	const output = input.replace(/(\^|_)\\(?:textrm|text)\{([^}]*)\}/gi, " $1$2 ").replace(/\\(?:textrm|text)\{([^}]*)\}/gi, " $1 ");
 	if (output === input) {
@@ -383,12 +388,6 @@ function formatLinks(text) {
 	return text.replace(/<(a)\s*href="(.*?)".*?>(.*?)<\/\1>/gi, "<a href='$2' class='url' target='_blank' rel='nofollow'>$3</a>").replace(/<a>(\s)?(.*?)(\s)?<\/a>/gi, "$1<a href='$2' class='url' target='_blank' rel='nofollow'>$2</a>$3");
 }
 
-/* function fixMalformedLinks(text) {
-	return text
-		.replace(/(?<!["'>])\<?\b(https?:\/\/.*?\.(?:html?|pdf))(?!\.\w)\>?/gi, (match, link) => `${link
-		.replace(/ /g, "")}`)
-		.replace(/(?<!["'>])\b(https?:\/\/\S+\.(?:html?|pdf))(?!\.\w)\b/gi, "<a href='$1' class='url' target='_blank' rel='nofollow'>$1</a>");
-} */
 function fixMalformedLinks(text) {
 	return text
 		.replace(/(?<!["'>])\<?\b(https?:\/\/[^\s<>]+\.(?:html?|pdf))(?!\.\w)\>?/gi, (match, link) => {
@@ -462,7 +461,8 @@ function exerciciosMaterial(str) {
 	let text = str
 		.replace(/<p>\s?(?:<b>)?\d+ ?[.)-](?:\s?<b>|\s?<\/b>| )*(.*?)(?:<\/b>)?\s?<\/p>/gi, '<div class="exercise"><p>$1</p></div>')
 		.replace(/(?<=<div class="exercise"><p>)(\([^)]*\))/gi, "<b>$1</b>")
-		.replace(/Enem/gi, "ENEM");
+		.replace(/Enem/gi, "ENEM")
+		.replace(/(?:<p><br><\/p>|<br>|\s)*(<\/div>)(?:<p><br><\/p>|<br>|\s)*(<ol class="options">)/gi, "$1$2");
 	return text;
 }
 
@@ -662,6 +662,8 @@ function clear() {
 			.replace(/(<br>\s*)*$/gi, "")
 			.replace(/(?:<br><\/p>\s*)$/gi, "</p>")
 			.replace(/(?:\s*<p><\/p>\s*)$/gi, "");
+
+		textareaValue = removeQuebras(textareaValue);
 
 		if (document.getElementById("latex").checked) {
 			textareaValue = textareaValue
