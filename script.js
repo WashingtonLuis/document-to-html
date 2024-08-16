@@ -124,7 +124,7 @@ function latex(str) {
 		.replace(/∩/g, " \\cap ")
 		.replace(/(?<!\\)%/g, "\\%")
 		.replace(/\\(mathbf|mathbit)/g, " \\textbf")
-		.replace(/\$/g, " \\$\\; ")
+		.replace(/(?<!\$)\$(?!\$)/g, " \\$\\; ")
 		.replace(/⬚/g, " ")
 
 		// .replace(/(?<!(?:\\\w+)|\}|\_|\^|\])\{(.*?)\}/g, "$1")
