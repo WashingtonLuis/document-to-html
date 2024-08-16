@@ -471,7 +471,7 @@ function exerciciosResolvidos(str) {
 		.replace(/<p>[a-e]\) (.*?)<\/p>/gi, '<ol class="options"><li>$1</li></ol>')
 		.replace(/(?<=<\/li>)<\/ol>\s*<ol class="options">(?=<li>)/gi, "")
 		.replace(/(?<=<div class="exercise">)((?:(?!<div class="exercise">)[\s\S])*?)<\/div>((?:(?!<div class="exercise">)[\s\S])*?)(?=<ol class="options"><li>)/gi, "$1$2</div>")
-		.replace(/<p>Letra ([A-E])(?:(?!<\/p>)[\s\S])*?<\/p>\s*<p>Resolução:/gi, "<p><b>Resolução: $1</b></p><p><b>Comentário:</b> ")
+		.replace(/<p>Letra ([A-E])(?:(?!<\/p>)[\s\S])*?<\/p>\s*<p>(?:Resolução|Comentário):/gi, "<p><b>Resolução: $1</b></p><p><b>Comentário:</b> ")
 		.replace(/(?<=Resolução: )[a-e]/g, (match) => match.toUpperCase());
 	return text;
 }
