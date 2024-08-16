@@ -463,7 +463,24 @@ function semTag(str) {
 function exerciciosMaterial(str) {
 	let text = str
 		.replace(/<p>\s?(?:<b>)?\d+ ?[.)-](?:\s?<b>|\s?<\/b>| )*(.*?)(?:<\/b>)?\s?<\/p>/gi, '<div class="exercise"><p>$1</p></div>')
-		.replace(/\(Enem\)/gi, "<b>(ENEM)</b>")
+		.replace(/(?<=<div class="exercise"><p>)(\([^)]*\))/gi, "<b>$1</b>")
+		.replace(/Enem/gi, "ENEM");
+	return text;
+}
+
+function exerciciosResolvidos(str) {
+	let text = str
+		.replace(/<p>[a-e]\) (.*?)<\/p>/gi, '<ol class="options"><li>$1</li></ol>')
+		.replace(/(?<=<\/li>)<\/ol>\s*<ol class="options">(?=<li>)/gi, "")
+		.replace(/(?<=<div class="exercise">)((?:(?!<div class="exercise">)[\s\S])*?)<\/div>((?:(?!<div class="exercise">)[\s\S])*?)(?=<ol class="options"><li>)/gi, "$1$2</div>")
+		.replace(/<p>Letra ([A-E])(?:(?!<\/p>)[\s\S])*?<\/p>\s*<p>Resolução:/gi, '<p><b>Resolução: $1</b></p><p><b>Comentário:</b> ')
+		.replace(/(?<=Resolução: )[a-e]/g, (match) => match.toUpperCase())
+		;
+	return text;
+}
+
+function exerciciosH5p(str) {
+	let text = str
 		.replace(/<p>[a-e]\) (.*?)<\/p>/gi, '<div class="d-print-none"><!-- h5p --></div><div class="d-none d-print-block"><ol class="options"><li>$1</li></ol></div>')
 		.replace(/(?<=<\/li>)<\/ol><\/div>\s*<div class="d-print-none">\s*<!-- h5p --><\/div><div class="d-none d-print-block"><ol class="options">(?=<li>)/gi, "")
 		.replace(/(?<=<div class="exercise">)((?:(?!<div class="exercise">)[\s\S])*?)<\/div>((?:(?!<div class="exercise">)[\s\S])*?)(<div class="d-print-none"><!-- h5p --><\/div>)(?=<div class="d-none d-print-block"><ol class="options"><li>)/gi, "$1$2$3</div>");
@@ -593,6 +610,12 @@ function clear() {
 
 		if (document.getElementById("exerciciosMaterial").checked) {
 			textareaValue = exerciciosMaterial(textareaValue);
+			textareaValue = exerciciosH5p(textareaValue);
+		}
+
+		if (document.getElementById("exResolvidosMaterial").checked) {
+			textareaValue = exerciciosMaterial(textareaValue);
+			textareaValue = exerciciosResolvidos(textareaValue);
 		}
 
 		textareaValue = textareaValue
@@ -775,10 +798,10 @@ $(document).ready(function () {
 				.replace(/\{\\color\{Red\}([^}]*)\}/gi, "$1")
 				.replace(/(?<!\\|\w|[({]) (e|a|ou|de|da)/g, "\\ $1")
 				.replace(/(e|a|ou|de|da)\s/g, "$1\\ ")
-				.replace(/(?<=\d) (?=\w)/gi, '\\ ')
-				.replace(/(?<=[A-Za-z])\ \,/gi, ',')
+				.replace(/(?<=\d) (?=\w)/gi, "\\ ")
+				.replace(/(?<=[A-Za-z])\ \,/gi, ",")
 				.replace(/(\d),(\d)/g, "$1,\\!$2")
-				.replace(/\\ \\right\)/gi, '\\right\)');
+				.replace(/\\ \\right\)/gi, "\\right)");
 
 			// Definir o texto formatado em outro elemento
 			$("#result").text(textareaValueEq);
