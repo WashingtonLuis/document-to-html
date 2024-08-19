@@ -356,6 +356,7 @@ function facilidades(str) {
 	text = convertTableCellsToHeaders(text);
 	text = formatLinks(text);
 	text = fixMalformedLinks(text);
+	text = replacePWithCite(text);
 
 	return text;
 }
@@ -415,6 +416,17 @@ function fixMalformedLinks(text) {
 	);
 }
 
+function replacePWithCite(text) {
+	return text.replace(/<p>([^<]*Disponível em:\s*<a[^>]*>.*?<\/a>.*?<\/p>)/gi, "<cite>$1</cite>");
+}
+
+function padraoResposta(text) {
+	return text
+		.replace(/<p>Letra ([A-E])(?:(?!<\/p>)[\s\S])*?<\/p>\s*<p>(?:Resolução|Comentário):(?:<\/p>\s*<p>)?/gi, "<p><b>Resolução: $1</b></p><p><b>Comentário:</b> ")
+		.replace(/<p>Resolução: Letra ([A-E]) - /gi, "<p><b>Resolução: $1</b></p><p><b>Comentário:</b> ")
+		.replace(/(?<=Resolução: )[a-e]/g, (match) => match.toUpperCase());
+}
+
 function manual(str) {
 	let text = str;
 	text = text
@@ -472,6 +484,7 @@ function exerciciosMaterial(str) {
 		.replace(/(?<=<div class="exercise"><p>)(\([^)]*\))(?:\s-\s)?/gi, "<b>$1</b> ")
 		.replace(/Enem/gi, "ENEM")
 		.replace(/(?:<p><br><\/p>|<br>|\s)*(<\/div>)(?:<p><br><\/p>|<br>|\s)*(<ol class="options">)/gi, "$1$2");
+	text = padraoResposta(text);
 	return text;
 }
 
@@ -479,9 +492,10 @@ function exerciciosResolvidos(str) {
 	let text = str
 		.replace(/<p>[a-e]\) (.*?)<\/p>/gi, '<ol class="options"><li>$1</li></ol>')
 		.replace(/(?<=<\/li>)<\/ol>\s*<ol class="options">(?=<li>)/gi, "")
-		.replace(/(?<=<div class="exercise">)((?:(?!<div class="exercise">)[\s\S])*?)<\/div>((?:(?!<div class="exercise">)[\s\S])*?)(?=<ol class="options"><li>)/gi, "$1$2</div>")
-		.replace(/<p>Letra ([A-E])(?:(?!<\/p>)[\s\S])*?<\/p>\s*<p>(?:Resolução|Comentário):/gi, "<p><b>Resolução: $1</b></p><p><b>Comentário:</b> ")
-		.replace(/(?<=Resolução: )[a-e]/g, (match) => match.toUpperCase());
+		.replace(/(?<=<div class="exercise">)((?:(?!<div class="exercise">)[\s\S])*?)<\/div>((?:(?!<div class="exercise">)[\s\S])*?)(?=<ol class="options"><li>)/gi, "$1$2</div>");
+
+	text = padraoResposta(text);
+
 	return text;
 }
 
