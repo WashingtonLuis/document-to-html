@@ -177,7 +177,7 @@ function latex(str) {
 		.replace(/(?<!\\left|\\right)\|/g, " | ")
 		// .replace(/(?<!\\left)\|(.*?)\|/g, " \\left| $1\\right| ")
 
-		.replace(/(_|\^)(?![a-zA-Z0-9{])/gi, " ")
+		// .replace(/(_|\^)(?![a-zA-Z0-9{])/gi, " ")
 
 		.replace(/_\(([^()<.\-\+\^\]#]*)\)/gi, "_{$1}")
 		.replace(/_\(([^()<.\-\+\^\]#]*)\)/gi, "_{$1}")
@@ -245,7 +245,8 @@ function latex(str) {
 		.replace(/\\\;\\textrm\{ /g, " \\textrm{ ")
 		.replace(/\\textrm\{(e|de) ?\}/g, " \\textrm{ $1 }")
 		.replace(/(?<=\\textrm\{R\} \\\$\\\;)( ?\d+)\\;(\d+(?:,\d+)?)/gi, "$1.$2")
-		.replace(/[áéíóúçãõâêô]/g, (match) => latexAcentuacao[match]);
+		.replace(/[áéíóúçãõâêô]/g, (match) => latexAcentuacao[match])
+		.replace(/ *\$\$ */g, "$$$$");
 
 	return text;
 }
@@ -256,7 +257,8 @@ function convertCodecogsToMathcha(text) {
 	text = textNLatex(text);
 	text = text
 		.replace(/[ ]{2,}/gi, " ")
-		.replace(/(?<!\\(?:\w+))(?<=(?:[A-Za-záéíóúàèìòùâêîôûäëïöüãẽĩõũç| ]+))\s(?!\\left|\\right|\(|\)|\}|\]|\\|\*|\-|\+|\.|\=|\^|_|:)/g, "\\ ")
+		.replace(/ ([_^])/g, '$1')
+		.replace(/(?<!\\(?:\w+|\$|\^|_))(?<=(?:[A-Za-záéíóúàèìòùâêîôûäëïöüãẽĩõũç| ]+))\s(?!\\left|\\right|\(|\)|\}|\]|\\|\*|\-|\+|\.|\=|\^|_|:|\$)/g, "\\ ")
 		.replace(/\{\\color\{Red\}([^}]*)\}/gi, "$1")
 		.replace(/(?<!\\|\w|[({]) (e|a|ou|de|da)/g, "\\ $1")
 		.replace(/(e|a|ou|de|da)\s/g, "$1\\ ")
@@ -265,7 +267,8 @@ function convertCodecogsToMathcha(text) {
 		.replace(/(\d),(\d)/g, "$1,\\!$2")
 		.replace(/\\ (?=\\right|$)/gi, "")
 		.replace(/(?<![a-záéíóúàèìòùâêîôûäëïöüãẽĩõũç]{3,}|[ (=>])-(?![a-záéíóúàèìòùâêîôûäëïöüãẽĩõũç]{3,}|[ )=<])/g, "\\ –\\ ")
-		.replace(/(?<![a-záéíóúàèìòùâêîôûäëïöüãẽĩõũç]{3,}|[=>])-(?![a-záéíóúàèìòùâêîôûäëïöüãẽĩõũç]{3,}|[)=<])/g, "–");
+		.replace(/(?<![a-záéíóúàèìòùâêîôûäëïöüãẽĩõũç]{3,}|[=>])-(?![a-záéíóúàèìòùâêîôûäëïöüãẽĩõũç]{3,}|[)=<])/g, "–")
+		.replace(/ *\$\$ */g, "$$$$");
 	return text;
 }
 
@@ -636,7 +639,8 @@ function clear() {
 			.replace(/<img\s+src="[^"]*"\s+(?:(?:width|height)="[^"]*"\s*)+>/gi, "@@")
 			.replace(/<p>(?:<b>)?(?:<br\s*\/?>)?@@(?:<br\s*\/?>)?(?:<\/b>)?<\/p>/gi, "@@")
 			.replace(/@@((?:<br\s*\/?>)?(?:<\/b>)?<\/p>)/gi, "$1@@")
-			.replace(/<p[^>]*>\s*<\/p>/gis, "");
+			.replace(/<p[^>]*>\s*<\/p>/gis, "")
+			.replace(/(?<=\$\$)(?=\$\$)/g, '\n');
 
 		textareaValue = textareaValue
 			.replace(/<font\s?>/gi, "")
@@ -671,7 +675,8 @@ function clear() {
 			textareaValue = textareaValue
 				.replace(/\n+/gi, " ")
 				.replace(/[ ]{2,}/gi, " ")
-				.replace(/^\s*/g, "");
+				.replace(/^\s*/g, "")
+				.replace(/(?<=\$\$) (?=\$\$)/g, '\n');
 		}
 
 		// Definir o texto formatado em outro elemento
