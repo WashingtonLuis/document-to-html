@@ -397,21 +397,22 @@ function formatLinks(text) {
 }
 
 function fixMalformedLinks(text) {
-	return text
-		.replace(/(?<!["'>])\<?\b((?:https?:\/\/|www\.)[^<>]+\.[a-z]{2,})(?!\.\w)\>?/gi, (match, link) => {
-			if (link) {
-				return link.replace(/ /g, ""); // Remove espaços em branco no link
-			}
-			return match;
-		})
-		.replace(/(?<!["'>])\b((?:https?:\/\/|www\.)[^\s<>]+\.[a-z]{2,})(?!\.\w)\b/gi, (match, link) => {
-			// Verifica se o link já está dentro de uma tag <a> para evitar duplicação
-			const isAlreadyLinked = /<a[^>]*href=['"]?(?:https?:\/\/|www\.)[^\s<>]+\.[a-z]{2,}['"]?[^>]*>/i.test(match);
-			if (!isAlreadyLinked) {
-				return `<a href='${link.startsWith("www.") ? "http://" + link : link}' class='url' target='_blank' rel='nofollow'>${link}</a>`;
-			}
-			return match;
-		});
+	return (
+		text
+			// Primeira substituição: Remove espaços em branco de links
+			.replace(/(?<!["'>])\<?\b((?:https?:\/\/|www\.)[^<>]+\.[a-z]{2,})(?!\.\w)\>?/gi, (match, link) => {
+				return link ? link.replace(/\s+/g, "") : match;
+			})
+			// Segunda substituição: Envolve links em tags <a>
+			.replace(/(?<!["'>])\b((?:https?:\/\/|www\.)[^\s<>]+\.[a-z]{2,})(?!\.\w)\b/gi, (match, link) => {
+				const isAlreadyLinked = /<a[^>]*href=['"]?(?:https?:\/\/|www\.)[^\s<>]+\.[a-z]{2,}['"]?[^>]*>/i.test(match);
+				if (!isAlreadyLinked) {
+					const formattedLink = link.startsWith("www.") ? `http://${link}` : link;
+					return `<a href='${formattedLink}' class='url' target='_blank' rel='nofollow'>${link}</a>`;
+				}
+				return match;
+			})
+	);
 }
 
 function manual(str) {
