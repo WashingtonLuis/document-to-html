@@ -132,6 +132,7 @@ function latex(str) {
 		.replace(/(?<!\\)%/g, "\\%")
 		.replace(/\\(mathbf|mathbit)/g, " \\textbf")
 		.replace(/(?<!\$)\$(?!\$)/g, " \\$\\; ")
+		.replace(/ *\$\$ */g, "$$$$")
 		.replace(/⬚/g, " ")
 
 		// .replace(/(?<!(?:\\\w+)|\}|\_|\^|\])\{(.*?)\}/g, "$1")
@@ -247,8 +248,7 @@ function latex(str) {
 		.replace(/\\\;\\textrm\{ /g, " \\textrm{ ")
 		.replace(/\\textrm\{(e|de) ?\}/g, " \\textrm{ $1 }")
 		.replace(/(?<=\\textrm\{R\} \\\$\\\;)( ?\d+)\\;(\d+(?:,\d+)?)/gi, "$1.$2")
-		.replace(/[áéíóúçãõâêô]/g, (match) => latexAcentuacao[match])
-		.replace(/ *\$\$ */g, "$$$$");
+		.replace(/[áéíóúçãõâêô]/g, (match) => latexAcentuacao[match]);
 
 	return text;
 }
@@ -269,7 +269,7 @@ function convertCodecogsToMathcha(text) {
 		.replace(/(?<=[A-Za-z])\ \,/gi, ",")
 		.replace(/(\d),(\d)/g, "$1,\\!$2")
 		.replace(/\\ (?=\\right|$)/gi, "")
-		.replace(/(?<![a-záéíóúàèìòùâêîôûäëïöüãẽĩõũç]{3,}|[ (=>])-(?![a-záéíóúàèìòùâêîôûäëïöüãẽĩõũç]{3,}|[ )=<])/g, "\\ –\\ ")
+		.replace(/(?<![a-záéíóúàèìòùâêîôûäëïöüãẽĩõũç]{3,}|[ (=>]|\$\$)-(?![a-záéíóúàèìòùâêîôûäëïöüãẽĩõũç]{3,}|[ )=<]|\$\$)/g, "\\ –\\ ")
 		.replace(/(?<![a-záéíóúàèìòùâêîôûäëïöüãẽĩõũç]{3,}|[=>])-(?![a-záéíóúàèìòùâêîôûäëïöüãẽĩõũç]{3,}|[)=<])/g, "–")
 		.replace(/ *\$\$ */g, "$$$$");
 	return text;
