@@ -61,8 +61,10 @@ function textNLatex(input) {
 function textLatex(input) {
 	const output = input
 		.replace(/[ ]{2,}/gi, " ")
-		.replace(/(?<!^|^ )\\textrm\{([^{}]*)\}(?: ?)\\textrm\{([^{}]*)\}/g, " \\textrm{$1 $2}")
-		.replace(/\\textrm\{(.*?)\}\: /g, " \\textrm{$1: }");
+		.replace(/\\textrm\{([^{}]+)\}\\textrm\{([^{}]+)\}/gi, " \\textrm{$1$2}")
+		.replace(/\\textrm\{([^{}]+)\}\s*\\textrm\{([^{}]+)\}/gi, " \\textrm{$1 $2}")
+		.replace(/\\textrm\{(.*?)\}\: /gi, " \\textrm{$1: }");
+
 	if (output === input) {
 		// Se não houver mais alterações, retorne o resultado
 		const output2 = output
@@ -253,6 +255,7 @@ function latex(str) {
 
 function convertCodecogsToMathcha(text) {
 	text = semTag(text);
+	text = textLatex(text);
 	text = text.replace(/(\\(?:\'|\~|\^).)|\\c\{c\}/g, (match) => nLatexAcentuacao[match]);
 	text = textNLatex(text);
 	text = text
