@@ -689,6 +689,10 @@ function clear() {
 
 		textareaValue = removeQuebras(textareaValue);
 
+		if (document.getElementById("facilidades").checked) {
+			textareaValue = facilidades(textareaValue);
+		}
+
 		if (document.getElementById("latex").checked) {
 			textareaValue = textareaValue
 				.replace(/\n+/gi, " ")
