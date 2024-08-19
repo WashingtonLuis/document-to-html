@@ -406,7 +406,7 @@ function fixMalformedLinks(text) {
 			})
 			// Segunda substituição: Envolve links em tags <a>
 			.replace(/(?<!["'>])\b((?:https?:\/\/|www\.)[^\s<>]+\.[a-z]{2,})(?!\.\w)\b/gi, (match, link) => {
-				const isAlreadyLinked = /<a[^>]*href=['"]?(?:https?:\/\/|www\.)[^\s<>]+\.[a-z]{2,}['"]?[^>]*>/i.test(match);
+				const isAlreadyLinked = /<a[^>]*href=['"]?(?:https?:\/\/|www\.)[^\s<>]+\.[a-z]{2,}['"]?[^>]*>/i.test(text);
 				if (!isAlreadyLinked) {
 					const formattedLink = link.startsWith("www.") ? `http://${link}` : link;
 					return `<a href='${formattedLink}' class='url' target='_blank' rel='nofollow'>${link}</a>`;
@@ -417,7 +417,7 @@ function fixMalformedLinks(text) {
 }
 
 function replacePWithCite(text) {
-	return text.replace(/<p>([^<]*Disponível em:\s*<a[^>]*>.*?<\/a>.*?<\/p>)/gi, "<cite>$1</cite>");
+	return text.replace(/<p>((?:<b>|<i>|<\/b>|<\/i>|[^<])+Disponível em:\s*<a[^>]*>.*?<\/a>.*?)<\/p>/gi, "<cite>$1</cite>");
 }
 
 function padraoResposta(text) {
