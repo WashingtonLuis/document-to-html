@@ -260,7 +260,7 @@ function convertCodecogsToMathcha(text) {
 	text = textNLatex(text);
 	text = text
 		.replace(/[ ]{2,}/gi, " ")
-		.replace(/ ([_^])/g, '$1')
+		.replace(/ ([_^])/g, "$1")
 		.replace(/(?<!\\(?:\w+|\$|\^|_))(?<=(?:[A-Za-záéíóúàèìòùâêîôûäëïöüãẽĩõũç| ]+))\s(?!\\left|\\right|\(|\)|\}|\]|\\|\*|\-|\+|\.|\=|\^|_|:|\$)/g, "\\ ")
 		.replace(/\{\\color\{Red\}([^}]*)\}/gi, "$1")
 		.replace(/(?<!\\|\w|[({]) (e|a|ou|de|da)/g, "\\ $1")
@@ -398,17 +398,17 @@ function formatLinks(text) {
 
 function fixMalformedLinks(text) {
 	return text
-		.replace(/(?<!["'>])\<?\b(https?:\/\/[^\s<>]+\.(?:html?|pdf))(?!\.\w)\>?/gi, (match, link) => {
+		.replace(/(?<!["'>])\<?\b((?:https?:\/\/|www\.)[^<>]+\.[a-z]{2,})(?!\.\w)\>?/gi, (match, link) => {
 			if (link) {
 				return link.replace(/ /g, ""); // Remove espaços em branco no link
 			}
 			return match;
 		})
-		.replace(/(?<!["'>])\b(https?:\/\/[^\s<>]+\.(?:html?|pdf))(?!\.\w)\b/gi, (match, link) => {
+		.replace(/(?<!["'>])\b((?:https?:\/\/|www\.)[^\s<>]+\.[a-z]{2,})(?!\.\w)\b/gi, (match, link) => {
 			// Verifica se o link já está dentro de uma tag <a> para evitar duplicação
-			const isAlreadyLinked = /<a[^>]*href=['"]?https?:\/\/[^\s<>]+\.(?:html?|pdf)['"]?[^>]*>/i.test(match);
+			const isAlreadyLinked = /<a[^>]*href=['"]?(?:https?:\/\/|www\.)[^\s<>]+\.[a-z]{2,}['"]?[^>]*>/i.test(match);
 			if (!isAlreadyLinked) {
-				return `<a href='${link}' class='url' target='_blank' rel='nofollow'>${link}</a>`;
+				return `<a href='${link.startsWith("www.") ? "http://" + link : link}' class='url' target='_blank' rel='nofollow'>${link}</a>`;
 			}
 			return match;
 		});
@@ -643,7 +643,7 @@ function clear() {
 			.replace(/<p>(?:<b>)?(?:<br\s*\/?>)?@@(?:<br\s*\/?>)?(?:<\/b>)?<\/p>/gi, "@@")
 			.replace(/@@((?:<br\s*\/?>)?(?:<\/b>)?<\/p>)/gi, "$1@@")
 			.replace(/<p[^>]*>\s*<\/p>/gis, "")
-			.replace(/(?<=\$\$)(?=\$\$)/g, '\n');
+			.replace(/(?<=\$\$)(?=\$\$)/g, "\n");
 
 		textareaValue = textareaValue
 			.replace(/<font\s?>/gi, "")
@@ -679,7 +679,7 @@ function clear() {
 				.replace(/\n+/gi, " ")
 				.replace(/[ ]{2,}/gi, " ")
 				.replace(/^\s*/g, "")
-				.replace(/(?<=\$\$) (?=\$\$)/g, '\n');
+				.replace(/(?<=\$\$) (?=\$\$)/g, "\n");
 		}
 
 		// Definir o texto formatado em outro elemento
