@@ -358,7 +358,7 @@ function facilidades(str) {
 	text = fixMalformedLinks(text);
 	text = replacePWithCite(text);
 
-	return text;
+	return text === str ? text : facilidades(text);
 }
 
 function removeTagU(text) {
@@ -401,12 +401,12 @@ function fixMalformedLinks(text) {
 	return (
 		text
 			// Primeira substituição: Remove espaços em branco de links
-			.replace(/(?<!["'>])\<?\b((?:https?:\/\/|www\.)[^<>]+\.[a-z]{2,})(?!\.\w)\>?/gi, (match, link) => {
+			.replace(/(?<!["'>])<?\b((?:https?:\/\/|www\.)[^\s<>]+(?:\.[a-z]{2,})(?:[\/?#][^\s<>]*)?)>?/gi, (match, link) => {
 				return link ? link.replace(/\s+/g, "") : match;
 			})
 			// Segunda substituição: Envolve links em tags <a>
-			.replace(/(?<!["'>])\b((?:https?:\/\/|www\.)[^\s<>]+\.[a-z]{2,})(?!\.\w)\b/gi, (match, link) => {
-				const isAlreadyLinked = /<a[^>]*href=['"]?(?:https?:\/\/|www\.)[^\s<>]+\.[a-z]{2,}['"]?[^>]*>/i.test(text);
+			.replace(/(?<!["'>])\b((?:https?:\/\/|www\.)[^\s<>]+(?:\.[a-z]{2,})(?:[\/?#][^\s<>]*)?)\b/gi, (match, link) => {
+				const isAlreadyLinked = /<a[^>]*href=['"]?(?:https?:\/\/|www\.)[^\s<>]+(?:\.[a-z]{2,})(?:[\/?#][^\s<>]*)?['"]?[^>]*>/i.test(text);
 				if (!isAlreadyLinked) {
 					const formattedLink = link.startsWith("www.") ? `http://${link}` : link;
 					return `<a href='${formattedLink}' class='url' target='_blank' rel='nofollow'>${link}</a>`;
@@ -545,7 +545,7 @@ function _clear(str) {
 
 		.replace(/style="[^"]*?"(?!><\/iframe>)/gi, "")
 
-		.replace(/<(?!a)(\w+)\s*(?![^>]*\b(?:class\s*=\s*["']?\s*(?:text-danger|text-center|data-table|table-responsive|mx-auto|text-right|legend|url|img-center|img-right|img-left|box-item|d-none|d-print-block|d-print-none|youtube|box-book|mx-\d+|row|col-sm-\d+)\b|type="[1aAiI]"|colspan="\d"|rowspan="\d"|src="))[^>]*>/gi, "<$1>")
+		.replace(/<(?!a)(\w+)\s*(?![^>]*\b(?:class\s*=\s*["']?\s*(?:text-danger|text-center|data-table|table-responsive|mx-auto|text-right|legend|url|img-center|img-right|img-left|box-item|d-none|d-print-block|d-print-none|youtube|box-book|mx-\d+|row|col-sm-\d+)\b|type="[1aAiI]"|colspan="\d"|rowspan="\d"|src="|exercise))[^>]*>/gi, "<$1>")
 
 		.replace(/\<b\b[^>]*\>/gi, "<b>")
 		.replace(/\<li\b[^>]*\>/gi, "<li>")
@@ -688,10 +688,6 @@ function clear() {
 			.replace(/(?:\s*<p><\/p>\s*)$/gi, "");
 
 		textareaValue = removeQuebras(textareaValue);
-
-		if (document.getElementById("facilidades").checked) {
-			textareaValue = facilidades(textareaValue);
-		}
 
 		if (document.getElementById("latex").checked) {
 			textareaValue = textareaValue
