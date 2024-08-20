@@ -413,8 +413,6 @@ function fixMalformedLinks(text) {
 				if (processedLinks.has(link)) return match;
 
 				const isAlreadyLinked = /<a[^>]*href=['"]?(?:https?:\/\/|www\.)[^\s<>]+(?:\.[a-z]{2,})(?:[\/?#][^\s<>]*)?['"]?[^>]*>/i.test(text);
-				
-console.log(isAlreadyLinked, link);
 
 				if (!isAlreadyLinked) {
 					processedLinks.add(link);
