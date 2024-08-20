@@ -349,7 +349,7 @@ function nLatex(str) {
 function facilidades(str) {
 	let text = str;
 
-	text = removeTagU(text);
+	text = removeTag(text);
 	text = removeImgFromParagraphs(text);
 	text = replaceYoutubeLinks(text);
 	text = wrapTablesWithResponsiveDiv(text);
@@ -358,18 +358,19 @@ function facilidades(str) {
 	text = fixMalformedLinks(text);
 	text = replacePWithCite(text);
 
-	return text === str ? text : facilidades(text);
+	return text;
 }
 
-function removeTagU(text) {
+function removeTag(text) {
 	// Criar um elemento temporário
 	var tempDiv = $("<div>");
 
 	// Inserir o conteúdo de text no elemento temporário
 	tempDiv.html(text);
 
-	// Aplicar o unwrap() para remover as tags <u> mas preservar o conteúdo
+	// Aplicar o unwrap() para remover as tags mas preservar o conteúdo
 	tempDiv.find("u").contents().unwrap();
+	tempDiv.find("a").contents().unwrap();
 
 	// Extrair o HTML modificado de volta para text
 	return tempDiv.html();
@@ -398,19 +399,29 @@ function formatLinks(text) {
 }
 
 function fixMalformedLinks(text) {
+	// Use a Set to store links that are already processed to avoid duplications.
+	const processedLinks = new Set();
+
 	return (
 		text
 			// Primeira substituição: Remove espaços em branco de links
-			.replace(/(?<!["'>])<?\b((?:https?:\/\/|www\.)[^\s<>]+(?:\.[a-z]{2,})(?:[\/?#][^\s<>]*)?)>?/gi, (match, link) => {
+			.replace(/(?<!["'>])<?\b((?:https?:\/\/|www\.)[^<>]+(?:\.[a-z]{2,})(?:[\/?#][^\s<>]*)?)>?/gi, (match, link) => {
 				return link ? link.replace(/\s+/g, "") : match;
 			})
-			// Segunda substituição: Envolve links em tags <a>
+			// Segunda substituição: Envolve links em tags <a> se não estiverem já envoltos
 			.replace(/(?<!["'>])\b((?:https?:\/\/|www\.)[^\s<>]+(?:\.[a-z]{2,})(?:[\/?#][^\s<>]*)?)\b/gi, (match, link) => {
+				if (processedLinks.has(link)) return match;
+
 				const isAlreadyLinked = /<a[^>]*href=['"]?(?:https?:\/\/|www\.)[^\s<>]+(?:\.[a-z]{2,})(?:[\/?#][^\s<>]*)?['"]?[^>]*>/i.test(text);
+				
+console.log(isAlreadyLinked, link);
+
 				if (!isAlreadyLinked) {
+					processedLinks.add(link);
 					const formattedLink = link.startsWith("www.") ? `http://${link}` : link;
 					return `<a href='${formattedLink}' class='url' target='_blank' rel='nofollow'>${link}</a>`;
 				}
+
 				return match;
 			})
 	);
