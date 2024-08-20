@@ -418,7 +418,7 @@ console.log(isAlreadyLinked, link);
 
 				if (!isAlreadyLinked) {
 					processedLinks.add(link);
-					const formattedLink = link.startsWith("www.") ? `http://${link}` : link;
+					const formattedLink = link.startsWith("www.") ? `https://${link}` : link;
 					return `<a href='${formattedLink}' class='url' target='_blank' rel='nofollow'>${link}</a>`;
 				}
 
