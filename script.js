@@ -604,6 +604,60 @@ function _clear(str) {
 	return text;
 }
 
+function insereQuebras(textareaValue) {
+	let text = textareaValue
+		.replace(/\s+/g, " ")
+		.replace(/ <(\/)?(p|div|ol|ul|li|td|tr)/gi, "<$1$2")
+		.replace(/(?<!<tr><td>|<td>)<(div|h1|h2|h5|p|table|tr|\/tr|td|th|blockquote|script|iframe|\/div|ol|ul|hr)([^>]*)>/gi, "\n<$1$2>")
+		.replace(/<((?:\/(?:div|h1|h2|h5|p|table|tr|ol|li|ul|blockquote))|(?:ol|ul|hr)[^>]*)>(?!<\/td>)/gi, "<$1>\n")
+		.replace(/\n{2,}/gi, "\n")
+		.replace(/<(li|script|iframe|tr|\/tr)([^>]*)>/gi, "\t<$1$2>")
+		.replace(/(<tr>|<\/td>|<\/th>)\n<(td|th)>/gi, "$1\n\t\t<$2>")
+		.replace(/ \n/gi, "\n")
+		.replace(/<\/(ol|ul|table|blockquote|div)>/gi, "</$1>\n<br>\n")
+		.replace(/(<div class="legend">)/gi, "\t$1")
+		.replace(/(<div class="youtube">)/gi, "$1\n\t")
+		.replace(/(<div class='d-print-none'>)/gi, "\n$1\n\t")
+		.replace(/<p><br>/gi, "\n<p><br>")
+		.replace(/(?<=<\/ol>)\s*<br>\s*(?=<\/div>)/gi, "\n")
+		.replace(/<img\s+src="[^"]*"\s+(?:(?:width|height)="[^"]*"\s*)+>/gi, "@@")
+		.replace(/<p>(?:<b>)?(?:<br\s*\/?>)?@@(?:<br\s*\/?>)?(?:<\/b>)?<\/p>/gi, "@@")
+		.replace(/@@((?:<br\s*\/?>)?(?:<\/b>)?<\/p>)/gi, "$1@@")
+		.replace(/<p[^>]*>\s*<\/p>/gis, "")
+		.replace(/(?<=\$\$)(?=\$\$)/g, "\n");
+	return text;
+}
+
+function organizaTags(textareaValue) {
+	let text = textareaValue
+		.replace(/<font\s?>/gi, "")
+		.replace(/<\/font>/gi, "")
+		.replace(/ <\/(i|b|u)>/gi, "</$1> ")
+		.replace(/(Acesso em|Disponível em) /gi, "$1: ")
+		.replace(/Acesso em: 0(\d)/gi, "Acesso em: $1")
+		.replace(/(?<!<i>)\bet al\.?/gi, "<i>et al.</i>")
+		.replace(/(?:<b>)+(.*?)( )?(?:<\/b>)+/gi, "<b>$1</b>$2")
+		.replace(/ \./gi, ".")
+		.replace(/[ ]{2,}/gi, " ")
+		.replace(/ <\/p>/gi, "</p>")
+		.replace(/<p[^>]*> /gi, "<p>")
+		.replace(/<p><\/p>/gi, "")
+		.replace(/<p><br><b>(\d+)\)<\/b> Letra /gi, "<p><br><b>$1)</b> ")
+		.replace(/<br>\n+?<p><br><\/p>/gi, "\n<p><br></p>")
+		.replace(/\n{2,}/gi, "\n\n")
+		.replace(/ \n/g, "\n")
+		.replace(/<\/p>\n{2}<p>(?!<br>)/g, "</p>\n<p>")
+		.replace(/<p><br><\/p>\n+(?=<p><br><b>\d+\)<\/b>)/g, "")
+		.replace(/:<\/b> ?:/gi, ":</b>")
+		.replace(/<div><br>\s?<\/div>\s?<br>/gi, "")
+		.replace(/<img width="\d+".*?v:shapes=".*?">/gi, "##")
+		.replace(/^\s*/g, "")
+		.replace(/(<br>\s*)*$/gi, "")
+		.replace(/(?:<br><\/p>\s*)$/gi, "</p>")
+		.replace(/(?:\s*<p><\/p>\s*)$/gi, "");
+	return text;
+}
+
 function clear() {
 	try {
 		// Obter o texto do editor de texto
@@ -639,62 +693,20 @@ function clear() {
 		}
 
 		if (document.getElementById("exerciciosMaterial").checked) {
+			textareaValue = organizaTags(textareaValue);
 			textareaValue = exerciciosMaterial(textareaValue);
 			textareaValue = exerciciosH5p(textareaValue);
 		}
 
 		if (document.getElementById("exResolvidosMaterial").checked) {
+			textareaValue = organizaTags(textareaValue);
 			textareaValue = exerciciosMaterial(textareaValue);
 			textareaValue = exerciciosResolvidos(textareaValue);
 		}
 
-		textareaValue = textareaValue
-			.replace(/\s+/g, " ")
-			.replace(/ <(\/)?(p|div|ol|ul|li|td|tr)/gi, "<$1$2")
-			.replace(/(?<!<tr><td>|<td>)<(div|h1|h2|h5|p|table|tr|\/tr|td|th|blockquote|script|iframe|\/div|ol|ul|hr)([^>]*)>/gi, "\n<$1$2>")
-			.replace(/<((?:\/(?:div|h1|h2|h5|p|table|tr|ol|li|ul|blockquote))|(?:ol|ul|hr)[^>]*)>(?!<\/td>)/gi, "<$1>\n")
-			.replace(/\n{2,}/gi, "\n")
-			.replace(/<(li|script|iframe|tr|\/tr)([^>]*)>/gi, "\t<$1$2>")
-			.replace(/(<tr>|<\/td>|<\/th>)\n<(td|th)>/gi, "$1\n\t\t<$2>")
-			.replace(/ \n/gi, "\n")
-			.replace(/<\/(ol|ul|table|blockquote|div)>/gi, "</$1>\n<br>\n")
-			.replace(/(<div class="legend">)/gi, "\t$1")
-			.replace(/(<div class="youtube">)/gi, "$1\n\t")
-			.replace(/(<div class='d-print-none'>)/gi, "\n$1\n\t")
-			.replace(/<p><br>/gi, "\n<p><br>")
-			.replace(/(?<=<\/ol>)\s*<br>\s*(?=<\/div>)/gi, "\n")
-			.replace(/<img\s+src="[^"]*"\s+(?:(?:width|height)="[^"]*"\s*)+>/gi, "@@")
-			.replace(/<p>(?:<b>)?(?:<br\s*\/?>)?@@(?:<br\s*\/?>)?(?:<\/b>)?<\/p>/gi, "@@")
-			.replace(/@@((?:<br\s*\/?>)?(?:<\/b>)?<\/p>)/gi, "$1@@")
-			.replace(/<p[^>]*>\s*<\/p>/gis, "")
-			.replace(/(?<=\$\$)(?=\$\$)/g, "\n");
+		textareaValue = insereQuebras(textareaValue);
 
-		textareaValue = textareaValue
-			.replace(/<font\s?>/gi, "")
-			.replace(/<\/font>/gi, "")
-			.replace(/ <\/(i|b|u)>/gi, "</$1> ")
-			.replace(/(Acesso em|Disponível em) /gi, "$1: ")
-			.replace(/Acesso em: 0(\d)/gi, "Acesso em: $1")
-			.replace(/(?<!<i>)\bet al\.?/gi, "<i>et al.</i>")
-			.replace(/(?:<b>)+(.*?)( )?(?:<\/b>)+/gi, "<b>$1</b>$2")
-			.replace(/ \./gi, ".")
-			.replace(/[ ]{2,}/gi, " ")
-			.replace(/ <\/p>/gi, "</p>")
-			.replace(/<p[^>]*> /gi, "<p>")
-			.replace(/<p><\/p>/gi, "")
-			.replace(/<p><br><b>(\d+)\)<\/b> Letra /gi, "<p><br><b>$1)</b> ")
-			.replace(/<br>\n+?<p><br><\/p>/gi, "\n<p><br></p>")
-			.replace(/\n{2,}/gi, "\n\n")
-			.replace(/ \n/g, "\n")
-			.replace(/<\/p>\n{2}<p>(?!<br>)/g, "</p>\n<p>")
-			.replace(/<p><br><\/p>\n+(?=<p><br><b>\d+\)<\/b>)/g, "")
-			.replace(/:<\/b> ?:/gi, ":</b>")
-			.replace(/<div><br>\s?<\/div>\s?<br>/gi, "")
-			.replace(/<img width="\d+".*?v:shapes=".*?">/gi, "##")
-			.replace(/^\s*/g, "")
-			.replace(/(<br>\s*)*$/gi, "")
-			.replace(/(?:<br><\/p>\s*)$/gi, "</p>")
-			.replace(/(?:\s*<p><\/p>\s*)$/gi, "");
+		textareaValue = organizaTags(textareaValue);
 
 		textareaValue = removeQuebras(textareaValue);
 
