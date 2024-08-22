@@ -432,7 +432,7 @@ function replacePWithCite(text) {
 function padraoResposta(text) {
 	return text
 		.replace(/<p>Letra ([A-E])(?:(?!<\/p>)[\s\S])*?<\/p>\s*<p>(?:Resolução|Comentário):(?:<\/p>\s*<p>)?/gi, "<p><b>Resolução: $1</b></p><p><b>Comentário:</b> ")
-		.replace(/<p>Resolução: Letra ([A-E]) - /gi, "<p><b>Resolução: $1</b></p><p><b>Comentário:</b> ")
+		.replace(/<p>(?:Resolução: )?Letra ([A-E]) - /gi, "<p><b>Resolução: $1</b></p><p><b>Comentário:</b> ")
 		.replace(/(?<=Resolução: )[a-e]/g, (match) => match.toUpperCase());
 }
 
@@ -506,7 +506,31 @@ function exerciciosResolvidos(str) {
 
 	text = padraoResposta(text);
 
-	return text;
+	var tempDiv = $("<div>");
+	tempDiv.html(text);
+	// Itera sobre cada bloco de exercício
+	tempDiv.find(".exercise").each(function () {
+		// Encontra o elemento <ol> associado ao exercício
+		var $exercise = $(this);
+		var $options = $exercise.next("ol.options"); // Assumindo que <ol> segue o <div class="exercise">
+
+		// Encontra o texto da resolução
+		var resolutionText = $options.find('p:contains("Resolução:")').text().trim();
+
+		// Extrai a letra da resolução (e.g., "E")
+		var correctAnswer = resolutionText.match(/Resolução:\s*([A-Z])/i)[1];
+
+		// Mapeia letras para índices: A=0, B=1, C=2, D=3, E=4
+		var indexMap = { A: 0, B: 1, C: 2, D: 3, E: 4 };
+		var correctIndex = indexMap[correctAnswer.toUpperCase()];
+
+		// Encontra a <li> correta e envolve seu conteúdo em <b>
+		var $correctLi = $options.find("li").eq(correctIndex);
+		$correctLi.html("<b>" + $correctLi.html() + "</b>");
+	});
+
+	// Extrai o HTML modificado de volta para a string
+	return tempDiv.html();
 }
 
 function exerciciosH5p(str) {
