@@ -494,6 +494,7 @@ function exerciciosMaterial(str) {
 		.replace(/Enem/gi, "ENEM")
 		.replace(/(?:<p><br><\/p>|<br>|\s)*(<\/div>)(?:<p><br><\/p>|<br>|\s)*(<ol class="options">)/gi, "$1$2");
 	text = padraoResposta(text);
+
 	return text;
 }
 
@@ -503,8 +504,6 @@ function exerciciosResolvidos(str) {
 		.replace(/(?<=<\/li>)<\/ol>\s*<ol class="options">(?=<li>)/gi, "")
 		.replace(/(?<=<div class="exercise">)((?:(?!<div class="exercise">)[\s\S])*?)<\/div>((?:(?!<div class="exercise">)[\s\S])*?)(?=<ol class="options"><li>)/gi, "$1$2</div>")
 		.replace(/(<ol class="options">)([\s\S]*?)(<\/ol>)([\s\S]*?)(?:(?=<div class="exercise">)|$)/gi, "$1$2$4$3");
-
-	text = padraoResposta(text);
 
 	var tempDiv = $("<div>");
 	tempDiv.html(text);
@@ -538,6 +537,23 @@ function exerciciosH5p(str) {
 		.replace(/<p>[a-e]\) (.*?)<\/p>/gi, '<div class="d-print-none"><!-- h5p --></div><div class="d-none d-print-block"><ol class="options"><li>$1</li></ol></div>')
 		.replace(/(?<=<\/li>)<\/ol><\/div>\s*<div class="d-print-none">\s*<!-- h5p --><\/div><div class="d-none d-print-block"><ol class="options">(?=<li>)/gi, "")
 		.replace(/(?<=<div class="exercise">)((?:(?!<div class="exercise">)[\s\S])*?)<\/div>((?:(?!<div class="exercise">)[\s\S])*?)(<div class="d-print-none"><!-- h5p --><\/div>)(?=<div class="d-none d-print-block"><ol class="options"><li>)/gi, "$1$2$3</div>");
+
+	let tempDiv = $("<div>");
+	tempDiv.html(text);
+
+	// Remove o parágrafo <p><br></p>, <p><b>Resolução: [A-E]</b></p> e o <p><b>Comentário:</b> ...</p>
+	tempDiv.find('p:contains("Resolução:")').prev('p:contains("<br>")').remove(); // Remove <p><br></p>
+	tempDiv.find('p:contains("Resolução:")').next('p:contains("Comentário:")').remove(); // Remove <p><b>Comentário:</b> ...</p>
+	tempDiv.find('p:contains("Resolução:")').remove(); // Remove <p><b>Resolução: [A-E]</b></p>
+
+	// Extrai o HTML modificado de volta para a string
+	text = tempDiv.html();
+
+	text
+	.replace(/(\s*(?:<p><br><\/p>|<br>)\s*)+/gi, "<p><br></p>")
+	// .replace(/(\s*<p><br><\/p>\s*)+(?=<div class="exercise">)/gi, "$1")
+	;
+
 	return text;
 }
 
@@ -579,7 +595,7 @@ function _clear(str) {
 
 		.replace(/style="[^"]*?"(?!><\/iframe>)/gi, "")
 
-		.replace(/<(?!a)(\w+)\s*(?![^>]*\b(?:class\s*=\s*["']?\s*(?:text-danger|text-center|data-table|table-responsive|mx-auto|text-right|legend|url|img-center|img-right|img-left|box-item|d-none|d-print-block|d-print-none|youtube|box-book|mx-\d+|row|col-sm-\d+)\b|type="[1aAiI]"|colspan="\d"|rowspan="\d"|src="|exercise))[^>]*>/gi, "<$1>")
+		.replace(/<(?!a)(\w+)\s*(?![^>]*\b(?:class\s*=\s*["']?\s*(?:text-danger|text-center|data-table|table-responsive|mx-auto|text-right|legend|url|img-center|img-right|img-left|box-item|d-none|d-print-block|d-print-none|youtube|box-book|mx-\d+|row|col-sm-\d+)\b|type="[1aAiI]"|colspan="\d"|rowspan="\d"|src="|exercise|options))[^>]*>/gi, "<$1>")
 
 		.replace(/\<b\b[^>]*\>/gi, "<b>")
 		.replace(/\<li\b[^>]*\>/gi, "<li>")
@@ -598,7 +614,7 @@ function _clear(str) {
 		.replace(/<colgroup>.*?<\/colgroup>/gi, "")
 		.replace(/(\s*<br>\s*)+/gi, "<br>")
 		.replace(/(<p>\s*<\/p>)+/gi, "")
-		.replace(/(\s*<p><br><\/p>\s*)+/gi, "<p><br></p>")
+		.replace(/(\s*(?:<p><br><\/p>|<br>)\s*)+/gi, "<p><br></p>")
 		.replace(/(?:<b>)+(.*?)( )?(?:<\/b>)+/gi, "<b>$1</b>$2")
 
 		.replace(/<b>(\s|<br>)*<\/b>/gi, "$1")
