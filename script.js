@@ -361,18 +361,35 @@ function facilidades(str) {
 	return text;
 }
 
-function removeTag(text) {
-	// Criar um elemento temporário
-	var tempDiv = $("<div>");
+function removeTag(html) {
+	// Cria um elemento temporário e insere o HTML
+	var tempDiv = $("<div>").html(html);
 
-	// Inserir o conteúdo de text no elemento temporário
-	tempDiv.html(text);
+	// Remove tags <b>, <i>, <p> e <div> vazias
+	tempDiv.find("b:empty, i:empty, p:empty, div:empty").remove();
 
-	// Aplicar o unwrap() para remover as tags mas preservar o conteúdo
-	tempDiv.find("u").contents().unwrap();
-	tempDiv.find("a").contents().unwrap();
+	// Filtra e processa <b>, <i> e <div> que contenham apenas <br> ou espaços
+	tempDiv
+		.find("b, i, div")
+		.filter(function () {
+			var content = $(this).html().trim();
+			return content === "<br>" || content === "<p><br></p>" || content === "";
+		})
+		.each(function () {
+			// Substitui a tag <b>, <i> ou <div> pelo conteúdo relevante
+			if ($(this).html().trim() === "<br>") {
+				$(this).replaceWith("<br>");
+			} else if ($(this).html().trim() === "<p><br></p>") {
+				$(this).replaceWith("<p><br></p>");
+			} else {
+				$(this).remove(); // Remove a tag vazia
+			}
+		});
 
-	// Extrair o HTML modificado de volta para text
+	// Remove tags <u> e <a> mas preserva o conteúdo
+	tempDiv.find("u, a").contents().unwrap();
+
+	// Retorna o HTML modificado
 	return tempDiv.html();
 }
 
@@ -542,17 +559,26 @@ function exerciciosH5p(str) {
 	tempDiv.html(text);
 
 	// Remove o parágrafo <p><br></p>, <p><b>Resolução: [A-E]</b></p> e o <p><b>Comentário:</b> ...</p>
-	tempDiv.find('p:contains("Resolução:")').prev('p:contains("<br>")').remove(); // Remove <p><br></p>
+	tempDiv.find('p:contains("Resolução: B")').each(function () {
+		var $resolucaoPar = $(this);
+
+		// Remove todas as tags <p><br></p> que precedem o parágrafo da resolução
+		$resolucaoPar.prevAll("p").each(function () {
+			if ($(this).html().trim() === "<br>") {
+				$(this).remove();
+			} else {
+				return false; // Para o loop se encontrar um <p> que não seja <p><br></p>
+			}
+		});
+	});
 	tempDiv.find('p:contains("Resolução:")').next('p:contains("Comentário:")').remove(); // Remove <p><b>Comentário:</b> ...</p>
 	tempDiv.find('p:contains("Resolução:")').remove(); // Remove <p><b>Resolução: [A-E]</b></p>
 
 	// Extrai o HTML modificado de volta para a string
 	text = tempDiv.html();
 
-	text
-	.replace(/(\s*(?:<p><br><\/p>|<br>)\s*)+/gi, "<p><br></p>")
+	text.replace(/(\s*(?:<p><br><\/p>|<br>)\s*)+/gi, "<p><br></p>");
 	// .replace(/(\s*<p><br><\/p>\s*)+(?=<div class="exercise">)/gi, "$1")
-	;
 
 	return text;
 }
@@ -642,6 +668,8 @@ function _clear(str) {
 		.replace(/[ ]{2,}/gi, " ")
 		.replace(/<p> ?(<b>) ?/gi, "<p>$1");
 	text = removeSpan(text);
+	text = removeTag(text);
+
 	return text;
 }
 
@@ -696,6 +724,7 @@ function organizaTags(textareaValue) {
 		.replace(/(<br>\s*)*$/gi, "")
 		.replace(/(?:<br><\/p>\s*)$/gi, "</p>")
 		.replace(/(?:\s*<p><\/p>\s*)$/gi, "");
+	// .replace(/<(b|p|div)>(\s*)<\/\1>/gi, '$2')
 	return text;
 }
 
@@ -746,7 +775,7 @@ function clear() {
 		}
 
 		textareaValue = insereQuebras(textareaValue);
-
+		
 		textareaValue = organizaTags(textareaValue);
 
 		textareaValue = removeQuebras(textareaValue);
