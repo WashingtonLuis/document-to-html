@@ -1025,7 +1025,7 @@ $(document).ready(function () {
 			textareaValue = textareaValue
 				.replace(/<br \/>/gi, "<br>")
 				.replace(/(?<=@@)\s*<p>(?:\s*<br>)<\/p>/g, "") // Remove parágrafos vazios após @@
-				.replace(/@@\s*<p>(Figura[\s\S]*?)<\/p>\s*<p>((?:Disponível em:|Fonte:)[\s\S]*?)<\/p>/gi, (match, caption1, caption2) => {
+				.replace(/@@\s*<p[^>]*?>(Figura[\s\S]*?)<\/p>\s*<p[^>]*?>((?:Disponível em:|Fonte:)[\s\S]*?)<\/p>/gi, (match, caption1, caption2) => {
 					// Formata um novo bloco de imagem quando @@ é encontrado com legenda
 					const imageName = `blo${bloco}-${counter.toString().padStart(2, "0")}.jpg`;
 					return `<div class='img-center mx-400 text-center'><img src='${imageName}'><div class='legend'><b>${caption1}</b><br>${caption2}</div></div>`;
