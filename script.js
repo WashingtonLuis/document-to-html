@@ -775,7 +775,7 @@ function clear() {
 		}
 
 		textareaValue = insereQuebras(textareaValue);
-		
+
 		textareaValue = organizaTags(textareaValue);
 
 		textareaValue = removeQuebras(textareaValue);
@@ -995,7 +995,8 @@ $(document).ready(function () {
 				})
 				.replace(/(?<=(?:jpg|png)'><\/div>)(<div class="img-(?:center|left|right) mx-\d{3} text-center">)#(jpg|png)>/gi, "")
 				.replace(/<p>(<div.*?<\/div>)<\/p>/gi, "$1")
-				.replace(/\n\n/gi, "\n");
+				.replace(/\n\n/gi, "\n")
+				.replace(/#(?:jpg|png)/gi, "");
 
 			$("#numImg").val(counter);
 			// Definir o texto formatado em outro elemento
