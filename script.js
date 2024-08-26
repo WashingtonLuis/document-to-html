@@ -969,7 +969,7 @@ $(document).ready(function () {
 		}
 	});
 
-	$("#imgJpgPng").click(function () {
+	/*$("#imgJpgPng").click(function () {
 		try {
 			let textareaValueEq = $("#summernote").summernote("code");
 			let counter = parseInt($("#numImg").val(), 10);
@@ -995,7 +995,7 @@ $(document).ready(function () {
 				})
 				.replace(/(?<=(?:jpg|png)'><\/div>)(<div class="img-(?:center|left|right) mx-\d{3} text-center">)#(jpg|png)>/gi, "")
 				.replace(/<p>(<div.*?<\/div>)<\/p>/gi, "$1")
-				.replace(/\n\n/gi, "\n")
+				.replace(/\n+/gi, "\n")
 				.replace(/#(?:jpg|png)/gi, "");
 
 			$("#numImg").val(counter);
@@ -1010,6 +1010,49 @@ $(document).ready(function () {
 				.catch((err) => {
 					console.error("Erro ao copiar o texto:", err);
 				});
+		} catch (error) {
+			console.error("Erro ao formatar o texto:", error);
+		}
+	});*/
+
+	$("#imgJpgPng").click(function () {
+		try {
+			let textareaValue = $("#summernote").summernote("code");
+			let counter = parseInt($("#numImg").val(), 10);
+			const bloco = $("#bloco").val();
+
+			// Tratamento para entradas com @@ ou blocos de imagem existentes
+			textareaValue = textareaValue
+				.replace(/<br \/>/gi, "<br>")
+				.replace(/(?<=@@)\s*<p>(?:\s*<br>)<\/p>/g, "") // Remove parágrafos vazios após @@
+				.replace(/@@\s*<p>(Figura[\s\S]*?)<\/p>\s*<p>((?:Disponível em:|Fonte:)[\s\S]*?)<\/p>/gi, (match, caption1, caption2) => {
+					// Formata um novo bloco de imagem quando @@ é encontrado com legenda
+					const imageName = `blo${bloco}-${counter.toString().padStart(2, "0")}.jpg`;
+					return `<div class='img-center mx-400 text-center'><img src='${imageName}'><div class='legend'><b>${caption1}</b><br>${caption2}</div></div>`;
+				})
+				.replace(/@@/gi, () => {
+					// Formata um novo bloco de imagem quando @@ é encontrado sem legenda
+					const imageName = `blo${bloco}-${counter.toString().padStart(2, "0")}.jpg`;
+					return `<div class='img-center mx-400 text-center'><img src='${imageName}'></div>`;
+				})
+				.replace(/<img src=['"]blo\d{1,2}-\d{2,3}\.(jpg|png)['"]\s*\/?>/gi, (match, extension) => {
+					// Reorganiza o nome das imagens, extraindo o tipo da imagem (jpg ou png)
+					const imageName = `blo${bloco}-${counter.toString().padStart(2, "0")}.${extension}`;
+					counter++;
+					return `<img src='${imageName}'>`;
+				});
+
+			// Atualiza o contador de imagens
+			$("#numImg").val(counter);
+
+			// Atualiza o elemento de resultado
+			$("#result").text(textareaValue);
+
+			// Copia o texto para a área de transferência
+			navigator.clipboard
+				.writeText(textareaValue)
+				.then(() => console.log("Texto copiado com sucesso!"))
+				.catch((err) => console.error("Erro ao copiar o texto:", err));
 		} catch (error) {
 			console.error("Erro ao formatar o texto:", error);
 		}
