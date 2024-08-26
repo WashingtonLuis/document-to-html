@@ -448,7 +448,7 @@ function replacePWithCite(text) {
 
 function padraoResposta(text) {
 	return text
-		.replace(/<p>Letra ([A-E])(?:(?!<\/p>)[\s\S])*?<\/p>\s*<p>(?:Resolução|Comentário):(?:<\/p>\s*<p>)?/gi, "<p><b>Resolução: $1</b></p><p><b>Comentário:</b> ")
+		.replace(/<p>Letra[ :-]*([A-E])(?:(?!<\/p>)[\s\S])*?<\/p>\s*<p>(?:Resolução|Comentário)[ :-]*(?:<\/p>\s*<p>)?/gi, "<p><b>Resolução: $1</b></p><p><b>Comentário:</b> ")
 		.replace(/<p>(?:Resolução: )?Letra ([A-E]) - /gi, "<p><b>Resolução: $1</b></p><p><b>Comentário:</b> ")
 		.replace(/(?<=Resolução: )[a-e]/g, (match) => match.toUpperCase());
 }
@@ -1024,7 +1024,7 @@ $(document).ready(function () {
 			// Tratamento para entradas com @@ ou blocos de imagem existentes
 			textareaValue = textareaValue
 				.replace(/<br \/>/gi, "<br>")
-				.replace(/(?<=@@)\s*<p>(?:\s*<br>)<\/p>/g, "") // Remove parágrafos vazios após @@
+				.replace(/(?<=@@)\s*<p>(?:\s*<br>\s*)<\/p>\s*/g, "") // Remove parágrafos vazios após @@
 				.replace(/@@\s*<p[^>]*?>(Figura[\s\S]*?)<\/p>\s*<p[^>]*?>((?:Disponível em:|Fonte:)[\s\S]*?)<\/p>/gi, (match, caption1, caption2) => {
 					// Formata um novo bloco de imagem quando @@ é encontrado com legenda
 					const imageName = `blo${bloco}-${counter.toString().padStart(2, "0")}.jpg`;
