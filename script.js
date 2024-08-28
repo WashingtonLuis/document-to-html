@@ -439,6 +439,8 @@ function fixMalformedLinks(text) {
 
 				return match;
 			})
+			.replace(/(?:&lt;|<)(?=<a)/gi, "")
+			.replace(/(?<=<\/a>)(?:&gt;|>)/gi, "")
 	);
 }
 
@@ -504,15 +506,91 @@ function semTag(str) {
 	return str.replace(/<(?:\/)?(?:b|i|u|p|font|br)\s?.*?>/gi, " ").replace(/[ ]{2,}/gi, " ");
 }
 
+function listaOrdenada(text) {
+	var tempDiv = $("<div>");
+	tempDiv.html(text);
+
+	// Encontra a sequência de parágrafos que correspondem aos itens da lista
+	var listItems = tempDiv.find("p").filter(function () {
+		return $(this)
+			.text()
+			.match(/^\d+\.\s/); // Encontra parágrafos que começam com números seguidos por ponto e espaço
+	});
+
+	if (listItems.length > 0) {
+		if (document.getElementById("listaOrdenada").checked) {
+			var $ol = $("<ol></ol>");
+			var itemsToRemove = [];
+			listItems.each(function () {
+				var listItem = $(this).text().trim();
+				listItem = listItem.replace(/^\d+\.\s+/, "");
+				$ol.append("<li>" + listItem + "</li>");
+				itemsToRemove.push(this);
+			});
+
+			// Insere a lista ordenada após o último parágrafo identificado
+			listItems.last().after($ol);
+
+			// Remove os parágrafos originais
+			$(itemsToRemove).remove();
+		} else {
+			listItems.addClass("list-item");
+		}
+	}
+
+	// Extrai o HTML modificado de volta para a string
+	return tempDiv.html();
+}
+
+function removeListaOrdenada(text) {
+	let tempDiv = $("<div>");
+	tempDiv.html(text);
+
+	const listItems = tempDiv.find(".list-item");
+
+	const newText = listItems
+		.map((i, item) => $(item).text())
+		.get()
+		.join("<br>");
+	listItems.first().html(newText).removeClass("list-item");
+	listItems.slice(1).remove();
+
+	return tempDiv.html();
+}
+
 function exerciciosMaterial(str) {
-	let text = str
+	let text = str;
+	text = listaOrdenada(text);
+	text = text
 		.replace(/<p>\s?(?:<b>)?\d+ ?[.)-](?:\s?<b>|\s?<\/b>| )*(.*?)(?:<\/b>)?\s?<\/p>/gi, '<div class="exercise"><p>$1</p></div>')
 		.replace(/(?<=<div class="exercise"><p>)(\([^)]*\))(?:\s-\s)?/gi, "<b>$1</b> ")
 		.replace(/Enem/gi, "ENEM")
 		.replace(/(?:<p><br><\/p>|<br>|\s)*(<\/div>)(?:<p><br><\/p>|<br>|\s)*(<ol class="options">)/gi, "$1$2");
 	text = padraoResposta(text);
+	text = removeListaOrdenada(text);
 
 	return text;
+}
+
+function destacarRespostaCorreta($exercise) {
+	// Encontra a lista de opções (mais flexível)
+	let $options = $exercise.nextAll("ol.options").first();
+
+	if ($options.length > 0) {
+		try {
+			// Extrai a resposta correta com tratamento de erros
+			let resolutionText = $options.find('p:contains("Resolução:")').text().trim();
+			let correctAnswer = resolutionText.match(/Resolução:\s*([A-E])/i)[1];
+			let indexMap = { A: 0, B: 1, C: 2, D: 3, E: 4 };
+			let correctIndex = indexMap[correctAnswer.toUpperCase()];
+
+			// Encontra a <li> correta e envolve seu conteúdo em <b>
+			let $correctLi = $options.find("li").eq(correctIndex);
+			$correctLi.html("<b>" + $correctLi.html() + "</b>");
+		} catch (error) {
+			console.log(`Erro ao processar o exercício: \n${$exercise.text().slice(0, 50)}`);
+		}
+	}
 }
 
 function exerciciosResolvidos(str) {
@@ -522,27 +600,12 @@ function exerciciosResolvidos(str) {
 		.replace(/(?<=<div class="exercise">)((?:(?!<div class="exercise">)[\s\S])*?)<\/div>((?:(?!<div class="exercise">)[\s\S])*?)(?=<ol class="options"><li>)/gi, "$1$2</div>")
 		.replace(/(<ol class="options">)([\s\S]*?)(<\/ol>)([\s\S]*?)(?:(?=<div class="exercise">)|$)/gi, "$1$2$4$3");
 
-	var tempDiv = $("<div>");
+	let tempDiv = $("<div>");
 	tempDiv.html(text);
+
 	// Itera sobre cada bloco de exercício
 	tempDiv.find(".exercise").each(function () {
-		// Encontra o elemento <ol> associado ao exercício
-		var $exercise = $(this);
-		var $options = $exercise.next("ol.options"); // Assumindo que <ol> segue o <div class="exercise">
-
-		// Encontra o texto da resolução
-		var resolutionText = $options.find('p:contains("Resolução:")').text().trim();
-
-		// Extrai a letra da resolução (e.g., "E")
-		var correctAnswer = resolutionText.match(/Resolução:\s*([A-Z])/i)[1];
-
-		// Mapeia letras para índices: A=0, B=1, C=2, D=3, E=4
-		var indexMap = { A: 0, B: 1, C: 2, D: 3, E: 4 };
-		var correctIndex = indexMap[correctAnswer.toUpperCase()];
-
-		// Encontra a <li> correta e envolve seu conteúdo em <b>
-		var $correctLi = $options.find("li").eq(correctIndex);
-		$correctLi.html("<b>" + $correctLi.html() + "</b>");
+		destacarRespostaCorreta($(this));
 	});
 
 	// Extrai o HTML modificado de volta para a string
@@ -559,8 +622,8 @@ function exerciciosH5p(str) {
 	tempDiv.html(text);
 
 	// Remove o parágrafo <p><br></p>, <p><b>Resolução: [A-E]</b></p> e o <p><b>Comentário:</b> ...</p>
-	tempDiv.find('p:contains("Resolução: B")').each(function () {
-		var $resolucaoPar = $(this);
+	tempDiv.find('p:contains("Resolução:")').each(function () {
+		let $resolucaoPar = $(this);
 
 		// Remove todas as tags <p><br></p> que precedem o parágrafo da resolução
 		$resolucaoPar.prevAll("p").each(function () {
@@ -621,7 +684,7 @@ function _clear(str) {
 
 		.replace(/style="[^"]*?"(?!><\/iframe>)/gi, "")
 
-		.replace(/<(?!a)(\w+)\s*(?![^>]*\b(?:class\s*=\s*["']?\s*(?:text-danger|text-center|data-table|table-responsive|mx-auto|text-right|legend|url|img-center|img-right|img-left|box-item|d-none|d-print-block|d-print-none|youtube|box-book|mx-\d+|row|col-sm-\d+)\b|type="[1aAiI]"|colspan="\d"|rowspan="\d"|src="|exercise|options))[^>]*>/gi, "<$1>")
+		.replace(/<(?!a)(\w+)\s*(?![^>]*\b(?:class\s*=\s*["']?\s*(?:text-danger|text-center|data-table|table-responsive|mx-auto|text-right|legend|url|img-center|img-right|img-left|box-item|d-none|d-print-block|d-print-none|youtube|box-book|mx-\d+|row|col-sm-\d+)\b|type="[1aAiI]"|colspan="\d"|rowspan="\d"|src="|exercise|options|list-item))[^>]*>/gi, "<$1>")
 
 		.replace(/\<b\b[^>]*\>/gi, "<b>")
 		.replace(/\<li\b[^>]*\>/gi, "<li>")
@@ -640,7 +703,7 @@ function _clear(str) {
 		.replace(/<colgroup>.*?<\/colgroup>/gi, "")
 		.replace(/(\s*<br>\s*)+/gi, "<br>")
 		.replace(/(<p>\s*<\/p>)+/gi, "")
-		.replace(/(\s*(?:<p><br><\/p>|<br>)\s*)+/gi, "<p><br></p>")
+		.replace(/(\s*<p><br><\/p>\s*)+/gi, "<p><br></p>")
 		.replace(/(?:<b>)+(.*?)( )?(?:<\/b>)+/gi, "<b>$1</b>$2")
 
 		.replace(/<b>(\s|<br>)*<\/b>/gi, "$1")
@@ -701,6 +764,7 @@ function organizaTags(textareaValue) {
 	let text = textareaValue
 		.replace(/<font\s?>/gi, "")
 		.replace(/<\/font>/gi, "")
+		.replace(/ class=""/gi, "")
 		.replace(/ <\/(i|b|u)>/gi, "</$1> ")
 		.replace(/(Acesso em|Disponível em) /gi, "$1: ")
 		.replace(/Acesso em: 0(\d)/gi, "Acesso em: $1")
@@ -760,6 +824,10 @@ function clear() {
 
 		if (document.getElementById("manual").checked) {
 			textareaValue = manual(textareaValue);
+		}
+
+		if (document.getElementById("listaOrdenada").checked) {
+			textareaValue = listaOrdenada(textareaValue);
 		}
 
 		if (document.getElementById("exerciciosMaterial").checked) {
