@@ -356,7 +356,7 @@ function facilidades(str) {
 	text = convertTableCellsToHeaders(text);
 	text = formatLinks(text);
 	text = fixMalformedLinks(text);
-	text = replacePWithCite(text);
+	text = padraoFonte(text);
 
 	return text;
 }
@@ -444,14 +444,14 @@ function fixMalformedLinks(text) {
 	);
 }
 
-function replacePWithCite(text) {
-	return text.replace(/<p>((?:<b>|<i>|<\/b>|<\/i>|[^<])+Disponível em:\s*<a[^>]*>.*?<\/a>.*?)<\/p>/gi, "<cite>$1</cite>");
+function padraoFonte(text) {
+	return text.replace(/<p>((?:<b>|<i>|<\/b>|<\/i>|[^<])+Disponível em:\s*<a[^>]*>.*?<\/a>.*?)<\/p>/gi, "<p class='text-right'>$1</p>");
 }
 
 function padraoResposta(text) {
 	return text
-		.replace(/<p>Letra[ :-]*([A-E])(?:(?!<\/p>)[\s\S])*?<\/p>\s*<p>(?:Resolução|Comentário)[ :-]*(?:<\/p>\s*<p>)?/gi, "<p><b>Resolução: $1</b></p><p><b>Comentário:</b> ")
-		.replace(/<p>(?:Resolução: )?Letra ([A-E]) - /gi, "<p><b>Resolução: $1</b></p><p><b>Comentário:</b> ")
+		.replace(/<p>Letra[ :-]*([A-E])(?:(?!<\/p>)[\s\S])*?<\/p>\s*<p>(?:Resolução|Comentário)[ :-]*(?:<\/p>\s*<p>)?/gi, "<p><br><b>Resolução: $1</b><br><b>Comentário:</b> ")
+		.replace(/<p>(?:Resolução: )?Letra ([A-E]) - /gi, "<p><br><b>Resolução: $1</b><br><b>Comentário:</b> ")
 		.replace(/(?<=Resolução: )[a-e]/g, (match) => match.toUpperCase());
 }
 
@@ -506,12 +506,34 @@ function semTag(str) {
 	return str.replace(/<(?:\/)?(?:b|i|u|p|font|br)\s?.*?>/gi, " ").replace(/[ ]{2,}/gi, " ");
 }
 
+function removeParagrafosBr(tempDiv) {
+	// Remove <p><br></p> ou <br> antes de uma lista ordenada <ol>
+	tempDiv
+		.find("ol")
+		.prev("p")
+		.each(function () {
+			if ($(this).html().trim() === "<br>") {
+				$(this).remove();
+			}
+		});
+
+	// Remove <p><br></p> ou <br> antes do primeiro item de lista com a classe "list-item"
+	tempDiv
+		.find(".list-item")
+		.prev("p")
+		.each(function () {
+			if ($(this).html().trim() === "<br>") {
+				$(this).remove();
+			}
+		});
+}
+
 function listaOrdenada(text) {
-	var tempDiv = $("<div>");
+	let tempDiv = $("<div>");
 	tempDiv.html(text);
 
 	// Encontra a sequência de parágrafos que correspondem aos itens da lista
-	var listItems = tempDiv.find("p").filter(function () {
+	let listItems = tempDiv.find("p").filter(function () {
 		return $(this)
 			.text()
 			.match(/^\d+\.\s/); // Encontra parágrafos que começam com números seguidos por ponto e espaço
@@ -519,11 +541,11 @@ function listaOrdenada(text) {
 
 	if (listItems.length > 0) {
 		if (document.getElementById("listaOrdenada").checked) {
-			var $ol = $("<ol></ol>");
-			var itemsToRemove = [];
+			let $ol = $("<ol></ol>");
+			let itemsToRemove = [];
 			listItems.each(function () {
-				var listItem = $(this).text().trim();
-				listItem = listItem.replace(/^\d+\.\s+/, "");
+				let listItem = $(this).text().trim();
+				listItem = listItem.replace(/^\d+\.\s+/, ""); // Remove o número e o ponto
 				$ol.append("<li>" + listItem + "</li>");
 				itemsToRemove.push(this);
 			});
@@ -537,6 +559,8 @@ function listaOrdenada(text) {
 			listItems.addClass("list-item");
 		}
 	}
+
+	removeParagrafosBr(tempDiv);
 
 	// Extrai o HTML modificado de volta para a string
 	return tempDiv.html();
