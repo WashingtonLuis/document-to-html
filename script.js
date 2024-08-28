@@ -534,18 +534,30 @@ function listaOrdenada(text) {
 
 	// Encontra a sequência de parágrafos que correspondem aos itens da lista
 	let listItems = tempDiv.find("p").filter(function () {
-		return $(this)
-			.text()
-			.match(/^\d+\.\s/); // Encontra parágrafos que começam com números seguidos por ponto e espaço
+		return (
+			$(this)
+				.text()
+				.match(/^\d+\.\s/) ||
+			$(this)
+				.text()
+				.match(/^[IVXLCDM]+\.\s/i)
+		);
+		// Encontra parágrafos que começam com números ou numerais romanos seguidos por ponto e espaço
 	});
 
 	if (listItems.length > 0) {
 		if (document.getElementById("listaOrdenada").checked) {
-			let $ol = $("<ol></ol>");
+			let olType = listItems
+				.first()
+				.text()
+				.match(/^[IVXLCDM]+\.\s/i)
+				? "I"
+				: "1";
+			let $ol = $("<ol></ol>").attr("type", olType); // Define o tipo de lista com base no primeiro item
 			let itemsToRemove = [];
 			listItems.each(function () {
 				let listItem = $(this).text().trim();
-				listItem = listItem.replace(/^\d+\.\s+/, ""); // Remove o número e o ponto
+				listItem = listItem.replace(/^\d+\.\s+|^[IVXLCDM]+\.\s+/i, ""); // Remove o número ou numeral romano e o ponto
 				$ol.append("<li>" + listItem + "</li>");
 				itemsToRemove.push(this);
 			});
@@ -556,7 +568,7 @@ function listaOrdenada(text) {
 			// Remove os parágrafos originais
 			$(itemsToRemove).remove();
 		} else {
-			listItems.addClass("list-item");
+			listItems.addClass("list-item"); // Adiciona a classe "list-item" para itens com números ou numerais romanos
 		}
 	}
 
