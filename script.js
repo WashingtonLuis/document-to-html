@@ -528,9 +528,63 @@ function removeParagrafosBr(tempDiv) {
 		});
 }
 
+function listaOrdenada(text) {
+	var tempDiv = $("<div>");
+	tempDiv.html(text);
+
+	// Seleciona todos os parágrafos
+	var paragraphs = tempDiv.find("p");
+	var $ol = null;
+	var itemsToRemove = [];
+
+	paragraphs.each(function () {
+		var paragraph = $(this);
+		var texto = paragraph.text().trim();
+
+		// Verifica se o parágrafo é um item de lista numerada
+		if (texto.match(/^\d+\.\s/)) {
+			if (document.getElementById("listaOrdenada").checked) {
+				// Cria uma nova lista ordenada se ainda não existe uma ativa
+				if ($ol === null) {
+					$ol = $("<ol></ol>");
+				}
+
+				// Remove o número e adiciona o item à lista
+				var listItem = texto.replace(/^\d+\.\s+/, "");
+				$ol.append("<li>" + listItem + "</li>");
+				paragraph.addClass("remover");
+			} else {
+				// Adiciona a classe ao parágrafo se a lista ordenada não for aplicada
+				paragraph.addClass("list-item");
+			}
+		} else {
+			// Se o parágrafo não for um item de lista, finalize a lista anterior (se houver)
+			if ($ol !== null) {
+				itemsToRemove[itemsToRemove.length - 1].after($ol);
+				$ol = null;
+			}
+
+			// Adiciona o parágrafo ao resultado final
+			itemsToRemove.push(paragraph);
+		}
+	});
+
+	// Finaliza a última lista, se houver
+	if ($ol !== null) {
+		itemsToRemove[itemsToRemove.length - 1].after($ol);
+	}
+
+	// Remove os parágrafos originais que foram convertidos para lista
+	tempDiv.find(".remover").remove();
+
+	// Retorna o HTML modificado
+	return tempDiv.html();
+}
+
 function processarListaOrdenada(text) {
 	let tempDiv = $("<div>"); // Cria um elemento div temporário
 	tempDiv.html(text); // Insere o texto HTML no div
+
 	const paragraphs = tempDiv.find("p"); // Seleciona todos os parágrafos
 	let listaItems = [];
 	let listaEncontrada = false;
@@ -600,6 +654,7 @@ function exerciciosMaterial(str) {
 	let text = str;
 	// text = listaOrdenada(text);
 	text = processarListaOrdenada(text);
+	text = listaOrdenada(text);
 	text = text
 		.replace(/<p>\s?(?:<b>)?\d+ ?[.)-](?:\s?<b>|\s?<\/b>| )*(.*?)(?:<\/b>)?\s?<\/p>/gi, '<div class="exercise"><p>$1</p></div>')
 		.replace(/(?<=<div class="exercise"><p>)(\([^)]*\))(?:\s-\s)?/gi, "<b>$1</b> ")
@@ -866,6 +921,7 @@ function clear() {
 		}
 
 		textareaValue = processarListaOrdenada(textareaValue);
+		textareaValue = listaOrdenada(textareaValue);
 
 		if (document.getElementById("exerciciosMaterial").checked) {
 			textareaValue = organizaTags(textareaValue);
