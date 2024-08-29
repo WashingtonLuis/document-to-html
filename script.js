@@ -599,7 +599,7 @@ function processarListaOrdenada(text) {
 	let resultadoHTML = "";
 
 	// Regex para identificar os itens do tipo "I - ..., II - ..."
-	const regexRomanos = /^(I{1,3}|IV|V|VI{0,3}|IX|X{0,3})\s-\s/;
+	const regexRomanos = /^(I{1,3}|IV|V|VI{0,3}|IX|X{0,3})\s?(?:-|\.)\s/;
 	const checkboxChecked = document.getElementById("listaOrdenada").checked;
 
 	paragraphs.each(function (index, p) {
