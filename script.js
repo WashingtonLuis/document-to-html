@@ -528,54 +528,56 @@ function removeParagrafosBr(tempDiv) {
 		});
 }
 
-function listaOrdenada(text) {
-	let tempDiv = $("<div>");
-	tempDiv.html(text);
+function processarListaOrdenada(text) {
+	let tempDiv = $("<div>"); // Cria um elemento div temporário
+	tempDiv.html(text); // Insere o texto HTML no div
+	const paragraphs = tempDiv.find("p"); // Seleciona todos os parágrafos
+	let listaItems = [];
+	let listaEncontrada = false;
+	let resultadoHTML = "";
 
-	// Encontra a sequência de parágrafos que correspondem aos itens da lista
-	let listItems = tempDiv.find("p").filter(function () {
-		return (
-			$(this)
-				.text()
-				.match(/^\d+\.\s/) ||
-			$(this)
-				.text()
-				.match(/^[IVXLCDM]+\.\s/i)
-		);
-		// Encontra parágrafos que começam com números ou numerais romanos seguidos por ponto e espaço
+	// Regex para identificar os itens do tipo "I - ..., II - ..."
+	const regexRomanos = /^(I{1,3}|IV|V|VI{0,3}|IX|X{0,3})\s-\s/;
+	const checkboxChecked = document.getElementById("listaOrdenada").checked;
+
+	paragraphs.each(function (index, p) {
+		// Uso de `each` do jQuery para iterar sobre os parágrafos
+		let texto = $(p).html().trim();
+
+		if (regexRomanos.test(texto)) {
+			listaEncontrada = true;
+			if (checkboxChecked) {
+				listaItems.push(`<li>${texto.replace(regexRomanos, "")}</li>`);
+				$(p).html(""); // Remove o conteúdo original do parágrafo
+			} else {
+				$(p).addClass("list-item-I"); // Adiciona a classe usando jQuery
+				listaItems.push($("<div>").append($(p).clone()).html()); // Clona e converte o elemento para string HTML
+			}
+		} else {
+			if (listaEncontrada && listaItems.length > 0) {
+				if (checkboxChecked) {
+					resultadoHTML += `<ol type="I">${listaItems.join("")}</ol>`;
+				} else {
+					resultadoHTML += listaItems.join(""); // Junta os itens com a classe `list-item-I`
+				}
+				listaItems = [];
+				listaEncontrada = false;
+			}
+			resultadoHTML += $("<div>").append($(p).clone()).html(); // Clona e converte o elemento para string HTML
+		}
 	});
 
-	if (listItems.length > 0) {
-		if (document.getElementById("listaOrdenada").checked) {
-			let olType = listItems
-				.first()
-				.text()
-				.match(/^[IVXLCDM]+\.\s/i)
-				? "I"
-				: "1";
-			let $ol = $("<ol></ol>").attr("type", olType); // Define o tipo de lista com base no primeiro item
-			let itemsToRemove = [];
-			listItems.each(function () {
-				let listItem = $(this).text().trim();
-				listItem = listItem.replace(/^\d+\.\s+|^[IVXLCDM]+\.\s+/i, ""); // Remove o número ou numeral romano e o ponto
-				$ol.append("<li>" + listItem + "</li>");
-				itemsToRemove.push(this);
-			});
-
-			// Insere a lista ordenada após o último parágrafo identificado
-			listItems.last().after($ol);
-
-			// Remove os parágrafos originais
-			$(itemsToRemove).remove();
+	// Caso a lista esteja no final do texto
+	if (listaEncontrada && listaItems.length > 0 && checkboxChecked) {
+		if (checkboxChecked) {
+			resultadoHTML += `<ol type="I">${listaItems.join("")}</ol>`;
 		} else {
-			listItems.addClass("list-item"); // Adiciona a classe "list-item" para itens com números ou numerais romanos
+			resultadoHTML += listaItems.join(""); // Junta os itens restantes
 		}
 	}
 
-	removeParagrafosBr(tempDiv);
-
-	// Extrai o HTML modificado de volta para a string
-	return tempDiv.html();
+	// Retorna o novo HTML processado
+	return resultadoHTML;
 }
 
 function removeListaOrdenada(text) {
@@ -596,7 +598,8 @@ function removeListaOrdenada(text) {
 
 function exerciciosMaterial(str) {
 	let text = str;
-	text = listaOrdenada(text);
+	// text = listaOrdenada(text);
+	text = processarListaOrdenada(text);
 	text = text
 		.replace(/<p>\s?(?:<b>)?\d+ ?[.)-](?:\s?<b>|\s?<\/b>| )*(.*?)(?:<\/b>)?\s?<\/p>/gi, '<div class="exercise"><p>$1</p></div>')
 		.replace(/(?<=<div class="exercise"><p>)(\([^)]*\))(?:\s-\s)?/gi, "<b>$1</b> ")
@@ -862,9 +865,7 @@ function clear() {
 			textareaValue = manual(textareaValue);
 		}
 
-		if (document.getElementById("listaOrdenada").checked) {
-			textareaValue = listaOrdenada(textareaValue);
-		}
+		textareaValue = processarListaOrdenada(textareaValue);
 
 		if (document.getElementById("exerciciosMaterial").checked) {
 			textareaValue = organizaTags(textareaValue);
