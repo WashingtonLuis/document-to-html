@@ -529,39 +529,47 @@ function removeParagrafosBr(tempDiv) {
 }
 
 function listaOrdenada(text) {
-	var tempDiv = $("<div>");
+	let tempDiv = $("<div>");
 	tempDiv.html(text);
 
 	// Seleciona todos os parágrafos
-	var paragraphs = tempDiv.find("p");
-	var $ol = null;
-	var itemsToRemove = [];
+	let paragraphs = tempDiv.find("p");
+	let $newTag = null;
+	let itemsToRemove = [];
 
 	paragraphs.each(function () {
-		var paragraph = $(this);
-		var texto = paragraph.text().trim();
+		let paragraph = $(this);
+		let texto = paragraph.text().trim();
 
 		// Verifica se o parágrafo é um item de lista numerada
 		if (texto.match(/^\d+\.\s/)) {
 			if (document.getElementById("listaOrdenada").checked) {
 				// Cria uma nova lista ordenada se ainda não existe uma ativa
-				if ($ol === null) {
-					$ol = $("<ol></ol>");
+				if ($newTag === null) {
+					$newTag = $("<ol></ol>");
 				}
 
 				// Remove o número e adiciona o item à lista
-				var listItem = texto.replace(/^\d+\.\s+/, "");
-				$ol.append("<li>" + listItem + "</li>");
+				let listItem = texto.replace(/^\d+\.\s+/, "");
+				$newTag.append("<li>" + listItem + "</li>");
 				paragraph.addClass("remover");
 			} else {
-				// Adiciona a classe ao parágrafo se a lista ordenada não for aplicada
-				paragraph.addClass("list-item");
+				if ($newTag === null) {
+					$newTag = $("<p></p>");
+				}
+				if ($newTag.is("p") && $newTag.html().trim() === "") {
+					$newTag.append(texto);
+				} else {
+					$newTag.append("<br>" + texto);
+				}
+
+				paragraph.addClass("remover");
 			}
 		} else {
 			// Se o parágrafo não for um item de lista, finalize a lista anterior (se houver)
-			if ($ol !== null) {
-				itemsToRemove[itemsToRemove.length - 1].after($ol);
-				$ol = null;
+			if ($newTag !== null) {
+				itemsToRemove[itemsToRemove.length - 1].after($newTag);
+				$newTag = null;
 			}
 
 			// Adiciona o parágrafo ao resultado final
@@ -570,8 +578,8 @@ function listaOrdenada(text) {
 	});
 
 	// Finaliza a última lista, se houver
-	if ($ol !== null) {
-		itemsToRemove[itemsToRemove.length - 1].after($ol);
+	if ($newTag !== null) {
+		itemsToRemove[itemsToRemove.length - 1].after($newTag);
 	}
 
 	// Remove os parágrafos originais que foram convertidos para lista
@@ -604,15 +612,20 @@ function processarListaOrdenada(text) {
 				listaItems.push(`<li>${texto.replace(regexRomanos, "")}</li>`);
 				$(p).html(""); // Remove o conteúdo original do parágrafo
 			} else {
-				$(p).addClass("list-item-I"); // Adiciona a classe usando jQuery
-				listaItems.push($("<div>").append($(p).clone()).html()); // Clona e converte o elemento para string HTML
+				// Verifica se não é o primeiro parágrafo
+				if (listaItems.length > 0) {
+					listaItems.push(`<br>${texto.replace(/<\/?p>/, "")}`); // Adiciona <br> no início do conteúdo
+				} else {
+					listaItems.push(`${texto.replace(/<\/?p>/, "")}`); // Adiciona <br> no início do conteúdo
+				}
 			}
 		} else {
 			if (listaEncontrada && listaItems.length > 0) {
 				if (checkboxChecked) {
 					resultadoHTML += `<ol type="I">${listaItems.join("")}</ol>`;
 				} else {
-					resultadoHTML += listaItems.join(""); // Junta os itens com a classe `list-item-I`
+					console.log(listaItems);
+					resultadoHTML += `<p>${listaItems.join("")}</p>`;
 				}
 				listaItems = [];
 				listaEncontrada = false;
@@ -626,7 +639,7 @@ function processarListaOrdenada(text) {
 		if (checkboxChecked) {
 			resultadoHTML += `<ol type="I">${listaItems.join("")}</ol>`;
 		} else {
-			resultadoHTML += listaItems.join(""); // Junta os itens restantes
+			resultadoHTML += `<p>${listaItems.join("")}</p>`;
 		}
 	}
 
@@ -638,30 +651,25 @@ function removeListaOrdenada(text) {
 	let tempDiv = $("<div>");
 	tempDiv.html(text);
 
-	const listItems = tempDiv.find(".list-item");
+	const listItems = tempDiv.find(".list-item, list-item-I");
 
 	const newText = listItems
 		.map((i, item) => $(item).text())
 		.get()
 		.join("<br>");
-	listItems.first().html(newText).removeClass("list-item");
+	listItems.first().html(newText).removeClass("list-item, list-item-I");
 	listItems.slice(1).remove();
 
 	return tempDiv.html();
 }
 
 function exerciciosMaterial(str) {
-	let text = str;
-	// text = listaOrdenada(text);
-	text = processarListaOrdenada(text);
-	text = listaOrdenada(text);
-	text = text
+	let text = str
 		.replace(/<p>\s?(?:<b>)?\d+ ?[.)-](?:\s?<b>|\s?<\/b>| )*(.*?)(?:<\/b>)?\s?<\/p>/gi, '<div class="exercise"><p>$1</p></div>')
 		.replace(/(?<=<div class="exercise"><p>)(\([^)]*\))(?:\s-\s)?/gi, "<b>$1</b> ")
 		.replace(/Enem/gi, "ENEM")
 		.replace(/(?:<p><br><\/p>|<br>|\s)*(<\/div>)(?:<p><br><\/p>|<br>|\s)*(<ol class="options">)/gi, "$1$2");
 	text = padraoResposta(text);
-	text = removeListaOrdenada(text);
 
 	return text;
 }
@@ -922,6 +930,7 @@ function clear() {
 
 		textareaValue = processarListaOrdenada(textareaValue);
 		textareaValue = listaOrdenada(textareaValue);
+		textareaValue = removeListaOrdenada(textareaValue);
 
 		if (document.getElementById("exerciciosMaterial").checked) {
 			textareaValue = organizaTags(textareaValue);
