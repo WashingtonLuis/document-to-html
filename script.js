@@ -411,25 +411,39 @@ function convertTableCellsToHeaders(text) {
 	});
 }
 
-function formatLinks(text) {
+/*function formatLinks(text) {
 	return text.replace(/<(a)\s*href="(.*?)".*?>(.*?)<\/\1>/gi, "<a href='$2' class='url' target='_blank' rel='nofollow'>$3</a>").replace(/<a>(\s)?(.*?)(\s)?<\/a>/gi, "$1<a href='$2' class='url' target='_blank' rel='nofollow'>$2</a>$3");
+}*/
+
+function formatLinks(text) {
+	return text.replace(/<a\s*href="([^"]+)"[^>]*>(.*?)<\/a>/gi, (match, href, content) => {
+		const url = href.trim();
+		const innerText = content.trim();
+
+		// Se o conteúdo do link for a própria URL, formata com as classes e atributos adicionais
+		if (innerText === url) {
+			return `<a href="${url}" class="url" target="_blank" rel="nofollow">${url}</a>`;
+		} else {
+			return `<a href="${url}" class="url" target="_blank" rel="nofollow">${innerText}</a>`;
+		}
+	});
 }
 
-function fixMalformedLinks(text) {
+/*function fixMalformedLinks(text) {
 	// Use a Set to store links that are already processed to avoid duplications.
 	const processedLinks = new Set();
 
 	return (
 		text
 			// Primeira substituição: Remove espaços em branco de links
-			.replace(/(?<!["'>])<?\b((?:https?:\/\/|www\.)[^<>]+(?:\.[a-z]{2,})(?:[\/?#][^\s<>]*)?)>?/gi, (match, link) => {
+			.replace(/(?<!["'>])(?:<p>|<)?\b((?:https?:\/\/|www\.)[^<>]+(?:\.[a-z]{2,})(?:[\/?#%][^\s<>]*)?)(?:<\/p>|>)?/gi, (match, link) => {
 				return link ? link.replace(/\s+/g, "") : match;
 			})
 			// Segunda substituição: Envolve links em tags <a> se não estiverem já envoltos
-			.replace(/(?<!["'>])\b((?:https?:\/\/|www\.)[^\s<>]+(?:\.[a-z]{2,})(?:[\/?#][^\s<>]*)?)\b/gi, (match, link) => {
+			.replace(/(?<!["'>])(?:<p>|<)?\b((?:https?:\/\/|www\.)[^\s<>]+(?:\.[a-z]{2,})(?:[\/?#%][^\s<>]*)?)\b(?:<\/p>|>)?/gi, (match, link) => {
 				if (processedLinks.has(link)) return match;
 
-				const isAlreadyLinked = /<a[^>]*href=['"]?(?:https?:\/\/|www\.)[^\s<>]+(?:\.[a-z]{2,})(?:[\/?#][^\s<>]*)?['"]?[^>]*>/i.test(text);
+				const isAlreadyLinked = /<a[^>]*href=['"]?(?:https?:\/\/|www\.)[^\s<>]+(?:\.[a-z]{2,})(?:[\/?#%][^\s<>]*)?['"]?[^>]*>/i.test(text);
 
 				if (!isAlreadyLinked) {
 					processedLinks.add(link);
@@ -442,6 +456,22 @@ function fixMalformedLinks(text) {
 			.replace(/(?:&lt;|<)(?=<a)/gi, "")
 			.replace(/(?<=<\/a>)(?:&gt;|>)/gi, "")
 	);
+}*/
+function fixMalformedLinks(text) {
+	const processedLinks = new Set();
+
+	return text.replace(/(?:<p>|<)?\b((https?:\/\/|www\.)[^\s<>]+(?:\.[a-z]{2,})(?:[\/?#%][^\s<>]*)?)\b(?:<\/p>|>)?/gi, (match, url) => {
+		const cleanedUrl = url.replace(/\s+/g, ""); // Remove espaços dentro da URL
+
+		if (processedLinks.has(cleanedUrl)) return match; // Se o link já foi processado, retorne como está
+
+		const formattedLink = cleanedUrl.startsWith("www.") ? `https://${cleanedUrl}` : cleanedUrl;
+		processedLinks.add(cleanedUrl); // Marca o link como processado
+
+		// Verifica se o link já está envolto em <a>
+		const isAlreadyLinked = new RegExp(`<a[^>]*href=["']?${formattedLink}["']?[^>]*>`, "i").test(match);
+		return isAlreadyLinked ? match : `<a href="${formattedLink}" class="url" target="_blank" rel="nofollow">${cleanedUrl}</a>`;
+	});
 }
 
 function padraoFonte(text) {
@@ -927,11 +957,11 @@ function clear() {
 		if (document.getElementById("manual").checked) {
 			textareaValue = manual(textareaValue);
 		}
-
 		textareaValue = processarListaOrdenada(textareaValue);
+		console.log(textareaValue);
 		textareaValue = listaOrdenada(textareaValue);
+		console.log(textareaValue);
 		textareaValue = removeListaOrdenada(textareaValue);
-
 		if (document.getElementById("exerciciosMaterial").checked) {
 			textareaValue = organizaTags(textareaValue);
 			textareaValue = exerciciosMaterial(textareaValue);
