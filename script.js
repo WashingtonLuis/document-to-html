@@ -450,7 +450,7 @@ function padraoFonte(text) {
 
 function padraoResposta(text) {
 	return text
-		.replace(/<p>Letra[ :-]*([A-E])(?:(?!<\/p>)[\s\S])*?<\/p>\s*<p>(?:Resolução|Comentário)[ :-]*(?:<\/p>\s*<p>)?/gi, "<p><br><b>Resolução: $1</b><br><b>Comentário:</b> ")
+		.replace(/<p>(?:Letra|Alternativa)[ :-]*([A-E])(?:(?!<\/p>)[\s\S])*?<\/p>\s*<p>(?:Resolução|Comentário)[ :-]*(?:<\/p>\s*<p>)?/gi, "<p><br><b>Resolução: $1</b><br><b>Comentário:</b> ")
 		.replace(/<p>(?:Resolução: )?Letra ([A-E]) - /gi, "<p><br><b>Resolução: $1</b><br><b>Comentário:</b> ")
 		.replace(/(?<=Resolução: )[a-e]/g, (match) => match.toUpperCase());
 }
