@@ -961,10 +961,9 @@ function clear() {
 		if (document.getElementById("listaOrdenadaSemOl, listaOrdenada").checked) {
 			textareaValue = processarListaOrdenada(textareaValue);
 			textareaValue = listaOrdenada(textareaValue);
+			textareaValue = removeListaOrdenada(textareaValue);
 		}
 
-		console.log(textareaValue);
-		textareaValue = removeListaOrdenada(textareaValue);
 		if (document.getElementById("exerciciosMaterial").checked) {
 			textareaValue = organizaTags(textareaValue);
 			textareaValue = exerciciosMaterial(textareaValue);
