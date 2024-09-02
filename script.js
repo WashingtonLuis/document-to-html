@@ -460,7 +460,7 @@ function formatLinks(text) {
 function fixMalformedLinks(text) {
 	const processedLinks = new Set();
 
-	return text.replace(/(?:<p>|<)?\b((https?:\/\/|www\.)[^\s<>]+(?:\.[a-z]{2,})(?:[\/?#%][^\s<>]*)?)\b(?:<\/p>|>)?/gi, (match, url) => {
+	return text.replace(/(?:<p>|<)?(?<!src=")\b((https?:\/\/|www\.)[^\s<>]+(?:\.[a-z]{2,})(?:[\/?#%][^\s<>]*)?)\b(?:<\/p>|>)?/gi, (match, url) => {
 		const cleanedUrl = url.replace(/\s+/g, ""); // Remove espaços dentro da URL
 
 		if (processedLinks.has(cleanedUrl)) return match; // Se o link já foi processado, retorne como está
@@ -654,7 +654,6 @@ function processarListaOrdenada(text) {
 				if (checkboxChecked) {
 					resultadoHTML += `<ol type="I">${listaItems.join("")}</ol>`;
 				} else {
-					console.log(listaItems);
 					resultadoHTML += `<p>${listaItems.join("")}</p>`;
 				}
 				listaItems = [];
@@ -957,7 +956,7 @@ function clear() {
 		if (document.getElementById("manual").checked) {
 			textareaValue = manual(textareaValue);
 		}
-		
+
 		if (document.getElementById("listaOrdenadaSemOl").checked || document.getElementById("listaOrdenada").checked) {
 			textareaValue = processarListaOrdenada(textareaValue);
 			textareaValue = listaOrdenada(textareaValue);
