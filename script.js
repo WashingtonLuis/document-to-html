@@ -957,8 +957,8 @@ function clear() {
 		if (document.getElementById("manual").checked) {
 			textareaValue = manual(textareaValue);
 		}
-
-		if (document.getElementById("listaOrdenadaSemOl, listaOrdenada").checked) {
+		
+		if (document.getElementById("listaOrdenadaSemOl").checked || document.getElementById("listaOrdenada").checked) {
 			textareaValue = processarListaOrdenada(textareaValue);
 			textareaValue = listaOrdenada(textareaValue);
 			textareaValue = removeListaOrdenada(textareaValue);
