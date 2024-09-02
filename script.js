@@ -651,10 +651,14 @@ function processarListaOrdenada(text) {
 			}
 		} else {
 			if (listaEncontrada && listaItems.length > 0) {
+				console.log({ checkboxChecked }, "teste");
+
 				if (checkboxChecked) {
 					resultadoHTML += `<ol type="I">${listaItems.join("")}</ol>`;
+					console.log(listaItems, "asdfasdf");
 				} else {
 					resultadoHTML += `<p>${listaItems.join("")}</p>`;
+					console.log(listaItems, "asdfasdf");
 				}
 				listaItems = [];
 				listaEncontrada = false;
@@ -662,9 +666,9 @@ function processarListaOrdenada(text) {
 			resultadoHTML += $("<div>").append($(p).clone()).html(); // Clona e converte o elemento para string HTML
 		}
 	});
-
+	console.log({listaEncontrada},{listaItems}, "teste");
 	// Caso a lista esteja no final do texto
-	if (listaEncontrada && listaItems.length > 0 && checkboxChecked) {
+	if (listaEncontrada && listaItems.length > 0) {
 		if (checkboxChecked) {
 			resultadoHTML += `<ol type="I">${listaItems.join("")}</ol>`;
 		} else {
