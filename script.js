@@ -957,9 +957,12 @@ function clear() {
 		if (document.getElementById("manual").checked) {
 			textareaValue = manual(textareaValue);
 		}
-		textareaValue = processarListaOrdenada(textareaValue);
-		console.log(textareaValue);
-		textareaValue = listaOrdenada(textareaValue);
+
+		if (document.getElementById("listaOrdenadaSemOl, listaOrdenada").checked) {
+			textareaValue = processarListaOrdenada(textareaValue);
+			textareaValue = listaOrdenada(textareaValue);
+		}
+
 		console.log(textareaValue);
 		textareaValue = removeListaOrdenada(textareaValue);
 		if (document.getElementById("exerciciosMaterial").checked) {
