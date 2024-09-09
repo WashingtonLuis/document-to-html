@@ -666,7 +666,7 @@ function processarListaOrdenada(text) {
 			resultadoHTML += $("<div>").append($(p).clone()).html(); // Clona e converte o elemento para string HTML
 		}
 	});
-	console.log({listaEncontrada},{listaItems}, "teste");
+	console.log({ listaEncontrada }, { listaItems }, "teste");
 	// Caso a lista esteja no final do texto
 	if (listaEncontrada && listaItems.length > 0) {
 		if (checkboxChecked) {
@@ -991,6 +991,10 @@ function clear() {
 				.replace(/[ ]{2,}/gi, " ")
 				.replace(/^\s*/g, "")
 				.replace(/(?<=\$\$) (?=\$\$)/g, "\n");
+		}
+
+		if (document.getElementById("semTag").checked) {
+			textareaValue = semTag(textareaValue);
 		}
 
 		// Definir o texto formatado em outro elemento
