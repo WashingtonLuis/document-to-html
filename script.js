@@ -129,6 +129,7 @@ function latex(str) {
 		.replace(/γ/g, "\\gamma")
 		.replace(/∪/g, " \\cup ")
 		.replace(/∩/g, " \\cap ")
+		.replace(/×/g, " \\times ")
 		.replace(/(?<!\\)%/g, "\\%")
 		.replace(/\\(mathbf|mathbit)/g, " \\textbf")
 		.replace(/(?<!\$)\$(?!\$)/g, " \\$\\; ")
@@ -322,6 +323,7 @@ function nLatex(str) {
 		.replace(/≅|\\cong\b|≈|\\approx\b|≃|\\simeq\b/g, " ≃ ")
 		.replace(/\\pi\b/g, "π")
 		.replace(/\\mu\b/g, "μ")
+		.replace(/×|\\times/g, "×")
 
 		.replace(/\\mathrm\{(.*?)\}/g, "$1")
 		.replace(/\\left\\?(\(|\{|\[)/g, "$1")
@@ -793,7 +795,6 @@ function _clear(str) {
 		.replace(/’/g, "'")
 		.replace(/‘/g, "'")
 		.replace(/–/g, "-")
-		.replace(/×/g, "x")
 		.replace(/∙/g, " · ")
 		.replace(/\s+(!|\?|\.|\,)/g, "$1 ")
 		.replace(/[ ]{2,}/gi, " ")
