@@ -277,11 +277,12 @@ function convertCodecogsToMathcha(text) {
 }
 
 function circuit(text) {
-	text = semTag(text);
 	text = text
+		.replace(/<p>/gi, "")
+		.replace(/<\/p>/gi, "\n")
 		.replace(/# Address Estimated Arrival Time Actual Arrival Time Notes/gi, "")
-		.replace(/(\d+) (.*?), (\d*),? (.*?), ?(?:Uberaba,)? ?(\d{5}-\d{3}) (\d+:\d+)( \d+:\d+)?(?: \((?:Adiantado|Atrasado).*?\))? (.*?)$/g, "$1\t$2\t$3\t$4\t$5\t$6\t$7\t$8\n")
-		.replace(/[ ]{2,}/gi, " ");
+		.replace(/(\d+) (.*?), (\d+),? (.*?), ?(?:Uberaba,)? ?(\d{5}-\d{3}) (\d+:\d+) ?(\d+:\d+)? ?\((?:Adiantado|Atrasado) .*?\)(.*?)/g, "$1\t$2\t$3\t$4\t$5\t$6\t$7\t$8")
+		.replace(/\n\n/gi, '\n');
 	return text;
 }
 
