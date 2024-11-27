@@ -276,6 +276,15 @@ function convertCodecogsToMathcha(text) {
 	return text;
 }
 
+function circuit(text) {
+	text = semTag(text);
+	text = text
+		.replace(/^#.*?\n/gi, "")
+		.replace(/(\d+) (.*?), (\d*),? (.*?), (\d{5}-\d{3}) (\d+:\d+) (\d+:\d+)? (?:\((?:Adiantado|Atrasado).*?\))/g, "$1\t$2\t$3\t$4\t$5\t$6\t$7\t")
+		.replace(/[ ]{2,}/gi, " ");
+	return text;
+}
+
 function nLatex(str) {
 	let text = textNLatex(str);
 	text = text
@@ -1116,6 +1125,21 @@ $(document).ready(function () {
 			let textareaValueEq = $("#summernote").summernote("code");
 
 			textareaValueEq = convertCodecogsToMathcha(textareaValueEq);
+
+			// Definir o texto formatado em outro elemento
+			$("#result").text(textareaValueEq);
+
+			navigator.clipboard.writeText(textareaValueEq);
+		} catch (error) {
+			console.error("Erro ao formatar o texto:", error);
+		}
+	});
+
+	$("#circuit").click(function () {
+		try {
+			let textareaValueEq = $("#summernote").summernote("code");
+
+			textareaValueEq = circuit(textareaValueEq);
 
 			// Definir o texto formatado em outro elemento
 			$("#result").text(textareaValueEq);
