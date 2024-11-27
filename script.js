@@ -280,7 +280,7 @@ function circuit(text) {
 	text = semTag(text);
 	text = text
 		.replace(/^#.*?\n/gi, "")
-		.replace(/(\d+) (.*?), (\d*),? (.*?), (\d{5}-\d{3}) (\d+:\d+) (\d+:\d+)? (?:\((?:Adiantado|Atrasado).*?\))/g, "$1\t$2\t$3\t$4\t$5\t$6\t$7\t")
+		.replace(/(\d+) (.*?), (\d*),? (.*?), (\d{5}-\d{3}) (\d+:\d+) (\d+:\d+)? (?:\((?:Adiantado|Atrasado).*?\))(.*?)/g, "$1\t$2\t$3\t$4\t$5\t$6\t$7\t$8\n")
 		.replace(/[ ]{2,}/gi, " ");
 	return text;
 }
