@@ -281,8 +281,14 @@ function removeQuebrasParagrafos(text) {
 		.replace(/<p>/gi, "")
 		.replace(/<\/p>/gi, "\n")
 		.replace(/\n(\()/g, " $1")
-		.replace(/\n([a-záéíóúàèìòùâêîôûäëïöüãẽĩõũç]+)/g, " $1")
-		;
+		.replace(/\n([a-záéíóúàèìòùâêîôûäëïöüãẽĩõũç]+)/g, " $1");
+	return text;
+}
+
+function alternativasAlexandria(text) {
+	text = text.replace(/([A-E])\s(.+)/g, (_, letter, text) => {
+		return `<div class="content"><p>${text.trim()}.</p></div>`;
+	});
 	return text;
 }
 
@@ -1139,6 +1145,22 @@ $(document).ready(function () {
 			let textareaValueEq = $("#summernote").summernote("code");
 
 			textareaValueEq = convertCodecogsToMathcha(textareaValueEq);
+
+			// Definir o texto formatado em outro elemento
+			$("#result").text(textareaValueEq);
+
+			navigator.clipboard.writeText(textareaValueEq);
+		} catch (error) {
+			console.error("Erro ao formatar o texto:", error);
+		}
+	});
+
+	$("#alternativasAlexandria").click(function () {
+		try {
+			let textareaValueEq = $("#summernote").summernote("code");
+
+			textareaValueEq = removeQuebrasParagrafos(textareaValueEq);
+			textareaValueEq = alternativasAlexandria(textareaValueEq);
 
 			// Definir o texto formatado em outro elemento
 			$("#result").text(textareaValueEq);
