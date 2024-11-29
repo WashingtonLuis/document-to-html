@@ -276,11 +276,12 @@ function convertCodecogsToMathcha(text) {
 	return text;
 }
 
-function removeQuebras(text) {
+function removeQuebrasParagrafos(text) {
 	text = text
 		.replace(/<p>/gi, "")
 		.replace(/<\/p>/gi, "\n")
-		.replace(/\n([a-z]+)/g, " $1")
+		.replace(/\n(\()/g, " $1")
+		.replace(/\n([a-záéíóúàèìòùâêîôûäëïöüãẽĩõũç]+)/g, " $1")
 		;
 	return text;
 }
@@ -1152,7 +1153,7 @@ $(document).ready(function () {
 		try {
 			let textareaValueEq = $("#summernote").summernote("code");
 
-			textareaValueEq = removeQuebras(textareaValueEq);
+			textareaValueEq = removeQuebrasParagrafos(textareaValueEq);
 
 			// Definir o texto formatado em outro elemento
 			$("#result").text(textareaValueEq);
