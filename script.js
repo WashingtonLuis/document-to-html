@@ -276,13 +276,25 @@ function convertCodecogsToMathcha(text) {
 	return text;
 }
 
+function removeQuebras(text) {
+	text = text
+		.replace(/<p>/gi, "")
+		.replace(/<\/p>/gi, "\n")
+		.replace(/\n([a-z]+)/g, " $1")
+		;
+	return text;
+}
+
 function circuit(text) {
 	text = text
 		.replace(/<p>/gi, "")
 		.replace(/<\/p>/gi, "\n")
 		.replace(/# Address Estimated Arrival Time Actual Arrival Time Notes/gi, "")
-		.replace(/(\d+) (.*?), (\d+),? (.*?), ?(?:Uberaba,)? ?(\d{5}-\d{3}) (\d+:\d+) ?(\d+:\d+)? ?\((?:Adiantado|Atrasado) .*?\)(.*?)/g, "$1\t$2\t$3\t$4\t$5\t$6\t$7\t$8")
-		.replace(/\n\n/gi, '\n');
+		.replace(/\n\n/g, "\n")
+		.replace(/\n(\d\d:\d\d)/gi, " $1")
+		.replace(/\n([A-Z]+)/gi, " $1")
+		.replace(/\n(\d{1,4}-\d{3})/gi, "$1")
+		.replace(/(\d+) (.*?), (\d+),? (.*?), ?(?:Uberaba,)? ?(\d{5}-\d{3}) (\d+:\d+) ?(\d+:\d+)? ?(?:\((?:Adiantado|Atrasado) .*?\))?(.*?)?/g, "$1\t$2\t$3\t$4\t$5\t$6\t$7\t$8");
 	return text;
 }
 
@@ -307,7 +319,7 @@ function nLatex(str) {
 		.replace(/²/g, "<sup>2</sup>")
 		.replace(/³/g, "<sup>3</sup>")
 		.replace(/ª/g, "<sup>a</sup>")
-		.replace(/º/g, "<sup>o</sup>")
+		.replace(/º|°/g, "<sup>o</sup>")
 		.replace(/(?<=[0-9])(kg|g|u|dm|mm|cm|m|ml|l)\b/gi, " $1")
 		.replace(/\b(kg|g|u|dm|mm|cm|m|ml|l)(\d+)/g, "$1<sup>$2</sup>")
 
@@ -1126,6 +1138,21 @@ $(document).ready(function () {
 			let textareaValueEq = $("#summernote").summernote("code");
 
 			textareaValueEq = convertCodecogsToMathcha(textareaValueEq);
+
+			// Definir o texto formatado em outro elemento
+			$("#result").text(textareaValueEq);
+
+			navigator.clipboard.writeText(textareaValueEq);
+		} catch (error) {
+			console.error("Erro ao formatar o texto:", error);
+		}
+	});
+
+	$("#removeQuebras").click(function () {
+		try {
+			let textareaValueEq = $("#summernote").summernote("code");
+
+			textareaValueEq = removeQuebras(textareaValueEq);
 
 			// Definir o texto formatado em outro elemento
 			$("#result").text(textareaValueEq);
