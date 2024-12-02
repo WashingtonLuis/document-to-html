@@ -117,6 +117,7 @@ function latex(str) {
 		.replace(/≠|\\neq\b/g, " \\neq ")
 		.replace(/≥|\\geq\b/g, " \\geq ")
 		.replace(/≤|\\leq\b/g, " \\leq ")
+		.replace(/∞|ထ/g, " \\infty ")
 		// .replace(/≅|\\cong/g, " \\cong ")
 		// .replace(/≈|\\approx/g, " \\approx ")
 		.replace(/≅|\\cong\b|≈|\\approx\b|≃|\\simeq\b/g, " \\simeq ")
@@ -277,11 +278,15 @@ function convertCodecogsToMathcha(text) {
 }
 
 function removeQuebrasParagrafos(text) {
+	if (document.getElementById("nLatex").checked) {
+		textareaValue = nLatex(textareaValue);
+	}
 	text = text
 		.replace(/<p>/gi, "")
 		.replace(/<\/p>/gi, "\n")
 		.replace(/\n(\()/g, " $1")
-		.replace(/\n([a-záéíóúàèìòùâêîôûäëïöüãẽĩõũç]+)/g, " $1");
+		.replace(/\n([a-záéíóúàèìòùâêîôûäëïöüãẽĩõũç]+)/g, " $1")
+		.replace(/<br>/gi, "");
 	return text;
 }
 
@@ -348,6 +353,7 @@ function nLatex(str) {
 		.replace(/\\cap\b/g, "∩")
 		.replace(/\\theta\b/g, "θ")
 		.replace(/\\varphi\b/g, "𝜑")
+		.replace(/\\infty\b|∞/g, "ထ")
 		// .replace(/≅|\\cong/g, " ≅ ")
 		// .replace(/≈|\\approx/g, " ≈ ")
 		.replace(/≅|\\cong\b|≈|\\approx\b|≃|\\simeq\b/g, " ≃ ")
