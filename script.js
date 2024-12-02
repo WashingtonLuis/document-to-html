@@ -279,7 +279,7 @@ function convertCodecogsToMathcha(text) {
 
 function removeQuebrasParagrafos(text) {
 	if (document.getElementById("nLatex").checked) {
-		textareaValue = nLatex(textareaValue);
+		text = nLatex(text);
 	}
 	text = text
 		.replace(/<p>/gi, "")
