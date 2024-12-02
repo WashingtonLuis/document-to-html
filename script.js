@@ -289,7 +289,7 @@ function alternativasAlexandria(text) {
 	text = text.replace(/([A-E])\s(.+)/g, (_, letter, text) => {
 		return `\t<div class="editable-option clearfix none" style="top: 0px; display: block">\n\t\t<div class="dropdown">\n\t\t\t<a class="btn options-menu" data-toggle="dropdown" aria-expanded="false"></a>\n\t\t\t<ul class="dropdown-menu">\n\t\t\t\t<li><a class="edit">Editar</a></li>\n\t\t\t\t<li><a class="edit-justification">Justificativa</a></li>\n\t\t\t\t<li><a class="move-up">Mover para cima</a></li>\n\t\t\t\t<li><a class="move-down">Mover para baixo</a></li>\n\t\t\t\t<li><a class="remove">Remover</a></li>\n\t\t\t</ul>\n\t\t</div>\n\t\t<div class="justification none"></div>\n\t\t<div class="radio radio-success">\n\t\t\t<label><input type="radio" name="option" value="1" /><span class="circle"></span><span class="check"></span></label>\n\t\t</div>\n\t\t<div class="content"><p>${text.trim()}</p></div>\n\t</div>`;
 	});
-	text = text.replace(/^(.*?)$/gi, '<div class="options clearfix">$1<\/div>');
+	text = `<div class="options clearfix">\n${text}</div>`;
 	return text;
 }
 
