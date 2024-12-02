@@ -284,6 +284,8 @@ function removeQuebrasParagrafos(text) {
 	text = text
 		.replace(/<p>/gi, "")
 		.replace(/<\/p>/gi, "\n")
+		.replace(/<div>/gi, "")
+		.replace(/<\/div>/gi, "\n")
 		.replace(/\n(\()/g, " $1")
 		.replace(/\n([a-záéíóúàèìòùâêîôûäëïöüãẽĩõũç]+)/g, " $1")
 		.replace(/<br>/gi, "");
