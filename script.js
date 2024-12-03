@@ -304,12 +304,13 @@ function circuit(text) {
 	text = text
 		.replace(/<p>/gi, "")
 		.replace(/<\/p>/gi, "\n")
-		.replace(/# Address Estimated Arrival Time Actual Arrival Time Notes/gi, "")
+		.replace(/\# Address Estimated Arrival Time Actual Arrival Time Notes/gi, "")
 		.replace(/\n\n/g, "\n")
 		.replace(/\n(\d\d:\d\d)/gi, " $1")
 		.replace(/\n([A-Z]+)/gi, " $1")
 		.replace(/\n(\d{1,4}-\d{3})/gi, "$1")
-		.replace(/(\d+) (.*?), (\d+),? (.*?), ?(?:Uberaba,)? ?(\d{5}-\d{3}) (\d+:\d+) ?(\d+:\d+)? ?(?:\((?:Adiantado|Atrasado) .*?\))?(.*?)?/g, "$1\t$2\t$3\t$4\t$5\t$6\t$7\t$8");
+		.replace(/(\d{1,5}-\d{0,2})\n(\d{1,3})/gi, "$1$2")
+		.replace(/(\d+) (.*?), (\d+) ?((?:ap|apto|apartamento) \d+)? ?((?:bl|bloco|t|torre) \d+)?,? (.*?), ?(?:Uberaba,)? ?(\d{5}-\d{3}) (\d+:\d+) ?(\d+:\d+)? ?(?:\((?:Adiantado|Atrasado) .*?\))?(.*?)?/gi, "$1\t$2\t$3\t$6\t$7\t$8\t$9\t$4 $5 $10");
 	return text;
 }
 
