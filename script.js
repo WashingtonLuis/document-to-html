@@ -315,7 +315,7 @@ function circuit(text) {
 		.replace(/[ ]+/gi, " ")
 		.replace(/(?<=(?:R|Rua|Av\.|Avenida).*?,)\n(\d+)/gi, " $1")
 		.replace(/m ?i ?n/gi, "min")
-		.replace(/(\d+) (.*?), (\d+)(?: |, )?((?:ap|apto|apartamento) \d+)? ?((?:bl|bloco|t|torre) \d+)?,? (.*?), ?(?:Uberaba,)? ?(\d{5}-\d{3}) (\d+:\d+) ?(\d+:\d+)? ?(?:\((?:Adiantado|Atrasado) .*?\))?(.*?)?/gi, "$1\t$2\t$3\t$6\t$7\t$8\t$9\t$4 $5 $10")
+		.replace(/(\d+) (.*?), (?:número )?(\d+)(?: |, )?((?:ap|apto|apartamento|bl|bloco|t|torre) ?(?:\d+)? ?(?:(?:ap|apto|apartamento|bl|bloco|t|torre) ?(?:\d+)?)?)? ?,? (.*?), ?(?:Uberaba,)? ?(\d{5}-\d{3}) (\d+:\d+) ?(\d+:\d+)? ?(?:\((?:Adiantado|Atrasado) .*?\))?(.*?)?/gi, "$1\t$2\t$3\t$5\t$6\t$7\t$8\t$4 $9")
 		.replace(/\t[ ]+/gi, '\t');
 	return text;
 }
