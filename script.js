@@ -302,6 +302,7 @@ function alternativasAlexandria(text) {
 
 function circuit(text) {
 	text = text
+		.replace(/<p># Address<\/p><p>Estimated Arrival<\/p><p>Time<\/p><p>Actual Arrival Time Notes<\/p>/gi, "")
 		.replace(/<p>/gi, "")
 		.replace(/<\/p>/gi, "\n")
 		.replace(/\# Address Estimated Arrival Time Actual Arrival Time Notes/gi, "")
