@@ -353,6 +353,7 @@ function nLatex(str) {
 		.replace(/\\geq\b/g, " ≥ ")
 		.replace(/\\cdot\b/g, " · ")
 		.replace(/\\rightarrow\b/g, " → ")
+		.replace(/\\longrightarrow\b/g, " ⟶ ")
 		.replace(/\\Rightarrow\b/g, " ⇒ ")
 		.replace(/\\Delta\b/g, " Δ ")
 		.replace(/\\delta\b/g, "δ")
