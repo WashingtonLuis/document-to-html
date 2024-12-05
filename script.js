@@ -281,6 +281,9 @@ function removeQuebrasParagrafos(text) {
 	if (document.getElementById("nLatex").checked) {
 		text = nLatex(text);
 	}
+	if (document.getElementById("removePontoLista").checked) {
+		text = text.replace(/• /gi, "");
+	}
 	text = text
 		.replace(/<p>/gi, "")
 		.replace(/<\/p>/gi, "\n")
@@ -316,7 +319,7 @@ function circuit(text) {
 		.replace(/(?<=(?:R|Rua|Av\.|Avenida).*?,)\n(\d+)/gi, " $1")
 		.replace(/m ?i ?n/gi, "min")
 		.replace(/(\d+) (.*?), (?:número )?(\d+)(?: |, )?((?:ap|apto|apartamento|bl|bloco|t|torre) ?(?:\d+)? ?(?:(?:ap|apto|apartamento|bl|bloco|t|torre) ?(?:\d+)?)?)? ?,? (.*?), ?(?:Uberaba,)? ?(\d{5}-\d{3}) (\d+:\d+) ?(\d+:\d+)? ?(?:\((?:Adiantado|Atrasado) .*?\))?(.*?)?/gi, "$1\t$2\t$3\t$5\t$6\t$7\t$8\t$4 $9")
-		.replace(/\t[ ]+/gi, '\t');
+		.replace(/\t[ ]+/gi, "\t");
 	return text;
 }
 
