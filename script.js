@@ -292,7 +292,7 @@ function removeQuebrasParagrafos(text) {
 		.replace(/\n(\()/g, " $1")
 		.replace(/\n([a-záéíóúàèìòùâêîôûäëïöüãẽĩõũç]+)/g, " $1")
 		.replace(/<br>/gi, "")
-		.replace(/\n$/gi, '');
+		.replace(/\n$/gi, "");
 	return text;
 }
 
@@ -351,7 +351,7 @@ function nLatex(str) {
 
 		.replace(/\\(;| |,)/g, " ")
 		.replace(/\\geq\b/g, " ≥ ")
-		.replace(/\\cdot\b/g, " · ")
+		.replace(/\\cdot\b|\\cdot(?=\d)/g, " · ")
 		.replace(/\\rightarrow\b/g, " → ")
 		.replace(/\\longrightarrow\b/g, " ⟶ ")
 		.replace(/\\Rightarrow\b/g, " ⇒ ")
@@ -392,7 +392,9 @@ function nLatex(str) {
 		.replace(/(?<!R\$ )(?<=\d)(?=(\d{3})+(?!\d))/g, " ")
 		.replace(/(?<=R\$ \d)(?=(\d{3})+(?!\d))/g, ".")
 		.replace(/\{(.*?)\}\^ /g, "$1 ")
-		.replace(/\( ?(.*?) ?\)/g, "($1)");
+		.replace(/\( ?(.*?) ?\)/g, "($1)")
+		.replace(/\\underline\{.*?\}/gi, "##")
+		.replace(/;(?!\n|<| )/gi, "; ");
 	// .replace(/(?<=\b[A-Za-z]) \(/g, "(")
 
 	return text;
@@ -1048,6 +1050,7 @@ function clear() {
 			textareaValue = semTag(textareaValue);
 		}
 
+		textareaValue = textareaValue.replace(/\n$/gi, "").replace(/(?:\n )$/gi, "");
 		// Definir o texto formatado em outro elemento
 		$("#result").text(textareaValue);
 
