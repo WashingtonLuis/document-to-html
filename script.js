@@ -394,7 +394,8 @@ function nLatex(str) {
 		.replace(/\{(.*?)\}\^ /g, "$1 ")
 		.replace(/\( ?(.*?) ?\)/g, "($1)")
 		.replace(/\\underline\{.*?\}/gi, "##")
-		.replace(/;(?!\n|<| )/gi, "; ");
+		.replace(/;(?!\n|<| )/gi, "; ")
+		.replace(/(?<!=|<\w+|\/\w{1,3}|\n|\.) ?(<|>) ?(?!\/\w{1,3}>|\w{1,3}>|\/|\n|$)/gi, " $1 ");
 	// .replace(/(?<=\b[A-Za-z]) \(/g, "(")
 
 	return text;
