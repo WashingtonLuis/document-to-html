@@ -841,6 +841,8 @@ function _clear(str) {
 		.replace(/\n/g, " ")
 		.replace(/\s+/g, " ")
 		.replace(/<!--[\s\S]*?-->/g, " ")
+		.replace(/&lt;/gi, "<")
+		.replace(/&gt;/gi, ">")
 		.replace(/(&nbsp;)+|(&quot;)+|<o:p>|<\/o:p>/gi, " ")
 		.replace(/[\u201C\u201D]/g, '"')
 		.replace(/[\u2061\u200b\u202c]/g, "")
@@ -911,14 +913,13 @@ function _clear(str) {
 		.replace(/\((Figura \d+)\)/gi, "(<b>$1</b>)")
 
 		.replace(/[〖〗]/g, "")
-		.replace(/&lt;/g, "<")
-		.replace(/&gt;/g, ">")
 		.replace(/<p>(?:\s*)<\/p>/g, "")
 		// .replace(/<p>(?:\s*)(?:<br>)*(?:\s*)<\/p>/gi, "\n")
 		.replace(/(<div class="box-book">)(.*?)(?:<br>)?<\/div>/gi, "\n$1\n\t$2</div><br>\n")
 		.replace(/[ ]{2,}/gi, " ")
 		.replace(/<p> ?(<b>) ?/gi, "<p>$1");
 	text = removeSpan(text);
+	console.log({ str }, { text });
 	text = removeTag(text);
 
 	return text;
@@ -1050,7 +1051,11 @@ function clear() {
 			textareaValue = semTag(textareaValue);
 		}
 
-		textareaValue = textareaValue.replace(/\n$/gi, "").replace(/(?:\n )$/gi, "");
+		textareaValue = textareaValue
+			.replace(/&lt;/g, "<")
+			.replace(/&gt;/g, ">")
+			.replace(/\n$/gi, "")
+			.replace(/(?:\n )$/gi, "");
 		// Definir o texto formatado em outro elemento
 		$("#result").text(textareaValue);
 
