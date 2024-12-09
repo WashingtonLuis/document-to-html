@@ -354,7 +354,7 @@ function nLatex(str) {
 		.replace(/\\cdot\b|\\cdot(?=\d)/g, " · ")
 		.replace(/\\rightarrow\b/g, " → ")
 		.replace(/\\longrightarrow\b/g, " ⟶ ")
-		.replace(/\\Rightarrow\b/g, " ⇒ ")
+		.replace(/\\Rightarrow\b|\\𝑅𝑖𝑔ℎ𝑡𝑎𝑟𝑟𝑜𝑤\b/g, " ⇒ ")
 		.replace(/\\Delta\b/g, " Δ ")
 		.replace(/\\delta\b/g, "δ")
 		.replace(/\\neq\b/g, " ≠ ")
@@ -1056,8 +1056,7 @@ function clear() {
 			.replace(/&gt;/g, ">")
 			.replace(/\n$/gi, "")
 			.replace(/(?:\n )$/gi, "")
-			.replace(/(?<!<\w+|\/\w{1,4}|=|\n|\.) ?(<|>) ?(?!\/\w{1,4}>|\w{1,4}>|\/|\n|$)/gi, " $1 ")
-			;
+			.replace(/(?<!<\w+|\/\w{1,4}|=|\n|\.) ?(<|>) ?(?!\/\w{1,4}>|\w{1,4}>|\/|\n|$)/gi, " $1 ");
 		// Definir o texto formatado em outro elemento
 		$("#result").text(textareaValue);
 
