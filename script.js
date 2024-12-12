@@ -324,8 +324,7 @@ function circuit(text) {
 		.replace(/\t[ ]+/gi, "\t")
 		.replace(/apto\b|apartamento|apt\b|AP\b/gi, "ap")
 		.replace(/bloco|bl\b/gi, "bl")
-		.replace(/torre|T\b/gi, "t")
-		;
+		.replace(/torre|T\b/gi, "t");
 	return text;
 }
 
@@ -1074,6 +1073,11 @@ function clear() {
 	}
 }
 
+function limpaTela() {
+	// Definir o conteúdo da área editável como vazio
+	$("#summernote").summernote("empty");
+}
+
 $(document).ready(function () {
 	// Inicializar o editor de texto
 	$("#summernote").summernote({
@@ -1085,6 +1089,8 @@ $(document).ready(function () {
 
 	// Quando o botão é clicado, formatar o texto e exibi-lo em outro elemento
 	$("#clear").click(clear);
+
+	$("#limpaTela").click(limpaTela);
 
 	$("#eqGrande").click(function () {
 		try {
