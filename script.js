@@ -136,7 +136,8 @@ function latex(str) {
 		.replace(/(?<!\$)\$(?!\$)/g, " \\$\\; ")
 		.replace(/ *\$\$ */g, "$$$$")
 		.replace(/⬚/g, " ")
-
+		
+		// .replace(/\\\\(?:\n)?\\end\{vmatrix\}/g, " \\end{vmatrix}")
 		// .replace(/(?<!(?:\\\w+)|\}|\_|\^|\])\{(.*?)\}/g, "$1")
 		.replace(/(?<!(?:\\\w+)|\}|\_|\^|\])\{([^\^\}]*)\}(?:\^|\_)(?!\w)( |\.|\,|:|;|!|\?|=|\+)/g, "$1$2")
 
@@ -234,44 +235,46 @@ function latex(str) {
 		.replace(/\\\\/g, "\\\\ ")
 
 		.replace(/[ ]{2,}/gi, " ")
-		.replace(/(\\\; ?){2,}/gi, "\\;")
+		.replace(/(\\\; ?)+/gi, "\\;")
 
 		.replace(/(?<=\d)(?=(\d{3})+(?!\d))/g, "\\,")
 		.replace(/(\d),(\d)/g, "$1,\\!$2")
 		.replace(/(?<=kg|g|u|dm|mm|cm|m|ml|l)(2|3)/gi, "^{$1}")
 
-		.replace(/(\\(?:\'|\~|\^).)|\\c\{c\}/g, (match) => nLatexAcentuacao[match])
+		// .replace(/(\\(?:\'|\~|\^).)|\\c\{c\}/g, (match) => nLatexAcentuacao[match])
 
-		.replace(/(?<!\\|\\textrm\{|\\textrm\{ |\\textbf\{|\\textbf\{ |\\begin\{|\\begin\{ |\\end\{|\\end\{ |\{\\color\{|\{\\color\{ )(?<=\d|\b| )([A-Za-záéíóúàèìòùâêîôûäëïöüãẽĩõũç ]+)/g, "\\textrm{$1}")
-		.replace(/\\textrm\{(kg|g|u|dm|mm|cm|m|ml|l)\}/g, " \\textrm{ $1}")
-		.replace(/\\textrm\{(sen|cos|tag)\}/g, " \\textrm{$1 }")
+		// .replace(/(?<!\\|\\textrm\{|\\textrm\{ |\\textbf\{|\\textbf\{ |\\begin\{|\\begin\{ |\\end\{|\\end\{ |\{\\color\{|\{\\color\{ )(?<=\d|\b| )([A-Za-záéíóúàèìòùâêîôûäëïöüãẽĩõũç ]+)/g, "\\textrm{$1}")
+		// .replace(/\\textrm\{(kg|g|u|dm|mm|cm|m|ml|l)\}/g, " \\textrm{ $1}")
+		// .replace(/\\textrm\{(sen|cos|tag)\}/g, " \\textrm{$1 }")
 
 		.replace(/[ ]{2,}/gi, " ")
-		.replace(/\\\;\\textrm\{ /g, " \\textrm{ ")
-		.replace(/\\textrm\{(e|de) ?\}/g, " \\textrm{ $1 }")
-		.replace(/(?<=\\textrm\{R\} \\\$\\\;)( ?\d+)\\;(\d+(?:,\d+)?)/gi, "$1.$2")
-		.replace(/[áéíóúçãõâêô]/g, (match) => latexAcentuacao[match]);
+		// .replace(/\\\;\\textrm\{ /g, " \\textrm{ ")
+		// .replace(/\\textrm\{(e|de) ?\}/g, " \\textrm{ $1 }")
+		// .replace(/(?<=\\textrm\{R\} \\\$\\\;)( ?\d+)\\;(\d+(?:,\d+)?)/gi, "$1.$2")
+		// .replace(/[áéíóúçãõâêô]/g, (match) => latexAcentuacao[match])
+		;
 
 	return text;
 }
 
 function convertCodecogsToMathcha(text) {
 	text = semTag(text);
-	text = textLatex(text);
+	// text = textLatex(text);
 	text = text.replace(/(\\(?:\'|\~|\^).)|\\c\{c\}/g, (match) => nLatexAcentuacao[match]);
-	text = textNLatex(text);
+	// text = textNLatex(text);
+	
 	text = text
 		.replace(/[ ]{2,}/gi, " ")
-		.replace(/ ([_^])/g, "$1")
-		.replace(/(?<!\\(?:\w+|\$|\^|_))(?<=(?:[A-Za-záéíóúàèìòùâêîôûäëïöüãẽĩõũç| ]+))\s(?!\\left|\\right|\(|\)|\}|\]|\\|\*|\-|\+|\.|\=|\^|_|:|\$)/g, "\\ ")
+		.replace(/ (?=[_^])/g, "")
+		.replace(/(?<!\\(?:\w+|\$|\^|_))(?<=(?:[A-Za-záéíóúàèìòùâêîôûäëïöüãẽĩõũç| ]+))\s(?!\\left|\\right|\\end|\(|\)|\}|\]|\\|\*|\-|\+|\.|\=|\^|_|:|\$)/g, "\\ ")
 		.replace(/\{\\color\{Red\}([^}]*)\}/gi, "$1")
-		.replace(/(?<!\\|\w|[({]) (e|a|ou|de|da)/g, "\\ $1")
+		.replace(/(?<!\\|\w|[({]) (e|a|ou|de|da)\b/g, "\\ $1")
 		.replace(/(e|a|ou|de|da)\s/g, "$1\\ ")
 		.replace(/(?<=\d) (?=\w)/gi, "\\ ")
 		.replace(/(?<=[A-Za-z])\ \,/gi, ",")
 		.replace(/(\d),(\d)/g, "$1,\\!$2")
 		.replace(/\\ (?=\\right|$)/gi, "")
-		.replace(/\\ (?![a-zA-Z])/g, "")
+		.replace(/\\ (?![a-zA-Z]|\d|\\end)/g, "")
 		.replace(/(?<![a-záéíóúàèìòùâêîôûäëïöüãẽĩõũç]{3,}|[ (=>]|\$\$)-(?![a-záéíóúàèìòùâêîôûäëïöüãẽĩõũç]{3,}|[ )=<]|\$\$)/g, "\\ –\\ ")
 		.replace(/(?<![a-záéíóúàèìòùâêîôûäëïöüãẽĩõũç]{3,}|[=>,])-(?![a-záéíóúàèìòùâêîôûäëïöüãẽĩõũç]{3,}|[)=<])/g, "–")
 		.replace(/ *\$\$ */g, "$$$$");
@@ -1003,7 +1006,7 @@ function clear() {
 			textareaValue = removerParenteses(textareaValue);
 			textareaValue = latex(textareaValue);
 			textareaValue = voltaParenteses(textareaValue);
-			textareaValue = textLatex(textareaValue);
+			// textareaValue = textLatex(textareaValue);
 			textareaValue = convertCodecogsToMathcha(textareaValue);
 		}
 
