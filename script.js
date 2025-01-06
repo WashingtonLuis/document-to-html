@@ -269,7 +269,7 @@ function convertCodecogsToMathcha(text) {
 		.replace(/(?<!\\(?:\w+|\$|\^|_))(?<=(?:[A-Za-záéíóúàèìòùâêîôûäëïöüãẽĩõũç| ]+))\s(?!\\left|\\right|\\end|\(|\)|\}|\]|\\|\*|\-|\+|\.|\=|\^|_|:|\$)/g, "\\ ")
 		.replace(/\{\\color\{Red\}([^}]*)\}/gi, "$1")
 		.replace(/(?<!\\|\w|[({]) (e|a|ou|de|da)\b/g, "\\ $1")
-		.replace(/(e|a|ou|de|da)\s/g, "$1\\ ")
+		.replace(/$(e|a|ou|de|da)\s/g, "$1\\ ")
 		.replace(/(?<=\d) (?=\w)/gi, "\\ ")
 		.replace(/(?<=[A-Za-z])\ \,/gi, ",")
 		.replace(/(\d),(\d)/g, "$1,\\!$2")
@@ -277,7 +277,9 @@ function convertCodecogsToMathcha(text) {
 		.replace(/\\ (?![a-zA-Z]|\d|\\end)/g, "")
 		.replace(/(?<![a-záéíóúàèìòùâêîôûäëïöüãẽĩõũç]{3,}|[ (=>]|\$\$)-(?![a-záéíóúàèìòùâêîôûäëïöüãẽĩõũç]{3,}|[ )=<]|\$\$)/g, "\\ –\\ ")
 		.replace(/(?<![a-záéíóúàèìòùâêîôûäëïöüãẽĩõũç]{3,}|[=>,])-(?![a-záéíóúàèìòùâêîôûäëïöüãẽĩõũç]{3,}|[)=<])/g, "–")
-		.replace(/ *\$\$ */g, "$$$$");
+		.replace(/ *\$\$ */g, "$$$$")
+		.replace(/(\\ ){2,}/g, "$1")
+		;
 	return text;
 }
 
@@ -340,7 +342,7 @@ function nLatex(str) {
 		.replace(/→/g, " → ")
 		.replace(/·|⋅|\\bullet|\\cdot\b/g, " · ")
 		.replace(/⇒/g, " ⇒ ")
-		.replace(/△|Δ/g, " Δ ")
+		.replace(/\\triangle|△|Δ/g, "Δ")
 		.replace(/≠/g, " ≠ ")
 		.replace(/⬚/g, " ")
 
