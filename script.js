@@ -261,7 +261,7 @@ function convertCodecogsToMathcha(text) {
 	text = semTag(text);
 	// text = textLatex(text);
 	text = text.replace(/(\\(?:\'|\~|\^).)|\\c\{c\}/g, (match) => nLatexAcentuacao[match]);
-	// text = textNLatex(text);
+	text = textNLatex(text);
 	
 	text = text
 		.replace(/[ ]{2,}/gi, " ")
