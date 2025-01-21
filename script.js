@@ -404,7 +404,9 @@ function nLatex(str) {
 		.replace(/\{(.*?)\}\^ /g, "$1 ")
 		.replace(/\( ?(.*?) ?\)/g, "($1)")
 		.replace(/\\underline\{.*?\}/gi, "##")
-		.replace(/;(?!\n|<| )/gi, "; ");
+		.replace(/;(?!\n|<| )/gi, "; ")
+		.replace(/\\(?:right|left)([|()])/gi, "$1")
+		;
 	// .replace(/(?<=\b[A-Za-z]) \(/g, "(")
 
 	return text;
