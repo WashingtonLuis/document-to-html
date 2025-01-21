@@ -98,6 +98,7 @@ function latex(str) {
 		.replace(/<font\s?>/gi, "")
 		.replace(/<\/font>/gi, "")
 		.replace(/<br>/gi, "")
+		.replace(/\\bigm/gi, "")
 
 		.replace(/\=/g, " = ")
 		.replace(/\+/g, " + ")
