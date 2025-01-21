@@ -106,7 +106,7 @@ function latex(str) {
 		.replace(/∶/g, " : ")
 		.replace(/(d+)\-(d+)/g, "$1 – $2")
 
-		.replace(/&amp;/g, " & ")
+		.replace(/&amp;/g, "&")
 		// .replace(/\.{3}|\\cdots/g, " \\cdots ") ????????
 		.replace(/\\\.|·|⋅|\\bullet|\\cdot\b/g, " \\cdot ")
 		.replace(/→|\\rightarrow\b/g, " \\rightarrow ")
@@ -345,6 +345,10 @@ function nLatex(str) {
 		.replace(/\\triangle|△|Δ/g, "Δ")
 		.replace(/≠/g, " ≠ ")
 		.replace(/⬚/g, " ")
+
+		.replace(/&amp;/g, "&")
+		.replace(/&lt;/gi, "<")
+		.replace(/&gt;/gi, ">")
 
 		.replace(/\{([^}]*)\}(?:\^|_)(?!\w)( |\.|\,|:|;|!|\?|=|\+)/g, "$1$2")
 		.replace(/\{([^}]*)\}(\^|_)/g, "$1$2")
