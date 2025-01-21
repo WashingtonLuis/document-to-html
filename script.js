@@ -137,7 +137,7 @@ function latex(str) {
 		.replace(/(?<!\$)\$(?!\$)/g, " \\$\\; ")
 		.replace(/ *\$\$ */g, "$$$$")
 		.replace(/⬚/g, " ")
-		
+
 		// .replace(/\\\\(?:\n)?\\end\{vmatrix\}/g, " \\end{vmatrix}")
 		// .replace(/(?<!(?:\\\w+)|\}|\_|\^|\])\{(.*?)\}/g, "$1")
 		.replace(/(?<!(?:\\\w+)|\}|\_|\^|\])\{([^\^\}]*)\}(?:\^|\_)(?!\w)( |\.|\,|:|;|!|\?|=|\+)/g, "$1$2")
@@ -248,12 +248,11 @@ function latex(str) {
 		// .replace(/\\textrm\{(kg|g|u|dm|mm|cm|m|ml|l)\}/g, " \\textrm{ $1}")
 		// .replace(/\\textrm\{(sen|cos|tag)\}/g, " \\textrm{$1 }")
 
-		.replace(/[ ]{2,}/gi, " ")
-		// .replace(/\\\;\\textrm\{ /g, " \\textrm{ ")
-		// .replace(/\\textrm\{(e|de) ?\}/g, " \\textrm{ $1 }")
-		// .replace(/(?<=\\textrm\{R\} \\\$\\\;)( ?\d+)\\;(\d+(?:,\d+)?)/gi, "$1.$2")
-		// .replace(/[áéíóúçãõâêô]/g, (match) => latexAcentuacao[match])
-		;
+		.replace(/[ ]{2,}/gi, " ");
+	// .replace(/\\\;\\textrm\{ /g, " \\textrm{ ")
+	// .replace(/\\textrm\{(e|de) ?\}/g, " \\textrm{ $1 }")
+	// .replace(/(?<=\\textrm\{R\} \\\$\\\;)( ?\d+)\\;(\d+(?:,\d+)?)/gi, "$1.$2")
+	// .replace(/[áéíóúçãõâêô]/g, (match) => latexAcentuacao[match])
 
 	return text;
 }
@@ -263,7 +262,7 @@ function convertCodecogsToMathcha(text) {
 	// text = textLatex(text);
 	text = text.replace(/(\\(?:\'|\~|\^).)|\\c\{c\}/g, (match) => nLatexAcentuacao[match]);
 	text = textNLatex(text);
-	
+
 	text = text
 		.replace(/[ ]{2,}/gi, " ")
 		.replace(/ (?=[_^])/g, "")
@@ -279,8 +278,7 @@ function convertCodecogsToMathcha(text) {
 		.replace(/(?<![a-záéíóúàèìòùâêîôûäëïöüãẽĩõũç]{3,}|[ (=>]|\$\$)-(?![a-záéíóúàèìòùâêîôûäëïöüãẽĩõũç]{3,}|[ )=<]|\$\$)/g, "\\ –\\ ")
 		.replace(/(?<![a-záéíóúàèìòùâêîôûäëïöüãẽĩõũç]{3,}|[=>,])-(?![a-záéíóúàèìòùâêîôûäëïöüãẽĩõũç]{3,}|[)=<])/g, "–")
 		.replace(/ *\$\$ */g, "$$$$")
-		.replace(/(\\ ){2,}/g, "$1")
-		;
+		.replace(/(\\ ){2,}/g, "$1");
 	return text;
 }
 
@@ -337,6 +335,7 @@ function circuit(text) {
 function nLatex(str) {
 	let text = textNLatex(str);
 	text = text
+		.replace(/\\bigm/gi, "")
 		.replace(/(?:(?<![a-v(=>]{3,})|(?<=<p>[a-zA-Z]{1,2}))\=/g, " = ")
 		.replace(/\+/g, " + ")
 		.replace(/÷/g, " ÷ ")
