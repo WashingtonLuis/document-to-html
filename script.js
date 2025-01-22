@@ -336,6 +336,7 @@ function circuit(text) {
 function nLatex(str) {
 	let text = textNLatex(str);
 	text = text
+		.replace(/(?=\\\w)/gi, " ")
 		.replace(/\\bigm/gi, "")
 		.replace(/(?:(?<![a-v(=>]{3,})|(?<=<p>[a-zA-Z]{1,2}))\=/g, " = ")
 		.replace(/\+/g, " + ")
@@ -350,8 +351,8 @@ function nLatex(str) {
 		.replace(/&amp;/g, "&")
 		.replace(/&lt;/gi, "<")
 		.replace(/&gt;/gi, ">")
-		.replace(/\\(?:le|leq)(?:\b|\d)/gi, "≤")
-		.replace(/\\(?:ge|geq)(?:\b|\d)/gi, "≥")
+		.replace(/\\(?:le|leq)(?=\b|\d)/gi, "≤")
+		.replace(/\\(?:ge|geq)(?=\b|\d)/gi, "≥")
 
 		.replace(/\{([^}]*)\}(?:\^|_)(?!\w)( |\.|\,|:|;|!|\?|=|\+)/g, "$1$2")
 		.replace(/\{([^}]*)\}(\^|_)/g, "$1$2")
