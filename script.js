@@ -350,6 +350,8 @@ function nLatex(str) {
 		.replace(/&amp;/g, "&")
 		.replace(/&lt;/gi, "<")
 		.replace(/&gt;/gi, ">")
+		.replace(/\\(?:le|leq)(?:\b|\d)/gi, "≤")
+		.replace(/\\(?:ge|geq)(?:\b|\d)/gi, "≥")
 
 		.replace(/\{([^}]*)\}(?:\^|_)(?!\w)( |\.|\,|:|;|!|\?|=|\+)/g, "$1$2")
 		.replace(/\{([^}]*)\}(\^|_)/g, "$1$2")
