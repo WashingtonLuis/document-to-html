@@ -350,8 +350,6 @@ function nLatex(str) {
 		.replace(/⬚/g, " ")
 
 		.replace(/&amp;/g, "&")
-		.replace(/&lt;/gi, "<")
-		.replace(/&gt;/gi, ">")
 		.replace(/\\(?:le|leq)(?=\b|\d)/gi, "≤")
 		.replace(/\\(?:ge|geq)(?=\b|\d)/gi, "≥")
 
@@ -934,8 +932,7 @@ function _clear(str) {
 		.replace(/\((Figura \d+)\)/gi, "(<b>$1</b>)")
 
 		.replace(/[〖〗]/g, "")
-		.replace(/&lt;/gi, "<")
-		.replace(/&gt;/gi, ">")
+		.replace(/&amp;/g, "&")
 		.replace(/<p>(?:\s*)<\/p>/g, "")
 		// .replace(/<p>(?:\s*)(?:<br>)*(?:\s*)<\/p>/gi, "\n")
 		.replace(/(<div class="box-book">)(.*?)(?:<br>)?<\/div>/gi, "\n$1\n\t$2</div><br>\n")
@@ -1010,7 +1007,7 @@ function clear() {
 
 		if (document.getElementById("latex").checked) {
 			textareaValue = textareaValue
-				// .replace(/(?<!\\|\\textrm\{|\\textrm\{ |\\textbf\{|\\textbf\{ |\\begin\{|\\begin\{ |\\end\{|\\end\{ |\{\\color\{|\{\\color\{ |\\left)\\?\{([^{}<.]*)\\?\}/gi, '\\left\\{$1\\right\\}')
+				// .replace(/(?<!\\|\\textrm\{|\\textrm\{ |\\textbf\{|\\textbf\{ |\\begin\{|\\begin\{ |\\end\{|\\end\{ |\{\\color\{|\{\\color\{ |\\left)\\?\{([^{}<.]*)\\?\}/gi, '\\leftnLatex\\{$1\\right\\}')
 				.replace(/<(\w+)[^>]*(?:color: ?rgb\(255, ?0, ?0\);|color:#ff0000;).*?>(.*?)<\/\1>/gi, "{\\color{Red}$2}");
 		}
 
@@ -1074,9 +1071,10 @@ function clear() {
 		}
 
 		textareaValue = textareaValue
-			.replace(/&lt;/g, "<")
-			.replace(/&gt;/g, ">")
+			.replace(/&lt;/gi, "<")
+			.replace(/&gt;/gi, ">")
 			.replace(/\n$/gi, "")
+			.replace(/&amp;/g, "&")
 			.replace(/(?:\n )$/gi, "")
 			.replace(/(?<!<\w+|\/\w{1,4}|=|\n|\.) ?(<|>) ?(?!\/\w{1,4}>|\w{1,4}>|\/|\n|$)/gi, " $1 ");
 		// Definir o texto formatado em outro elemento
@@ -1171,7 +1169,7 @@ $(document).ready(function () {
 			textareaValueEq = _clear(textareaValueEq);
 			textareaValueEq = nLatex(textareaValueEq);
 			textareaValueEq = semTag(textareaValueEq);
-			textareaValueEq = textareaValueEq.replace(/[ ]{2,}/gi, " ").replace(/^\s+|\s+$/g, "");
+			textareaValueEq = textareaValueEq.replace(/&lt;/gi, " < ").replace(/&gt;/gi, " > ").replace(/[ ]{2,}/gi, " ").replace(/^\s+|\s+$/g, "");
 
 			// Definir o texto formatado em outro elemento
 			$("#result").text(textareaValueEq);
