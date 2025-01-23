@@ -387,6 +387,7 @@ function nLatex(str) {
 		.replace(/\\varphi\b/g, "𝜑")
 		.replace(/\\infty\b|∞/g, "ထ")
 		.replace(/\\lambda/g, "λ")
+		.replace(/\\prime/g, "'")
 		// .replace(/≅|\\cong/g, " ≅ ")
 		// .replace(/≈|\\approx/g, " ≈ ")
 		.replace(/≅|\\cong\b|≈|\\approx\b|≃|\\simeq\b/g, " ≃ ")
