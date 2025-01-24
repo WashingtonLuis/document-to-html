@@ -47,7 +47,7 @@ function removeQuebras(input) {
 }
 
 function textNLatex(input) {
-	const output = input.replace(/(\^|_)\\(?:textrm|text)\{([^}]*)\}/gi, " $1$2 ").replace(/\\(?:textrm|mathrm|text|mathbit|textbf|mathbf)\{([^}]*)\}/gi, " $1 ");
+	const output = input.replace(/(\^|_)\\(?:textrm|text)\{([^}]*)\}/gi, " $1$2 ").replace(/\\(?:textrm|mathrm|text|mathbit|textbf|mathbf)\{([^}]*)\}/gi, "$1");
 	if (output === input) {
 		return output
 			.replace(/[ ]{2, }/gi, " ")
