@@ -187,10 +187,7 @@ function latex(str) {
 
 		// .replace(/(_|\^)(?![a-zA-Z0-9{])/gi, " ")
 
-		.replace(/_\(([^()<.\-\+\^\]#]*)\)/gi, "_{$1}")
-		.replace(/_\(([^()<.\-\+\^\]#]*)\)/gi, "_{$1}")
-		.replace(/_([^\s{}()<.\-\+\^\\Rightarrow\\rightarrow\]#]+)/gi, "_{$1}")
-		.replace(/_([A-Za-záéíóúàèìòùâêîôûäëïöüãẽĩõũç]+)/g, "_{$1}")
+		.replace(/_(?![{}()<.\-\+\\]|\\(?:Rightarrow|rightarrow))([A-Za-záéíóúàèìòùâêîôûäëïöüãẽĩõũç0-9]+)/g, "_{$1}")
 		.replace(/\<sub\>(.*?)\<\/sub\>/g, "_{$1}")
 
 		.replace(/¹/g, "^1")
@@ -198,9 +195,7 @@ function latex(str) {
 		.replace(/³/g, "^3")
 		.replace(/ª/g, "^a")
 		.replace(/º/g, "^o")
-		.replace(/\^\(([^()<.\-\+_\]#]*)\)/gi, "^{$1}")
-		.replace(/\^\(([^()<.\-\+_\]#]*)\)/gi, "^{$1}")
-		.replace(/\^([^\s{}()<.\-\+_\\Rightarrow\\rightarrow\]#]+)/gi, "^{$1}")
+		.replace(/\^(?![{}()<.\-\+\\]|\\(?:Rightarrow|rightarrow))([A-Za-záéíóúàèìòùâêîôûäëïöüãẽĩõũç0-9]+)/g, "^{$1}")
 		.replace(/\<sup\>(.*?)\<\/sup\>/g, "^{$1}")
 
 		.replace(/(?<!Dia \d?)(#\[.*?\]|[a-z\d]+)\/(#\[.*?\]|[a-z\d]+)/gi, " \\frac{$1}{$2} ")
@@ -402,10 +397,8 @@ function nLatex(str) {
 		.replace(/-(?=\d)/g, "–")
 		.replace(/#\[([^[]*)\]/gi, "($1)")
 
-		.replace(/_([^\s{}()<.\-\+\\Rightarrow\\rightarrow]+)/gi, "<sub>$1</sub>")
-		.replace(/_([A-Za-záéíóúàèìòùâêîôûäëïöüãẽĩõũç]+)/g, "<sub>$1</sub>")
-		.replace(/\^([^\s{}()<.\-\+\\Rightarrow\\rightarrow]+)/gi, "<sup>$1</sup>")
-		.replace(/\^([A-Za-záéíóúàèìòùâêîôûäëïöüãẽĩõũç]+)/g, "<sup>$1</sup>")
+		.replace(/_(?![{}()<.\-\+\\]|\\(?:Rightarrow|rightarrow))([A-Za-záéíóúàèìòùâêîôûäëïöüãẽĩõũç0-9]+)/g, "<sub>$1</sub>")
+		.replace(/\^(?![{}()<.\-\+\\]|\\(?:Rightarrow|rightarrow))([A-Za-záéíóúàèìòùâêîôûäëïöüãẽĩõũç0-9]+)/g, "<sup>$1</sup>")
 
 		.replace(/_\{([^{}<)]*)\}/gi, "<sub>$1</sub>")
 		.replace(/\^\{([^{}<)]*)\}/gi, "<sup>$1</sup>")
