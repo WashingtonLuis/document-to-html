@@ -238,8 +238,8 @@ function latex(str) {
 
 		.replace(/(?<=\d)(?=(\d{3})+(?!\d))/g, "\\,")
 		.replace(/(\d),(\d)/g, "$1,\\!$2")
-		.replace(/(?<=kg|g|u|dm|mm|cm|m|ml|l)(2|3)/gi, "^{$1}")
-
+		.replace(/(?<=(?:\d| |^)(?:kg|g|u|dm|mm|cm|m|ml|l))\s*(2|3)\b/gi, "^{$1}")
+		
 		// .replace(/(\\(?:\'|\~|\^).)|\\c\{c\}/g, (match) => nLatexAcentuacao[match])
 
 		// .replace(/(?<!\\|\\textrm\{|\\textrm\{ |\\textbf\{|\\textbf\{ |\\begin\{|\\begin\{ |\\end\{|\\end\{ |\{\\color\{|\{\\color\{ )(?<=\d|\b| )([A-Za-záéíóúàèìòùâêîôûäëïöüãẽĩõũç ]+)/g, "\\textrm{$1}")
