@@ -575,7 +575,7 @@ function manual(str) {
 		.replace(/<p>(?:<br>)?\s?(\d+)\s?[-.)](?![0-9])\s?(?:Resolução:|Resposta:|Resposta: Letra|Resolução: Letra|Letra)?\s?(.*?)?<\/p>/gi, "<p><br><b>$1)</b> $2</p>")
 		.replace(/<ol><li>(?:<p>)?(?:<b>)?Resolução:\s?(?:<\/b>)(.*?)(?:<\/p>)?<\/li>\s*<\/ol>/gi, "<p><br><b>$$)</b> $1</p>")
 		.replace(/(?<!<p>)<br><\/p>/gi, "</p>")
-		.replace(/(Comentário:)/gi, "<br><b>Resolução comentada:</b> ")
+		.replace(/(?:<b>)?(Comentário:)(?:<\/b>)?/gi, "<br><b>Resolução comentada:</b> ")
 		.replace(/<p><br><\/p>\s+(<p><br><b>Resolução comentada:<\/b><\/p>)/gi, "$1")
 		.replace(/ ?<\/b> ?<b> ?/gi, " ")
 		.replace(/<p>(?:<b>)(?:Competência Específica|Competência) (\d+)[:.]?(.*?)?(?:<\/b>)?[:]?(.*?)?(?:<\/b>)?<\/p>/gi, "<p><b>Competência Específica $1:</b> $2$3</p>")
