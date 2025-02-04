@@ -362,7 +362,7 @@ function nLatex(str) {
 		.replace(/ª/g, "<sup>a</sup>")
 		.replace(/º|°/g, "<sup>o</sup>")
 		.replace(/₂/g, "<sub>2</sub>")
-		.replace(/(?<=[0-9])(kg|g|u|dm|mm|cm|m|ml|l)\b/gi, " $1")
+		.replace(/(?<=[0-9])(kg|g|u|dm|mm|cm|m|ml|l|mol)\b/gi, " $1")
 		.replace(/\b(kg|g|u|dm|mm|cm|m|ml|l)(\d+)/g, "$1<sup>$2</sup>")
 
 		.replace(/\\(;| |,)/g, " ")
