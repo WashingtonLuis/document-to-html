@@ -339,7 +339,7 @@ function nLatex(str) {
 		.replace(/(?=\\\w)/gi, " ")
 		.replace(/\\bigm/gi, "")
 		.replace(/(?:(?<![a-v(=>]{3,})|(?<=<p>[a-zA-Z]{1,2}))\=/g, " = ")
-		.replace(/(?<![>])\+/g, " + ")
+		.replace(/(?<![>{])\+/g, " + ")
 		.replace(/÷/g, " ÷ ")
 		.replace(/→/g, " → ")
 		.replace(/·|⋅|\\bullet|\\cdot\b/g, " · ")
