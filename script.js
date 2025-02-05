@@ -1094,6 +1094,26 @@ function limpaTela() {
 	$("#summernote").summernote("empty");
 }
 
+function mathToHtml(p=false) {
+	try {
+		let textareaValueEq = $("#summernote").summernote("code");
+
+		textareaValueEq = _clear(textareaValueEq);
+		textareaValueEq = nLatex(textareaValueEq);
+		textareaValueEq = semTag(textareaValueEq);
+		textareaValueEq = textareaValueEq.replace(/&lt;/gi, " < ").replace(/&gt;/gi, " > ").replace(/[ ]{2,}/gi, " ").replace(/^\s+|\s+$/g, "");
+
+		if (p) textareaValueEq = `<p>${textareaValueEq}</p>`;
+
+		// Definir o texto formatado em outro elemento
+		$("#result").text(textareaValueEq);
+
+		navigator.clipboard.writeText(textareaValueEq);
+	} catch (error) {
+		console.error("Erro ao formatar o texto:", error);
+	}
+}
+
 $(document).ready(function () {
 	// Inicializar o editor de texto
 	$("#summernote").summernote({
@@ -1163,21 +1183,11 @@ $(document).ready(function () {
 	});
 
 	$("#eqHtml").click(function () {
-		try {
-			let textareaValueEq = $("#summernote").summernote("code");
+		mathToHtml();
+	});
 
-			textareaValueEq = _clear(textareaValueEq);
-			textareaValueEq = nLatex(textareaValueEq);
-			textareaValueEq = semTag(textareaValueEq);
-			textareaValueEq = textareaValueEq.replace(/&lt;/gi, " < ").replace(/&gt;/gi, " > ").replace(/[ ]{2,}/gi, " ").replace(/^\s+|\s+$/g, "");
-
-			// Definir o texto formatado em outro elemento
-			$("#result").text(textareaValueEq);
-
-			navigator.clipboard.writeText(textareaValueEq);
-		} catch (error) {
-			console.error("Erro ao formatar o texto:", error);
-		}
+	$("#eqHtmlP").click(function () {
+		mathToHtml(true);
 	});
 
 	$("#textoSimples").click(function () {
@@ -1418,3 +1428,5 @@ $(document).ready(function () {
 		}
 	});
 });
+
+
