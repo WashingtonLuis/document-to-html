@@ -1078,7 +1078,7 @@ function clear() {
 			.replace(/\n$/gi, "")
 			.replace(/&amp;/g, "&")
 			.replace(/(?:\n )$/gi, "")
-			.replace(/(?<!<\w+|\/\w{1,4}|=|\n|\.) ?(<|>) ?(?!\/\w{1,4}>|\w{1,4}>|\/|\n|$)/gi, " $1 ");
+			.replace(/(?<!<\w+|\/\w{1,4}|=|\n|\.|\/|"|>) ?(<|>) ?(?!\/\w{1,4}>|\w{1,4}>|\/|\n|$)/gi, " $1 ");
 		// Definir o texto formatado em outro elemento
 		$("#result").text(textareaValue);
 
