@@ -152,7 +152,7 @@ function latex(str) {
 
 		.replace(/(?<!\\)(\d+)\\ (\d+)/g, "$1$2")
 		.replace(/(?<!\\)\\ /g, " ")
-		.replace(/\\prime/g, "'")
+		.replace(/\\prime|´/g, "'")
 
 		.replace(/(\d+) (\d+)/g, "$1\\,$2")
 
@@ -386,7 +386,7 @@ function nLatex(str) {
 		.replace(/\\varphi\b/g, "𝜑")
 		.replace(/\\infty\b|∞/g, "ထ")
 		.replace(/\\lambda/g, "λ")
-		.replace(/\\prime/g, "'")
+		.replace(/\\prime|´/g, "'")
 		.replace(/\\pm/g, "±")
 		.replace(/\\in/g, "∈")
 		.replace(/\\rightleftarrows|⇄/g, " ⇄ ")
