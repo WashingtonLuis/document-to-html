@@ -241,7 +241,7 @@ function latex(str) {
 		.replace(/(?<=\d)(?=(\d{3})+(?!\d))/g, "\\,")
 		.replace(/(\d),(\d)/g, "$1,\\!$2")
 		.replace(/(?<=(?:\d| |^)(?:kg|g|u|dm|mm|cm|m|ml|l))\s*(2|3)\b/gi, "^{$1}")
-		
+
 		// .replace(/(\\(?:\'|\~|\^).)|\\c\{c\}/g, (match) => nLatexAcentuacao[match])
 
 		// .replace(/(?<!\\|\\textrm\{|\\textrm\{ |\\textbf\{|\\textbf\{ |\\begin\{|\\begin\{ |\\end\{|\\end\{ |\{\\color\{|\{\\color\{ )(?<=\d|\b| )([A-Za-záéíóúàèìòùâêîôûäëïöüãẽĩõũç ]+)/g, "\\textrm{$1}")
@@ -278,10 +278,9 @@ function convertCodecogsToMathcha(text) {
 		.replace(/(?<![a-záéíóúàèìòùâêîôûäëïöüãẽĩõũç]{3,}|[ (=>]|\$\$)-|–(?![a-záéíóúàèìòùâêîôûäëïöüãẽĩõũç]{3,}|[ )=<]|\$\$)/g, "\\ –\\ ")
 		.replace(/(?<![a-záéíóúàèìòùâêîôûäëïöüãẽĩõũç]{3,}|[=>,])-|–(?![a-záéíóúàèìòùâêîôûäëïöüãẽĩõũç]{3,}|[)=<])/g, "–")
 		.replace(/;/g, ";\\ ")
-		.replace(/\{(?:\\ )?–(?:\\ )?/g, "\{–")
+		.replace(/\{(?:\\ )?–(?:\\ )?/g, "{–")
 		.replace(/ *\$\$ */g, "$$$$")
-		.replace(/(\\ ){2,}/g, "$1")
-		;
+		.replace(/(\\ ){2,}/g, "$1");
 	return text;
 }
 
@@ -373,7 +372,7 @@ function nLatex(str) {
 		.replace(/\\rightarrow\b/g, " → ")
 		.replace(/\\longrightarrow\b/g, " ⟶ ")
 		.replace(/\\Rightarrow\b|\\𝑅𝑖𝑔ℎ𝑡𝑎𝑟𝑟𝑜𝑤\b/g, " ⇒ ")
-		.replace(/\\Delta\b|∆/g, "Δ")
+		.replace(/\\Delta\b|[∆]/g, "Δ")
 		.replace(/ϕ|\\phi\b/g, "ϕ")
 		.replace(/\\delta\b/g, "δ")
 		.replace(/\\neq\b/g, " ≠ ")
@@ -388,7 +387,7 @@ function nLatex(str) {
 		.replace(/\\varphi\b/g, "𝜑")
 		.replace(/\\infty\b|∞/g, "ထ")
 		.replace(/\\lambda/g, "λ")
-		.replace(/\\prime|´/g, "'")
+		.replace(/\\prime|[´]/g, "'")
 		.replace(/\\pm/g, "±")
 		.replace(/\\in/g, "∈")
 		.replace(/\\rightleftarrows|⇄/g, " ⇄ ")
@@ -418,8 +417,7 @@ function nLatex(str) {
 		.replace(/\( ?(.*?) ?\)/g, "($1)")
 		.replace(/\\underline\{.*?\}/gi, "##")
 		.replace(/;(?!\n|<| )/gi, "; ")
-		.replace(/\\(?:right|left)([|()])/gi, "$1")
-		;
+		.replace(/\\(?:right|left)([|()])/gi, "$1");
 	// .replace(/(?<=\b[A-Za-z]) \(/g, "(")
 
 	return text;
@@ -1074,6 +1072,22 @@ function clear() {
 			textareaValue = semTag(textareaValue);
 		}
 
+		if (document.getElementById("uperCase").checked) {
+			var tempDiv = $("<div>").html(textareaValue);
+
+			tempDiv
+				.find("*")
+				.contents()
+				.each(function () {
+					if (this.nodeType === 3) {
+						// Verifica se é um nó de texto
+						this.nodeValue = this.nodeValue.toUpperCase();
+					}
+				});
+
+			textareaValue = tempDiv.html();
+		}
+
 		textareaValue = textareaValue
 			.replace(/&lt;/gi, "<")
 			.replace(/&gt;/gi, ">")
@@ -1098,14 +1112,18 @@ function limpaTela() {
 	$("#summernote").summernote("empty");
 }
 
-function mathToHtml(p=false) {
+function mathToHtml(p = false) {
 	try {
 		let textareaValueEq = $("#summernote").summernote("code");
 
 		textareaValueEq = _clear(textareaValueEq);
 		textareaValueEq = nLatex(textareaValueEq);
 		textareaValueEq = semTag(textareaValueEq);
-		textareaValueEq = textareaValueEq.replace(/&lt;/gi, " < ").replace(/&gt;/gi, " > ").replace(/[ ]{2,}/gi, " ").replace(/^\s+|\s+$/g, "");
+		textareaValueEq = textareaValueEq
+			.replace(/&lt;/gi, " < ")
+			.replace(/&gt;/gi, " > ")
+			.replace(/[ ]{2,}/gi, " ")
+			.replace(/^\s+|\s+$/g, "");
 
 		if (p) textareaValueEq = `<p>${textareaValueEq}</p>`;
 
@@ -1432,5 +1450,3 @@ $(document).ready(function () {
 		}
 	});
 });
-
-
