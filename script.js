@@ -471,7 +471,7 @@ function removeTag(html) {
 }
 
 function removeImgFromParagraphs(text) {
-	return text.replace(/(<p>[\s\S]*?)(<img>)([\s\S]*?<\/p>)/gi, "$1$3<div class='img-center mx-400 text-center'><img src='blo2-01.jpg'><div class='legend'><b>#$</b><br>Fonte: . Disponível em: <a href='##' class='url' target='_blank' rel='nofollow'>##</a>. Acesso em: .</div></div>");
+	return text.replace(/(<p>[\s\S]*?)(<img>)([\s\S]*?<\/p>)/gi, "$1$3<div class='mx-400 img-center'><img src='blo2-01.jpg'><div class='legend'><b>#$</b><br>Fonte: . Disponível em: <a href='##' class='url' target='_blank' rel='nofollow'>##</a>. Acesso em: .</div></div>");
 }
 
 function replaceYoutubeLinks(text) {
@@ -1351,15 +1351,15 @@ $(document).ready(function () {
 
 			textareaValueEq = textareaValueEq
 				.replace(/<p(?: class="text-center")?>(?:<b>\s?|\s)?@@(?:\s?<\/b>|\s)?<\/p>/gi, "@@")
-				.replace(/(<div class="img-(?:center|left|right) mx-\d{3} text-center">)?<img src="blo\d{1,2}\-\d{2,3}\.(jpg|png)"(?: \/)?>(?:<\/div)?/gi, "@@$1#$2")
+				.replace(/(<div class="img-(?:center|left|right) mx-\d{3}">)?<img src="blo\d{1,2}\-\d{2,3}\.(jpg|png)"(?: \/)?>(?:<\/div)?/gi, "@@$1#$2")
 				.replace(/@@/g, (match, offset, string) => {
 					// Extrai o formato (jpg ou png) do nome da imagem original
 
 					let formatMatch = string.slice(offset).match(/#(jpg|png)/i);
 					let format = formatMatch ? formatMatch[1] : "jpg";
 
-					let positionMatch = string.slice(offset).match(/<div class="img-(center|left|right) mx-\d{3} text-center">/i);
-					let position = positionMatch ? positionMatch[0] : "<div class='img-center mx-400 text-center'>";
+					let positionMatch = string.slice(offset).match(/<div class="img-(center|left|right) mx-\d{3}">/i);
+					let position = positionMatch ? positionMatch[0] : "<div class='mx-400 img-center'>";
 
 					// Construindo o nome da nova imagem
 					let imageName = `blo${bloco}-${counter.toString().padStart(2, "0")}.${format}`;
@@ -1367,7 +1367,7 @@ $(document).ready(function () {
 					counter++;
 					return `\n${position}<img src='${imageName}'></div>`;
 				})
-				.replace(/(?<=(?:jpg|png)'><\/div>)(<div class="img-(?:center|left|right) mx-\d{3} text-center">)#(jpg|png)>/gi, "")
+				.replace(/(?<=(?:jpg|png)'><\/div>)(<div class="img-(?:center|left|right) mx-\d{3}">)#(jpg|png)>/gi, "")
 				.replace(/<p>(<div.*?<\/div>)<\/p>/gi, "$1")
 				.replace(/\n+/gi, "\n")
 				.replace(/#(?:jpg|png)/gi, "");
@@ -1402,12 +1402,12 @@ $(document).ready(function () {
 				.replace(/@@\s*<p[^>]*?>(Figura[\s\S]*?)<\/p>\s*<p[^>]*?>((?:Disponível em:|Fonte:)[\s\S]*?)<\/p>/gi, (match, caption1, caption2) => {
 					// Formata um novo bloco de imagem quando @@ é encontrado com legenda
 					const imageName = `blo${bloco}-${counter.toString().padStart(2, "0")}.jpg`;
-					return `<div class='img-center mx-400 text-center'><img src='${imageName}'><div class='legend'><b>${caption1}</b><br>${caption2}</div></div>`;
+					return `<div class='mx-400 img-center'><img src='${imageName}'><div class='legend'><b>${caption1}</b><br>${caption2}</div></div>`;
 				})
 				.replace(/@@/gi, () => {
 					// Formata um novo bloco de imagem quando @@ é encontrado sem legenda
 					const imageName = `blo${bloco}-${counter.toString().padStart(2, "0")}.jpg`;
-					return `<div class='img-center mx-400 text-center'><img src='${imageName}'></div>`;
+					return `<div class='mx-400 img-center'><img src='${imageName}'></div>`;
 				})
 				.replace(/<img src=['"]blo\d{1,2}-\d{2,3}\.(jpg|png)['"]\s*\/?>/gi, (match, extension) => {
 					// Reorganiza o nome das imagens, extraindo o tipo da imagem (jpg ou png)
