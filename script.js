@@ -784,6 +784,16 @@ function exerciciosMaterial(str) {
 	return text;
 }
 
+function exerciciosFundamental1(str) {
+	let text = str
+		.replace(/<p>\s?(?:<b>)?\d+ ?[.)-](?:\s?<b>|\s?<\/b>| )*(.*?)(?:<\/b>)?\s?<\/p>/gi, '<div class="exercise exercise-circle"><p>$1</p></div>')
+		.replace(/(?<=<div class="exercise"><p>)(\([^)]*\))(?:\s-\s)?/gi, "<b>$1</b> ")
+		;
+	text = padraoResposta(text);
+
+	return text;
+}
+
 function destacarRespostaCorreta($exercise) {
 	// Encontra a lista de opções (mais flexível)
 	let $options = $exercise.nextAll("ol.options").first();
@@ -895,7 +905,7 @@ function _clear(str) {
 
 		.replace(/style="[^"]*?"(?!><\/iframe>)/gi, "")
 
-		.replace(/<(?!a)(\w+)\s*(?![^>]*\b(?:class\s*=\s*["']?\s*(?:text-danger|text-center|data-table|table-responsive|mx-auto|text-right|legend|url|img-center|img-right|img-left|box-item|d-none|d-print-block|d-print-none|youtube|box-book|mx-\d+|row|col-sm-\d+)\b|type="[1aAiI]"|colspan="\d"|rowspan="\d"|src="|exercise|options|list-item))[^>]*>/gi, "<$1>")
+		.replace(/<(?!a)(\w+)\s*(?![^>]*\b(?:class\s*=\s*["']?\s*(?:text-danger|text-center|data-table|table-responsive|mx-auto|text-right|legend|url|img-center|img-right|img-left|box-item|d-none|d-print-block|d-print-none|youtube|box-book|mx-\d+|row|col-sm-\d+)\b|type="[1aAiI]"|colspan="\d"|rowspan="\d"|src="|exercise|exercise-circle|options|list-item))[^>]*>/gi, "<$1>")
 
 		.replace(/\<b\b[^>]*\>/gi, "<b>")
 		.replace(/\<li\b[^>]*\>/gi, "<li>")
@@ -1054,6 +1064,11 @@ function clear() {
 			textareaValue = exerciciosResolvidos(textareaValue);
 		}
 
+		if (document.getElementById("exerciciosFundamental1").checked) {
+			textareaValue = organizaTags(textareaValue);
+			textareaValue = exerciciosFundamental1(textareaValue);
+		}
+
 		textareaValue = insereQuebras(textareaValue);
 
 		textareaValue = organizaTags(textareaValue);
@@ -1094,7 +1109,7 @@ function clear() {
 			.replace(/\n$/gi, "")
 			.replace(/&amp;/g, "&")
 			.replace(/(?:\n )$/gi, "")
-			.replace(/(?<!<\w+|\/\w{1,4}|=|\n|\.|\/|"|>) ?(<|>) ?(?!\/\w{1,4}>|\w{1,4}>|\/|\n|$)/gi, " $1 ");
+			.replace(/(?<!<[a-zA-Z]+|\/[a-zA-Z]{1,4}|=|\n|\.|\/|"|>) ?(<|>) ?(?!\/[a-zA-Z]{1,4}>|[a-zA-Z]{1,4}|\/|\n|$)/gi, " $1 ");
 		// Definir o texto formatado em outro elemento
 		$("#result").text(textareaValue);
 
