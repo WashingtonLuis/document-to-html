@@ -788,6 +788,7 @@ function exerciciosFundamental1(str) {
 	let text = str
 		.replace(/<p>\s?(?:<b>)?\d+ ?[.)-](?:\s?<b>|\s?<\/b>| )*(.*?)(?:<\/b>)?\s?<\/p>/gi, '<div class="exercise exercise-circle"><p>$1</p></div>')
 		.replace(/(?<=<div class="exercise"><p>)(\([^)]*\))(?:\s-\s)?/gi, "<b>$1</b> ")
+		.replace(/ X /g, " <b>X</b> ")
 		;
 	text = padraoResposta(text);
 
