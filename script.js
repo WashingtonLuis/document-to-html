@@ -1024,6 +1024,22 @@ function clear() {
 				.replace(/<(\w+)[^>]*(?:color: ?rgb\(255, ?0, ?0\);|color:#ff0000;).*?>(.*?)<\/\1>/gi, "{\\color{Red}$2}");
 		}
 
+		if (document.getElementById("uperCase").checked) {
+			var tempDiv = $("<div>").html(textareaValue);
+
+			tempDiv
+				.find("*")
+				.contents()
+				.each(function () {
+					if (this.nodeType === 3) {
+						// Verifica se é um nó de texto
+						this.nodeValue = this.nodeValue.toUpperCase();
+					}
+				});
+
+			textareaValue = tempDiv.html();
+		}
+
 		// Limpar espaços, estilos e tags indesejados
 		textareaValue = _clear(textareaValue);
 
@@ -1086,22 +1102,6 @@ function clear() {
 
 		if (document.getElementById("semTag").checked) {
 			textareaValue = semTag(textareaValue);
-		}
-
-		if (document.getElementById("uperCase").checked) {
-			var tempDiv = $("<div>").html(textareaValue);
-
-			tempDiv
-				.find("*")
-				.contents()
-				.each(function () {
-					if (this.nodeType === 3) {
-						// Verifica se é um nó de texto
-						this.nodeValue = this.nodeValue.toUpperCase();
-					}
-				});
-
-			textareaValue = tempDiv.html();
 		}
 
 		textareaValue = textareaValue
