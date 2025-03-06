@@ -365,6 +365,7 @@ function nLatex(str) {
 		.replace(/₂/g, "<sub>2</sub>")
 		.replace(/(?<=[0-9])(kg|g|u|dm|mm|cm|m|ml|l|mol)\b/gi, " $1")
 		.replace(/\b(kg|g|u|dm|mm|cm|m|ml|l)(\d+)/g, "$1<sup>$2</sup>")
+		.replace(/(?<=\d)(a|o) /g, "<sup>$1</sup> ")
 
 		.replace(/\\(;| |,)/g, " ")
 		.replace(/\\geq\b/g, " ≥ ")
@@ -939,8 +940,9 @@ function _clear(str) {
 		.replace(/(?:<b>)+(.*?)( )?(?:<\/b>)+/gi, "<b>$1</b>$2")
 
 		.replace(/<b>(\s|<br>)*<\/b>/gi, "$1")
-		.replace(/<\/b>\s?<b>/gi, " ")
 		.replace(/<b><\/b>/gi, "")
+		.replace(/<\/b><b>/gi, "")
+		.replace(/<\/b>\s+<b>/gi, " ")
 		.replace(/<div>(\s|<br>)*<\/div>/gi, "$1")
 
 		// .replace(/<img\b[^>]*>/gi, "<img>")
