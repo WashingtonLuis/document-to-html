@@ -886,7 +886,7 @@ function _clear(str) {
 		.replace(/\n/g, " ")
 		.replace(/\s+/g, " ")
 		.replace(/<!--[\s\S]*?-->/g, " ")
-		.replace(/(&nbsp;)+|(&quot;)+|<o:p>|<\/o:p>/gi, " ")
+		.replace(/&#160;|(&nbsp;)+|(&quot;)+|<o:p>|<\/o:p>/gi, " ")
 		.replace(/[\u201C\u201D]/g, '"')
 		.replace(/[\u2061\u200b\u202c]/g, "")
 		.replace(/’/g, "'")
