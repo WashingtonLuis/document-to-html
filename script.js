@@ -431,6 +431,7 @@ function facilidades(str) {
 	text = replaceYoutubeLinks(text);
 	text = wrapTablesWithResponsiveDiv(text);
 	text = convertTableCellsToHeaders(text);
+	text = clearTableCell(text);
 	text = formatLinks(text);
 	text = fixMalformedLinks(text);
 	text = padraoFonte(text);
@@ -487,6 +488,15 @@ function convertTableCellsToHeaders(text) {
 		return match.replace(/<td>\s*<p(?:\s+class="text-center")?\s*><b>(.*?)<\/b>\s*<\/p>\s*<\/td>/gi, "<th>$1</th>");
 	});
 }
+
+function clearTableCell(text) {
+  return text
+    // Remove apenas a classe, preservando outros atributos e evitando espaços extras
+    .replace(/<(td|th)([^>]*)\s*\bclass=["'][^"']*["']([^>]*)>/gi, '<$1$2$3>')
+    // Remove <p> dentro de <td> ou <th>, mantendo o conteúdo interno
+    .replace(/<(td|th)([^>]*)>\s*<p>(.*?)<\/p>\s*<\/\1>/gi, "<$1$2>$3</$1>");
+}
+
 
 /*function formatLinks(text) {
 	return text.replace(/<(a)\s*href="(.*?)".*?>(.*?)<\/\1>/gi, "<a href='$2' class='url' target='_blank' rel='nofollow'>$3</a>").replace(/<a>(\s)?(.*?)(\s)?<\/a>/gi, "$1<a href='$2' class='url' target='_blank' rel='nofollow'>$2</a>$3");
