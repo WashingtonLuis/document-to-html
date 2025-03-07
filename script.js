@@ -976,7 +976,7 @@ function insereQuebras(textareaValue) {
 		.replace(/<((?:\/(?:div|h1|h2|h5|p|table|tr|ol|li|ul|blockquote))|(?:ol|ul|hr)[^>]*)>(?!<\/td>)/gi, "<$1>\n")
 		.replace(/\n{2,}/gi, "\n")
 		.replace(/<(li|script|iframe|tr|\/tr)([^>]*)>/gi, "\t<$1$2>")
-		.replace(/(<tr>|<\/td>|<\/th>)\n<(td|th)>/gi, "$1\n\t\t<$2>")
+		.replace(/(<tr>|<\/td>|<\/th>)\n<(td|th)([^>]*)>/gi, "$1\n\t\t<$2$3>")
 		.replace(/ \n/gi, "\n")
 		.replace(/<\/(ol|ul|table|blockquote|div)>/gi, "</$1>\n<br>\n")
 		.replace(/(<div class="legend">)/gi, "\t$1")
