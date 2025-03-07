@@ -491,13 +491,14 @@ function convertTableCellsToHeaders(text) {
 }
 
 function clearTableCell(text) {
-  return text
-    // Remove apenas a classe, preservando outros atributos e evitando espaços extras
-    .replace(/<(td|th)([^>]*)\s*\bclass=["'][^"']*["']([^>]*)>/gi, '<$1$2$3>')
-    // Remove <p> dentro de <td> ou <th>, mantendo o conteúdo interno
-    .replace(/<(td|th)([^>]*)>\s*<p>(.*?)<\/p>\s*<\/\1>/gi, "<$1$2>$3</$1>");
+	return (
+		text
+			// Remove apenas a classe, preservando outros atributos e evitando espaços extras
+			.replace(/<(td|th)([^>]*)\s*\bclass=["'][^"']*["']([^>]*)>/gi, "<$1$2$3>")
+			// Remove <p> dentro de <td> ou <th>, mantendo o conteúdo interno
+			.replace(/<(td|th)([^>]*)>\s*<p>(.*?)<\/p>\s*<\/\1>/gi, "<$1$2>$3</$1>")
+	);
 }
-
 
 /*function formatLinks(text) {
 	return text.replace(/<(a)\s*href="(.*?)".*?>(.*?)<\/\1>/gi, "<a href='$2' class='url' target='_blank' rel='nofollow'>$3</a>").replace(/<a>(\s)?(.*?)(\s)?<\/a>/gi, "$1<a href='$2' class='url' target='_blank' rel='nofollow'>$2</a>$3");
@@ -799,8 +800,7 @@ function exerciciosFundamental1(str) {
 	let text = str
 		.replace(/<p>\s?(?:<b>)?\d+ ?[.)-](?:\s?<b>|\s?<\/b>| )*(.*?)(?:<\/b>)?\s?<\/p>/gi, '<div class="exercise exercise-circle"><p>$1</p></div>')
 		.replace(/(?<=<div class="exercise"><p>)(\([^)]*\))(?:\s-\s)?/gi, "<b>$1</b> ")
-		.replace(/ X /g, " <b>X</b> ")
-		;
+		.replace(/ X /g, " <b>X</b> ");
 	text = padraoResposta(text);
 
 	return text;
@@ -1080,20 +1080,18 @@ function clear() {
 			textareaValue = removeListaOrdenada(textareaValue);
 		}
 
+		textareaValue = organizaTags(textareaValue);
 		if (document.getElementById("exerciciosMaterial").checked) {
-			textareaValue = organizaTags(textareaValue);
 			textareaValue = exerciciosMaterial(textareaValue);
 			textareaValue = exerciciosH5p(textareaValue);
 		}
 
 		if (document.getElementById("exResolvidosMaterial").checked) {
-			textareaValue = organizaTags(textareaValue);
 			textareaValue = exerciciosMaterial(textareaValue);
 			textareaValue = exerciciosResolvidos(textareaValue);
 		}
 
 		if (document.getElementById("exerciciosFundamental1").checked) {
-			textareaValue = organizaTags(textareaValue);
 			textareaValue = exerciciosFundamental1(textareaValue);
 		}
 
@@ -1121,7 +1119,11 @@ function clear() {
 			.replace(/\n$/gi, "")
 			.replace(/&amp;/g, "&")
 			.replace(/(?:\n )$/gi, "")
-			.replace(/(?<!<[a-zA-Z]+|\/[a-zA-Z]{1,4}|=|\n|\.|\/|"|>) ?(<|>) ?(?!\/[a-zA-Z]{1,4}>|[a-zA-Z]{1,4}|\/|\n|$)/gi, " $1 ");
+			.replace(/(?<!<[a-zA-Z]+|\/[a-zA-Z]{1,4}|=|\n|\.|\/|"|>) ?(<|>) ?(?!\/[a-zA-Z]{1,4}>|[a-zA-Z]{1,4}|\/|\n|$)/gi, " $1 ")
+			.replace(/(?<=<(?:[^>]*)) >/gi,">")
+			.replace(/(<table[^>]*>)\s+(<tbody>)/gi,"$1$2")
+			.replace(/(<\/tbody>)\s+(<\/table>)/gi,"$1$2")
+			;
 		// Definir o texto formatado em outro elemento
 		$("#result").text(textareaValue);
 
