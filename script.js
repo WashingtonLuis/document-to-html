@@ -941,8 +941,7 @@ function _clear(str) {
 
 		.replace(/<b>(\s|<br>)*<\/b>/gi, "$1")
 		.replace(/<b><\/b>/gi, "")
-		.replace(/<\/b><b>/gi, "")
-		.replace(/<\/b>\s+<b>/gi, " ")
+		.replace(/<\/b>(\s*)<b>/gi, "$1")
 		.replace(/<div>(\s|<br>)*<\/div>/gi, "$1")
 
 		// .replace(/<img\b[^>]*>/gi, "<img>")
