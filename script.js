@@ -402,9 +402,9 @@ function nLatex(str) {
 		.replace(/\\mathrm\{(.*?)\}/g, "$1")
 		.replace(/\\left\\?(\(|\{|\[)/g, "$1")
 		.replace(/\\right\\?(\)|\}|\])/g, "$1")
-		.replace(/(?<![a-záéíóúàèìòùâêîôûäëïöüãẽĩõũç]{3,}|[ (=>,{])-(?![a-záéíóúàèìòùâêîôûäëïöüãẽĩõũç]{3,}|[ )=<])/g, " – ")
-		.replace(/(?<![a-záéíóúàèìòùâêîôûäëïöüãẽĩõũç]{3,}|[(=>])-(?![a-záéíóúàèìòùâêîôûäëïöüãẽĩõũç]{3,}|[)=<])/g, "–")
-		.replace(/-(?=\d)/g, "–")
+		.replace(/(?<![a-záéíóúàèìòùâêîôûäëïöüãẽĩõũç]{3,}|[ (=>,{]|(?!(?:eq|blo|mx)\d))-(?![a-záéíóúàèìòùâêîôûäëïöüãẽĩõũç]{3,}|[ )=<])/g, " – ")
+		.replace(/(?<![a-záéíóúàèìòùâêîôûäëïöüãẽĩõũç]{3,}|[(=>]|(?!(?:eq|blo|mx)\d))-(?![a-záéíóúàèìòùâêîôûäëïöüãẽĩõũç]{3,}|[)=<])/g, "–")
+		.replace(/(?= )-(?=\d)/g, "–")
 		.replace(/#\[([^[]*)\]/gi, "($1)")
 
 		.replace(/_(?![{}()<.\-\+\\]|\\(?:Rightarrow|rightarrow))([A-Za-záéíóúàèìòùâêîôûäëïöüãẽĩõũç0-9]+)/g, "<sub>$1</sub>")
@@ -984,9 +984,6 @@ function insereQuebras(textareaValue) {
 		.replace(/(<div class='d-print-none'>)/gi, "\n$1\n\t")
 		.replace(/<p><br>/gi, "\n<p><br>")
 		.replace(/(?<=<\/ol>)\s*<br>\s*(?=<\/div>)/gi, "\n")
-		.replace(/<img\s+src="[^"]*"\s+(?:(?:width|height)="[^"]*"\s*)+>/gi, "@@")
-		.replace(/<p>(?:<b>)?(?:<br\s*\/?>)?@@(?:<br\s*\/?>)?(?:<\/b>)?<\/p>/gi, "@@")
-		.replace(/@@((?:<br\s*\/?>)?(?:<\/b>)?<\/p>)/gi, "$1@@")
 		.replace(/<p[^>]*>\s*<\/p>/gis, "")
 		.replace(/(?<=\$\$)(?=\$\$)/g, "\n");
 	return text;
@@ -1015,7 +1012,11 @@ function organizaTags(textareaValue) {
 		.replace(/<p><br><\/p>\n+(?=<p><br><b>\d+\)<\/b>)/g, "")
 		.replace(/:<\/b> ?:/gi, ":</b>")
 		.replace(/<div><br>\s?<\/div>\s?<br>/gi, "")
+		.replace(/<img\s+src="[^"]*"\s+(?:(?:width|height)="[^"]*"\s*)+>/gi, "@@")
+		.replace(/@@((?:<br\s*\/?>)?(?:<\/b>)?<\/p>)/gi, "$1@@")
 		.replace(/<img width="\d+".*?v:shapes=".*?">/gi, "##")
+		.replace(/<img(?!(?:[^>]*\bsrc=['"](eq|blo)))[^>]*>/gi, "@@")
+		.replace(/<p>(?:<b>)?(?:<br\s*\/?>)?@@(?:<br\s*\/?>)?(?:<\/b>)?<\/p>/gi, "@@")
 		.replace(/^\s*/g, "")
 		.replace(/(<br>\s*)*$/gi, "")
 		.replace(/(?:<br><\/p>\s*)$/gi, "</p>")
@@ -1031,7 +1032,6 @@ function clear() {
 
 		if (document.getElementById("latex").checked) {
 			textareaValue = textareaValue
-				// .replace(/(?<!\\|\\textrm\{|\\textrm\{ |\\textbf\{|\\textbf\{ |\\begin\{|\\begin\{ |\\end\{|\\end\{ |\{\\color\{|\{\\color\{ |\\left)\\?\{([^{}<.]*)\\?\}/gi, '\\leftnLatex\\{$1\\right\\}')
 				.replace(/<(\w+)[^>]*(?:color: ?rgb\(255, ?0, ?0\);|color:#ff0000;).*?>(.*?)<\/\1>/gi, "{\\color{Red}$2}");
 		}
 
@@ -1063,6 +1063,7 @@ function clear() {
 		}
 
 		if (document.getElementById("nLatex").checked) {
+			textareaValue = organizaTags(textareaValue);
 			textareaValue = nLatex(textareaValue);
 		}
 
@@ -1080,8 +1081,8 @@ function clear() {
 			textareaValue = removeListaOrdenada(textareaValue);
 		}
 
-		textareaValue = organizaTags(textareaValue);
 		if (document.getElementById("exerciciosMaterial").checked) {
+			textareaValue = organizaTags(textareaValue);
 			textareaValue = exerciciosMaterial(textareaValue);
 			textareaValue = exerciciosH5p(textareaValue);
 		}
@@ -1092,6 +1093,7 @@ function clear() {
 		}
 
 		if (document.getElementById("exerciciosFundamental1").checked) {
+			textareaValue = organizaTags(textareaValue);
 			textareaValue = exerciciosFundamental1(textareaValue);
 		}
 
