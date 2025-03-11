@@ -500,10 +500,6 @@ function clearTableCell(text) {
 	);
 }
 
-/*function formatLinks(text) {
-	return text.replace(/<(a)\s*href="(.*?)".*?>(.*?)<\/\1>/gi, "<a href='$2' class='url' target='_blank' rel='nofollow'>$3</a>").replace(/<a>(\s)?(.*?)(\s)?<\/a>/gi, "$1<a href='$2' class='url' target='_blank' rel='nofollow'>$2</a>$3");
-}*/
-
 function formatLinks(text) {
 	return text.replace(/<a\s*href="([^"]+)"[^>]*>(.*?)<\/a>/gi, (match, href, content) => {
 		const url = href.trim();
@@ -518,34 +514,6 @@ function formatLinks(text) {
 	});
 }
 
-/*function fixMalformedLinks(text) {
-	// Use a Set to store links that are already processed to avoid duplications.
-	const processedLinks = new Set();
-
-	return (
-		text
-			// Primeira substituição: Remove espaços em branco de links
-			.replace(/(?<!["'>])(?:<p>|<)?\b((?:https?:\/\/|www\.)[^<>]+(?:\.[a-z]{2,})(?:[\/?#%][^\s<>]*)?)(?:<\/p>|>)?/gi, (match, link) => {
-				return link ? link.replace(/\s+/g, "") : match;
-			})
-			// Segunda substituição: Envolve links em tags <a> se não estiverem já envoltos
-			.replace(/(?<!["'>])(?:<p>|<)?\b((?:https?:\/\/|www\.)[^\s<>]+(?:\.[a-z]{2,})(?:[\/?#%][^\s<>]*)?)\b(?:<\/p>|>)?/gi, (match, link) => {
-				if (processedLinks.has(link)) return match;
-
-				const isAlreadyLinked = /<a[^>]*href=['"]?(?:https?:\/\/|www\.)[^\s<>]+(?:\.[a-z]{2,})(?:[\/?#%][^\s<>]*)?['"]?[^>]*>/i.test(text);
-
-				if (!isAlreadyLinked) {
-					processedLinks.add(link);
-					const formattedLink = link.startsWith("www.") ? `https://${link}` : link;
-					return `<a href='${formattedLink}' class='url' target='_blank' rel='nofollow'>${link}</a>`;
-				}
-
-				return match;
-			})
-			.replace(/(?:&lt;|<)(?=<a)/gi, "")
-			.replace(/(?<=<\/a>)(?:&gt;|>)/gi, "")
-	);
-}*/
 function fixMalformedLinks(text) {
 	const processedLinks = new Set();
 
@@ -917,7 +885,7 @@ function _clear(str) {
 
 		.replace(/style="[^"]*?"(?!><\/iframe>)/gi, "")
 
-		.replace(/<(?!a)(\w+)\s*(?![^>]*\b(?:class\s*=\s*["']?\s*(?:text-danger|text-center|data-table|table-responsive|mx-auto|text-right|legend|url|img-center|img-right|img-left|box-item|d-none|d-print-block|d-print-none|youtube|box-book|mx-\d+|row|col-sm-\d+)\b|type="[1aAiI]"|colspan="\d"|rowspan="\d"|src="|exercise|exercise-circle|options|list-item))[^>]*>/gi, "<$1>")
+		.replace(/<(?!a)(\w+)\s*(?![^>]*\b(?:class\s*=\s*["']?\s*(?:text-danger|text-center|data-table|table-responsive|mx-auto|text-right|legend|url|img-center|img-right|img-left|box-item|d-none|d-print-block|d-print-none|youtube|box-book|mx-\d+|row|col-sm-\d+)\b|type="[1aAiI]"|colspan="\d"|rowspan="\d"|src="|exercise|exercise-circle|options|list-item|balao))[^>]*>/gi, "<$1>")
 
 		.replace(/\<b\b[^>]*\>/gi, "<b>")
 		.replace(/\<li\b[^>]*\>/gi, "<li>")
@@ -993,7 +961,7 @@ function organizaTags(textareaValue) {
 	let text = textareaValue
 		.replace(/<font\s?>/gi, "")
 		.replace(/<\/font>/gi, "")
-		.replace(/ class=""/gi, "")
+		.replace(/ class="\s*"/gi, "")
 		.replace(/ <\/(i|b|u)>/gi, "</$1> ")
 		.replace(/(Acesso em|Disponível em) /gi, "$1: ")
 		.replace(/Acesso em: 0(\d)/gi, "Acesso em: $1")
@@ -1012,16 +980,17 @@ function organizaTags(textareaValue) {
 		.replace(/<p><br><\/p>\n+(?=<p><br><b>\d+\)<\/b>)/g, "")
 		.replace(/:<\/b> ?:/gi, ":</b>")
 		.replace(/<div><br>\s?<\/div>\s?<br>/gi, "")
-		.replace(/<img\s+src="[^"]*"\s+(?:(?:width|height)="[^"]*"\s*)+>/gi, "@@")
+		// .replace(/<img\s+src="(?!balao)[^"]*"\s+(?:(?:width|height)="[^"]*"\s*)+>/gi, "@@")
+		.replace(/<img\s+src="(?!balao)[^"]*"(?:\s+\w+="[^"]*")*\s+(?:width|height)="[^"]*"(?:\s+\w+="[^"]*")*\s*>/gi, "@@")
 		.replace(/@@((?:<br\s*\/?>)?(?:<\/b>)?<\/p>)/gi, "$1@@")
 		.replace(/<img width="\d+".*?v:shapes=".*?">/gi, "##")
-		.replace(/<img(?!(?:[^>]*\bsrc=['"](eq|blo)))[^>]*>/gi, "@@")
+		.replace(/<img(?!(?:[^>]*\bsrc=['"](eq|blo|balao)))[^>]*>/gi, "@@")
 		.replace(/<p>(?:<b>)?(?:<br\s*\/?>)?@@(?:<br\s*\/?>)?(?:<\/b>)?<\/p>/gi, "@@")
 		.replace(/^\s*/g, "")
 		.replace(/(<br>\s*)*$/gi, "")
 		.replace(/(?:<br><\/p>\s*)$/gi, "</p>")
-		.replace(/(?:\s*<p><\/p>\s*)$/gi, "");
-	// .replace(/<(b|p|div)>(\s*)<\/\1>/gi, '$2')
+		.replace(/(?:\s*<p><\/p>\s*)$/gi, "")
+		.replace(/<a id=".*?"><\/a>/gi, "");
 	return text;
 }
 
@@ -1031,8 +1000,13 @@ function clear() {
 		var textareaValue = $("#summernote").summernote("code");
 
 		if (document.getElementById("latex").checked) {
+			textareaValue = textareaValue.replace(/<(\w+)[^>]*(?:color: ?rgb\(255, ?0, ?0\);|color:#ff0000;).*?>(.*?)<\/\1>/gi, "{\\color{Red}$2}");
+		}
+		if (document.getElementById("exerciciosFundamental1").checked) {
 			textareaValue = textareaValue
-				.replace(/<(\w+)[^>]*(?:color: ?rgb\(255, ?0, ?0\);|color:#ff0000;).*?>(.*?)<\/\1>/gi, "{\\color{Red}$2}");
+			.replace(/<p class="[^"]*textos_titulos[^"]*">(.*?)<\/p>/gi, "<h5>$1</h5>")
+			.replace(/<img[^>]*\bsrc=['"][^'"]*Atividade_Oral[^'"]*['"][^>]*>/gi, "<img src='balao.png' height='35'>")
+			;
 		}
 
 		if (document.getElementById("uperCase").checked) {
@@ -1122,10 +1096,9 @@ function clear() {
 			.replace(/&amp;/g, "&")
 			.replace(/(?:\n )$/gi, "")
 			.replace(/(?<!<[a-zA-Z]+|\/[a-zA-Z]{1,4}|=|\n|\.|\/|"|>) ?(<|>) ?(?!\/[a-zA-Z]{1,4}>|[a-zA-Z]{1,4}|\/|\n|$)/gi, " $1 ")
-			.replace(/(?<=<(?:[^>]*)) >/gi,">")
-			.replace(/(<table[^>]*>)\s+(<tbody>)/gi,"$1$2")
-			.replace(/(<\/tbody>)\s+(<\/table>)/gi,"$1$2")
-			;
+			.replace(/(?<=<(?:[^>]*)) >/gi, ">")
+			.replace(/(<table[^>]*>)\s+(<tbody>)/gi, "$1$2")
+			.replace(/(<\/tbody>)\s+(<\/table>)/gi, "$1$2");
 		// Definir o texto formatado em outro elemento
 		$("#result").text(textareaValue);
 
