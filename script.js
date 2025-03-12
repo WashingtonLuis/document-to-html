@@ -1086,7 +1086,7 @@ function clear() {
 		}
 
 		if (document.getElementById("removePontoLista").checked) {
-			text = text.replace(/• /gi, "");
+			textareaValue = textareaValue.replace(/• /gi, "");
 		}
 
 		if (document.getElementById("semTag").checked) {
