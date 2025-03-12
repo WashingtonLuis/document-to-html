@@ -1005,7 +1005,7 @@ function clear() {
 		if (document.getElementById("exerciciosFundamental1").checked) {
 			textareaValue = textareaValue
 			.replace(/<p class="[^"]*textos_titulos[^"]*">(.*?)<\/p>/gi, "<h5>$1</h5>")
-			.replace(/<img[^>]*\bsrc=['"][^'"]*Atividade_Oral[^'"]*['"][^>]*>/gi, "<img src='balao.png' height='35'>")
+			.replace(/<img[^>]*\bsrc=['"][^'"]*Atividade_Oral[^'"]*['"][^>]*>/gi, "<img src='balao.png' height='35'> ")
 			;
 		}
 
