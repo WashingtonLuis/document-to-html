@@ -1085,6 +1085,10 @@ function clear() {
 				.replace(/(?<=\$\$) (?=\$\$)/g, "\n");
 		}
 
+		if (document.getElementById("removePontoLista").checked) {
+			text = text.replace(/• /gi, "");
+		}
+
 		if (document.getElementById("semTag").checked) {
 			textareaValue = semTag(textareaValue);
 		}
