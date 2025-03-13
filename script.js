@@ -1407,8 +1407,8 @@ $(document).ready(function () {
 			textareaValue = textareaValue
 				.replace(/<br \/>/gi, "<br>")
 				.replace(/<p>(?:\s*@@\s*)<\/p>/g, "@@") // Remove parágrafos @@
-				.replace(/<p>(?:\s*<br>\s*)<\/p>\s*(?=@@)/g, "") // Remove parágrafos vazios antes @@
-				.replace(/(?<=@@)\s*<p>(?:\s*<br>\s*)<\/p>\s*/g, "") // Remove parágrafos vazios após @@
+				.replace(/<p>\s*(?:<br>\s*)<\/p>\s*(?=@@(?!\s*<div\s+class=['"]exercise))/g, "") // Remove parágrafos vazios antes @@
+				.replace(/(@@)\s*<p>(?:\s*<br>\s*)<\/p>\s*(?!\s*<div\s+class=['"]exercise)/g, "$1") // Remove parágrafos vazios após @@
 				.replace(/@@\s*<p[^>]*?>(Figura[\s\S]*?)<\/p>\s*<p[^>]*?>((?:Disponível em:|Fonte:)[\s\S]*?)<\/p>/gi, (match, caption1, caption2) => {
 					// Formata um novo bloco de imagem quando @@ é encontrado com legenda
 					const imageName = `blo${bloco}-${counter.toString().padStart(2, "0")}.jpg`;
