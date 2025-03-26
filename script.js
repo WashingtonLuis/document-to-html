@@ -289,7 +289,7 @@ function removeQuebrasParagrafos(text) {
 		text = nLatex(text);
 	}
 	if (document.getElementById("removePontoLista").checked) {
-		text = text.replace(/• /gi, "");
+		text = text.replace(/•|● ?/gi, "");
 	}
 	text = text
 		.replace(/<p>/gi, "")
@@ -547,7 +547,7 @@ function manual(str) {
 	text = text
 		.replace(/<(\w) >/g, "<$1>")
 		.replace(/<p> ?(<b>) ?/gi, "<p>$1")
-		.replace(/<(?!b)([\w]+)>\s*(?:<b>\s*)?(Atividades? Resolvidas?|Atividades de sala|Atividade de sala|Resolução de problemas?|Mão na massa|Vamos pesquisar|Cinefórum|Visita técnica|Ponto de partida|Conectando ideias)(?:\s*<\/b>)?\s*<\/\1>/gi, "<hr>\n<h5><b>$2</b></h5><br>")
+		.replace(/<(?!b)([\w]+)>\s*(?:<b>\s*)?(Atividades? Resolvidas?|Atividades de sala|Atividade de sala|Resolução de problemas?|Mão na massa|Vamos pesquisar|Cinefórum|Visita técnica|Ponto de partida|Conectando ideias|Exercícios de fixação|Saiba mais)(?:\s*<\/b>)?\s*<\/\1>/gi, "<hr>\n<h5><b>$2</b></h5><br>")
 		.replace(/(?<![>])(Atividades? resolvidas?|Atividades de sala|Atividade de sala|Resolução de problemas?|Mão na massa|Vamos pesquisar|Cinefórum|Visita técnica|Conectando ideias|Ponto de partida)/gi, "<b>$1</b>")
 		.replace(/<p>(?:\s?<b>\s?)?(?:Resolução Comentada|Resposta|Resolução)\s*:(?:\s?<\/b>\s?)?<\/p>/gi, "<p><br><b>Resolução Comentada:</b></p>")
 		.replace(/<p>(?:<b>)?(\d+)\s?[-.)](?![0-9])\s?(\d+)\s?[-.)](?![0-9])\s?(\d+)\s?[-.)](?![0-9])\s?(?:<\/b>)?\s?Professor, es(?:.*?)?<\/p>/gi, "<p><br><b>$1)</b>, <b>$2)</b> e <b>$3)</b> Professor, essas atividades encontram-se resolvidas no material didático. Sugerimos que as utilize durante as explicações do tema ao qual elas se referem a fim de aprofundar os conceitos abordados na parte teórica.</p>")
@@ -1073,7 +1073,7 @@ function clear() {
 
 		textareaValue = insereQuebras(textareaValue);
 
-		textareaValue = organizaTags(textareaValue);
+		// textareaValue = organizaTags(textareaValue);
 
 		textareaValue = removeQuebras(textareaValue);
 
@@ -1086,7 +1086,7 @@ function clear() {
 		}
 
 		if (document.getElementById("removePontoLista").checked) {
-			textareaValue = textareaValue.replace(/• /gi, "");
+			textareaValue = textareaValue.replace(/•|● ?/gi, "");
 		}
 
 		if (document.getElementById("semTag").checked) {
@@ -1102,7 +1102,8 @@ function clear() {
 			.replace(/(?<!<[a-zA-Z]+|\/[a-zA-Z]{1,4}|=|\n|\.|\/|"|>) ?(<|>) ?(?!\/[a-zA-Z]{1,4}>|[a-zA-Z]{1,4}|\/|\n|$)/gi, " $1 ")
 			.replace(/(?<=<(?:[^>]*)) >/gi, ">")
 			.replace(/(<table[^>]*>)\s+(<tbody>)/gi, "$1$2")
-			.replace(/(<\/tbody>)\s+(<\/table>)/gi, "$1$2");
+			.replace(/(<\/tbody>)\s+(<\/table>)/gi, "$1$2")
+			.replace(/<a name="[^"]*"><\/a>/gi, '');
 		// Definir o texto formatado em outro elemento
 		$("#result").text(textareaValue);
 
