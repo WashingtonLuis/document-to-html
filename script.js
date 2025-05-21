@@ -1003,10 +1003,7 @@ function clear() {
 			textareaValue = textareaValue.replace(/<(\w+)[^>]*(?:color: ?rgb\(255, ?0, ?0\);|color:#ff0000;).*?>(.*?)<\/\1>/gi, "{\\color{Red}$2}");
 		}
 		if (document.getElementById("exerciciosFundamental1").checked) {
-			textareaValue = textareaValue
-			.replace(/<p class="[^"]*textos_titulos[^"]*">(.*?)<\/p>/gi, "<h5>$1</h5>")
-			.replace(/<img[^>]*\bsrc=['"][^'"]*Atividade_Oral[^'"]*['"][^>]*>/gi, "<img src='balao.png' height='35'> ")
-			;
+			textareaValue = textareaValue.replace(/<p class="[^"]*textos_titulos[^"]*">(.*?)<\/p>/gi, "<h5>$1</h5>").replace(/<img[^>]*\bsrc=['"][^'"]*Atividade_Oral[^'"]*['"][^>]*>/gi, "<img src='balao.png' height='35'> ");
 		}
 
 		if (document.getElementById("uperCase").checked) {
@@ -1103,7 +1100,7 @@ function clear() {
 			.replace(/(?<=<(?:[^>]*)) >/gi, ">")
 			.replace(/(<table[^>]*>)\s+(<tbody>)/gi, "$1$2")
 			.replace(/(<\/tbody>)\s+(<\/table>)/gi, "$1$2")
-			.replace(/<a name="[^"]*"><\/a>/gi, '');
+			.replace(/<a name="[^"]*"><\/a>/gi, "");
 		// Definir o texto formatado em outro elemento
 		$("#result").text(textareaValue);
 
@@ -1288,7 +1285,11 @@ $(document).ready(function () {
 		try {
 			let textareaValue = $("#summernote").summernote("code");
 
-			textareaValue = textareaValue.replace(/\n<\/?blockquote>/g,'');
+			textareaValue = textareaValue
+				.replace(/\n<\/?blockquote>/g, "")
+				.replace(/(?<=<p>)(?:\n|\t)+/g, "")
+				.replace(/(?:\n|\t)+(?=<\/p>)/g, "")
+				.replace(/\t(?=<)/g, "");
 
 			// Definir o texto formatado em outro elemento
 			$("#result").text(textareaValue);
