@@ -1287,9 +1287,12 @@ $(document).ready(function () {
 
 			textareaValue = textareaValue
 				.replace(/\n<\/?blockquote>/g, "")
+				.replace(/(?:\n|\t)+(?=<b>)/g, " ")
 				.replace(/(?<=<p>)(?:\n|\t)+/g, "")
 				.replace(/(?:\n|\t)+(?=<\/p>)/g, "")
-				.replace(/\t(?=<)/g, "");
+				.replace(/\t(?=<)/g, "")
+				.replace(/[ ]{2,}/gi, " ")
+				.replace(/\n\n/gi, "\n");
 
 			// Definir o texto formatado em outro elemento
 			$("#result").text(textareaValue);
