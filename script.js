@@ -1284,6 +1284,21 @@ $(document).ready(function () {
 		}
 	});
 
+	$("#removeCitacao").click(function () {
+		try {
+			let textareaValue = $("#summernote").summernote("code");
+
+			textareaValue = textareaValue.replace(/\n<\/?blockquote>/g,'');
+
+			// Definir o texto formatado em outro elemento
+			$("#result").text(textareaValue);
+
+			navigator.clipboard.writeText(textareaValue);
+		} catch (error) {
+			console.error("Erro ao formatar o texto:", error);
+		}
+	});
+
 	$("#circuit").click(function () {
 		try {
 			let textareaValueEq = $("#summernote").summernote("code");
