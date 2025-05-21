@@ -1286,7 +1286,7 @@ $(document).ready(function () {
 			let textareaValue = $("#summernote").summernote("code");
 
 			textareaValue = textareaValue
-				.replace(/\n<\/?blockquote>/g, "")
+				.replace(/(?:\n)?<\/?blockquote>/g, "")
 				.replace(/(?:\n|\t)+(?=<b>)/g, " ")
 				.replace(/(?<=<p>)(?:\n|\t)+/g, "")
 				.replace(/(?:\n|\t)+(?=<\/p>)/g, "")
