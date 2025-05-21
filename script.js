@@ -1290,6 +1290,7 @@ $(document).ready(function () {
 				.replace(/(?:\n|\t)+(?=<b>)/g, " ")
 				.replace(/(?<=<p>)(?:\n|\t)+/g, "")
 				.replace(/(?:\n|\t)+(?=<\/p>)/g, "")
+				.replace(/(?<=<p>) (?=<b>)/g, "")
 				.replace(/\t(?=<)/g, "")
 				.replace(/[ ]{2,}/gi, " ")
 				.replace(/\n\n/gi, "\n");
