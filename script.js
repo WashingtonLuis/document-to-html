@@ -1285,7 +1285,9 @@ $(document).ready(function () {
 		try {
 			let textareaValue = $("#summernote").summernote("code");
 
-			textareaValue = textareaValue.replace(/<p>\s*(<ol[^>]*>\s*<li>)([\s\S]*?)<\/p>/gi, "$1$2</li></ol>");
+			textareaValue = textareaValue
+			.replace(/<p>\s*(<ol[^>]*>\s*<li>)([\s\S]*?)<\/p>/gi, "$1$2</li></ol>")
+			.replace(/((<\/(li|ol|ul)>\n?){2,})$/gi, "");
 
 			// Definir o texto formatado em outro elemento
 			$("#result").text(textareaValue);
