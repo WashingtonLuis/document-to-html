@@ -1281,6 +1281,21 @@ $(document).ready(function () {
 		}
 	});
 
+	$("#removePantesOL").click(function () {
+		try {
+			let textareaValue = $("#summernote").summernote("code");
+
+			textareaValue = textareaValue.replace(/<p>\s*(<ol[^>]*>\s*<li>)([\s\S]*?)<\/p>/gi, "$1$2</li></ol>");
+
+			// Definir o texto formatado em outro elemento
+			$("#result").text(textareaValue);
+
+			navigator.clipboard.writeText(textareaValue);
+		} catch (error) {
+			console.error("Erro ao formatar o texto:", error);
+		}
+	});
+
 	$("#removeCitacao").click(function () {
 		try {
 			let textareaValue = $("#summernote").summernote("code");
