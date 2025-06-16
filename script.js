@@ -1324,7 +1324,7 @@ $(document).ready(function () {
 	$("#removeSpan").click(function () {
 		try {
 			let textareaValue = $("#summernote").summernote("code");
-text = removeSpan(text);
+
 			textareaValue = removeSpan(textareaValue);
 
 			// Definir o texto formatado em outro elemento
