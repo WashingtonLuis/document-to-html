@@ -1304,6 +1304,7 @@ $(document).ready(function () {
 
 			textareaValue = textareaValue
 				.replace(/(?:\n)?<\/?blockquote>/g, "")
+				.replace(/&nbsp;/g, " ")
 				.replace(/(?:\n|\t)+(?=<b>)/g, " ")
 				.replace(/(?<=<p>)(?:\n|\t)+/g, "")
 				.replace(/(?:\n|\t)+(?=<\/p>)/g, "")
@@ -1326,6 +1327,9 @@ $(document).ready(function () {
 			let textareaValue = $("#summernote").summernote("code");
 
 			textareaValue = removeSpan(textareaValue);
+			textareaValue = textareaValue
+				.replace(/&nbsp;/g, " ")
+				;
 
 			// Definir o texto formatado em outro elemento
 			$("#result").text(textareaValue);
