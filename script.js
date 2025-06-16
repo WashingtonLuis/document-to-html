@@ -36,7 +36,7 @@ function voltaParenteses(input) {
 }
 
 function removeSpan(input) {
-	const output = input.replace(/<span(?! class="d-none)[^<]*?>(?!<span)(.*?)<\/span>/gi, "$1");
+	const output = input.replace(/<span(?! class="(?:d-none|fs-2 vertical-align-symbol))[^<]*?>(?!<span)(.*?)<\/span>/gi, "$1");
 	// const output = input.replace(/<span[^<]*?>(.*?[^<span>].*?)<\/span>/gi, "$1");
 	return output === input ? output : removeSpan(output);
 }
@@ -1311,6 +1311,21 @@ $(document).ready(function () {
 				.replace(/\t(?=<)/g, "")
 				.replace(/[ ]{2,}/gi, " ")
 				.replace(/\n\n/gi, "\n");
+
+			// Definir o texto formatado em outro elemento
+			$("#result").text(textareaValue);
+
+			navigator.clipboard.writeText(textareaValue);
+		} catch (error) {
+			console.error("Erro ao formatar o texto:", error);
+		}
+	});
+
+	$("#removeSpan").click(function () {
+		try {
+			let textareaValue = $("#summernote").summernote("code");
+text = removeSpan(text);
+			textareaValue = removeSpan(textareaValue);
 
 			// Definir o texto formatado em outro elemento
 			$("#result").text(textareaValue);
