@@ -6,21 +6,52 @@ body {
   color: #333;
 }
 
+main {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
 .menu {
   display: flex;
   flex-wrap: wrap;
-  gap: 15px;
+  gap: 10px;
   padding: 15px;
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
   border-radius: 5px;
+  justify-content: center;
+}
+
+.colunas {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap; /* Permite responsividade */
+}
+
+fieldset {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 15px;
+  margin: 10px;
+  background-color: #fff;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+}
+
+legend {
+  font-weight: bold;
+  padding: 0 8px;
 }
 
 .opcao {
   display: flex;
   align-items: center;
   gap: 5px;
+  margin: 5px 10px 5px 0;
 }
 
 .opcao label {
@@ -43,17 +74,32 @@ body {
   margin-bottom: 20px;
 }
 
+.button-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, min-content);
+  gap: 20px 10px;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  justify-content: center;
+  align-items: center;
+  flex: 1 1 300px;
+  max-width: 1200px;
+  text-align: center;
+}
+
 button {
-  padding: 10px 20px;
-  margin: 5px;
+  padding: 5px 12px;
   border: none;
+  margin-bottom: 5px;
   background-color: #007bff;
   color: white;
   border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s;
-  font-size: 16px;
+  font-size: 14px;
+  white-space: nowrap;
   transition: background-color 0.3s, transform 0.2s;
+  width: auto;
 }
 
 button:hover {
@@ -61,14 +107,55 @@ button:hover {
   transform: scale(1.05);
 }
 
+#limpaTela {
+  background-color: #dc3545;
+}
+
+#limpaTela:hover {
+  background-color: #a71d2a;
+}
+
+.nBolco {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding: 5px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-top: 5px;
+  flex: 1 1 200px;
+  max-width: 100px;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+}
+
+.nBolco label {
+  margin-right: 5px;
+}
+
+.nBolco fieldset {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.grupo {
+  display: flex;
+  flex-direction: column;
+}
+
+.grupo label {
+  margin-bottom: 4px;
+}
+
 input[type="number"] {
-  width: 50px;
-  padding: 10px;
-  margin-top: 10px;
-  margin-bottom: 20px;
+  width: 60px;
+  padding: 8px;
   border: 2px solid #2980b9;
   border-radius: 5px;
-  font-size: 18px;
+  font-size: 16px;
   text-align: center;
 }
 
@@ -77,13 +164,21 @@ input[type="number"]:focus {
   outline: none;
 }
 
-@media (max-width: 500px) {
+@media (max-width: 768px) {
   .menu {
     flex-direction: column;
   }
 
   button {
     width: 100%;
-    box-sizing: border-box;
+  }
+
+  .button-container {
+    grid-template-columns: 1fr;
+  }
+
+  .inf {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }

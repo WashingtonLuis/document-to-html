@@ -12,100 +12,122 @@
 	<body>
 		<header>
 			<div class="menu">
-				<div class="opcao">
-					<input type="checkbox" id="latex" name="eq" value="latex" />
-					<label for="latex">LaTeX</label>
-				</div>
+				<fieldset>
+					<legend>Equações</legend>
+					<div class="opcao">
+						<input type="checkbox" id="latex" name="eq" value="latex" />
+						<label for="latex">LaTeX</label>
+					</div>
 
-				<div class="opcao">
-					<input type="checkbox" id="nLatex" name="eq" value="nLatex" />
-					<label for="nLatex">Não-LaTeX</label>
-				</div>
+					<div class="opcao">
+						<input type="checkbox" id="nLatex" name="eq" value="nLatex" />
+						<label for="nLatex">Não-LaTeX</label>
+					</div>
+				</fieldset>
 
-				<div class="opcao">
-					<input type="checkbox" id="semTag" name="checkbox3" value="semTag" />
-					<label for="semTag">semTag</label>
-				</div>
+				<fieldset>
+					<legend>Tipo do material</legend>
+					<div class="opcao">
+						<input type="checkbox" id="manual" name="checkbox4" value="manual" />
+						<label for="manual">Manual</label>
+					</div>
 
-				<div class="opcao">
-					<input type="checkbox" id="facilidades" name="checkbox3" value="facilidades" />
-					<label for="facilidades">Facilidades</label>
-				</div>
+					<div class="opcao">
+						<input type="checkbox" id="exerciciosMaterial" name="checkbox4" value="exerciciosMaterial" />
+						<label for="exerciciosMaterial">Exercícios/Material</label>
+					</div>
 
-				<div class="opcao">
-					<input type="checkbox" id="manual" name="checkbox4" value="manual" />
-					<label for="manual">Manual</label>
-				</div>
+					<div class="opcao">
+						<input type="checkbox" id="exResolvidosMaterial" name="checkbox4" value="exResolvidosMaterial" />
+						<label for="exResolvidosMaterial">ExResolvidos/Material</label>
+					</div>
 
-				<div class="opcao">
-					<input type="checkbox" id="exerciciosMaterial" name="checkbox4" value="exerciciosMaterial" />
-					<label for="exerciciosMaterial">Exercícios/Material</label>
-				</div>
+					<div class="opcao">
+						<input type="checkbox" id="exerciciosFundamental1" name="checkbox4" value="exerciciosFundamental1" />
+						<label for="exerciciosFundamental1">Exercícios/Fundamental 1</label>
+					</div>
+				</fieldset>
 
-				<div class="opcao">
-					<input type="checkbox" id="exResolvidosMaterial" name="checkbox4" value="exResolvidosMaterial" />
-					<label for="exResolvidosMaterial">ExResolvidos/Material</label>
-				</div>
+				<fieldset>
+					<legend>Opções</legend>
+					<div class="opcao">
+						<input type="checkbox" id="semTag" name="checkbox3" value="semTag" />
+						<label for="semTag">semTag</label>
+					</div>
 
-				<div class="opcao">
-					<input type="checkbox" id="exerciciosFundamental1" name="checkbox4" value="exerciciosFundamental1" />
-					<label for="exerciciosFundamental1">Exercícios/Fundamental 1</label>
-				</div>
+					<div class="opcao">
+						<input type="checkbox" id="facilidades" name="checkbox3" value="facilidades" />
+						<label for="facilidades">Facilidades</label>
+					</div>
 
-				<div class="opcao">
-					<input type="checkbox" id="listaOrdenada" name="checkbox5" value="listaOrdenada" />
-					<label for="listaOrdenada">OL</label>
-				</div>
+					<div class="opcao">
+						<input type="checkbox" id="listaOrdenada" name="checkbox5" value="listaOrdenada" />
+						<label for="listaOrdenada">OL</label>
+					</div>
 
-				<div class="opcao">
-					<input type="checkbox" id="listaOrdenadaSemOl" name="checkbox5" value="listaOrdenadaSemOl" />
-					<label for="listaOrdenadaSemOl">Lista Ordenada</label>
-				</div>
+					<div class="opcao">
+						<input type="checkbox" id="listaOrdenadaSemOl" name="checkbox5" value="listaOrdenadaSemOl" />
+						<label for="listaOrdenadaSemOl">Lista Ordenada</label>
+					</div>
 
-				<div class="opcao">
-					<input type="checkbox" id="removePontoLista" name="checkbox5" value="removePontoLista" />
-					<label for="removePontoLista">Remove Ponto Lista</label>
-				</div>
+					<div class="opcao">
+						<input type="checkbox" id="removePontoLista" name="checkbox5" value="removePontoLista" />
+						<label for="removePontoLista">Remove Ponto Lista</label>
+					</div>
 
-				<div class="opcao">
-					<input type="checkbox" id="uperCase" name="checkbox6" value="uperCase" />
-					<label for="uperCase">Letras Maiúsculas</label>
-				</div>
+					<div class="opcao">
+						<input type="checkbox" id="uperCase" name="checkbox6" value="uperCase" />
+						<label for="uperCase">Letras Maiúsculas</label>
+					</div>
+				</fieldset>
+
 				<button type="button" id="limpaTela" title="Limpa o campo de textoo">Limpa tela</button>
 			</div>
 		</header>
 
 		<main>
 			<div id="summernote"></div>
-<br>
-			<div class="button-container">
-				<button type="button" id="clear" title="Aplica todas as alterações de acordo com os seletores marcados e as alterações padrão">Limpar</button>
-				<button type="button" id="eqTag" title="Insere a tag '$$' nas equações para que sejam salvas em um arquivo">Tag Equação</button>
-				<button type="button" id="eqHtml" title="Converte as equações e texto para HTML">Math→HTML</button>
-				<button type="button" id="eqHtmlP" title="Converte as equações e texto para HTML entre a tag p">Math→HTML + p</button>
-				<button type="button" id="eqGrande" title="Insere a tag de Matriz para uma leve redução na equação">Equação Grande</button>
-				<button type="button" id="textoSimples" title="Remove todas as tags e retira as quebras de linha">Texto sem quebras</button>
-				<button type="button" id="ajustEqSalvaEq" title="Ajusta todas as equações que estão no padrão LaTeX dentro da tag '$$ equação $$' para que sejam utilizadas em um script para criar e salvar as imagens no padrão SVG no site 'https://csdn.codecogs.com/eqneditor/editor.php'">Ajustar Equação para script SalvarEqn</button>
-				<button type="button" id="imgSvg" title="Ajusta imagens nos formatos SVG e substitui o seletor '##' para imagens SVG">Ajustar Equações SVG</button>
-				<button type="button" id="imgJpgPng" title="Ajusta imagens nos formatos JPG e PNG e substitui o seletor '@@' para imagens JPG">Ajustar imagens JPG/PNG</button>
-				<button type="button" id="iniMaiusc" title="Formata o texto para começar com letra maiúscula todas as palavras com mais de 3 letras">Inicial Maiúscula</button>
-				<button type="button" id="codecogsToMathcha" title="Converte as equações do codecogs para Mathcha">codecogs para Mathcha</button>
-				<button type="button" id="alternativasAlexandria" title="Arrumas as Alternativas para o Alexandria">Alternativas Alexandria</button>
-				<button type="button" id="removeQuebras" title="Remove quebras incorretas">Remove Quebras</button>
-				<button type="button" id="removePantesOL" title="Remove P antes OL incorretas">Remove P>OL</button>
-				<button type="button" id="removeCitacao" title="Remove Citacao incorretas">Remove Citacao</button>
-				<button type="button" id="removeSpan" title="Remove Span incorretas">Remove Span</button>
-				<button type="button" id="circuit" title="Add tabulação entre as colunas circuit">Circuit</button>
-				<label for="bloco">Bloco:</label>
-				<input type="number" name="bloco" id="bloco" value="1" min="1" max="15" title="Seleciona o número do bloco/capítulo para nomeação das imagens" />
-				<label for="numImg">Img:</label>
-				<input type="number" name="numImg" id="numImg" value="1" min="1" title="Seleciona o número inicial da imgagem para nomeação das imagens" />
-				<label for="numSvg">Svg:</label>
-				<input type="number" name="numSvg" id="numSvg" value="1" min="1" title="Seleciona o número inicial da imgagem SVG para nomeação das imagens" />
+			<br />
+			<div class="colunas">
+				<div class="button-container">
+					<fieldset>
+						<button type="button" id="clear" title="Aplica todas as alterações de acordo com os seletores marcados e as alterações padrão">Limpar</button>
+						<button type="button" id="eqTag" title="Insere a tag '$$' nas equações para que sejam salvas em um arquivo">Tag Eq.</button>
+						<button type="button" id="eqHtml" title="Converte as equações e texto para HTML">Math→HTML</button>
+						<button type="button" id="eqHtmlP" title="Converte as equações e texto para HTML entre a tag p">Math→HTML + p</button>
+						<button type="button" id="eqGrande" title="Insere a tag de Matriz para uma leve redução na equação">Eq. Grande</button>
+						<button type="button" id="textoSimples" title="Remove todas as tags e retira as quebras de linha">Texto sem quebras</button>
+						<button type="button" id="ajustEqSalvaEq" title="Ajusta todas as equações que estão no padrão LaTeX dentro da tag '$$ equação $$' para que sejam utilizadas em um script para criar e salvar as imagens no padrão SVG no site 'https://csdn.codecogs.com/eqneditor/editor.php'">Aj.Eq.→SalvarEqn</button>
+						<button type="button" id="imgSvg" title="Ajusta imagens nos formatos SVG e substitui o seletor '##' para imagens SVG">Aj. Eq. SVG</button>
+						<button type="button" id="imgJpgPng" title="Ajusta imagens nos formatos JPG e PNG e substitui o seletor '@@' para imagens JPG">Aj. JPG/PNG</button>
+						<button type="button" id="iniMaiusc" title="Formata o texto para começar com letra maiúscula todas as palavras com mais de 3 letras">Inicial Maiúscula</button>
+						<button type="button" id="codecogsToMathcha" title="Converte as equações do codecogs para Mathcha">codecogs→Mathcha</button>
+						<button type="button" id="alternativasAlexandria" title="Arrumas as Alternativas para o Alexandria">Alts. Alexandria</button>
+						<button type="button" id="removeQuebras" title="Remove quebras incorretas">Del. Quebras</button>
+						<button type="button" id="removePantesOL" title="Remove P antes OL incorretas">Del. P>OL</button>
+						<button type="button" id="removeCitacao" title="Remove Citacao incorretas">Del. Citacao</button>
+						<button type="button" id="removeSpan" title="Remove Span incorretas">Del. Span</button>
+						<button type="button" id="circuit" title="Add tabulação entre as colunas circuit">Circuit</button>
+					</fieldset>
+				</div>
+				<div class="nBolco">
+					<div class="grupo">
+						<label for="bloco">Bloco:</label>
+						<input type="number" name="bloco" id="bloco" value="1" min="1" max="15" title="Seleciona o número do bloco/capítulo para nomeação das imagens" />
+					</div>
+					<div class="grupo">
+						<label for="numImg">Img:</label>
+						<input type="number" name="numImg" id="numImg" value="1" min="1" title="Seleciona o número inicial da imgagem para nomeação das imagens" />
+					</div>
+					<div class="grupo">
+						<label for="numSvg">Svg:</label>
+						<input type="number" name="numSvg" id="numSvg" value="1" min="1" title="Seleciona o número inicial da imgagem SVG para nomeação das imagens" />
+					</div>
+				</div>
 			</div>
+			<p id="result"></p>
 		</main>
 
-		<p id="result"></p>
 
 		<script src="script.js" defer></script>
 	</body>
