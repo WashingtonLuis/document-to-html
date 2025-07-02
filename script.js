@@ -1378,9 +1378,7 @@ $(document).ready(function () {
 
 	$("#imgSvg").click(function () {
 		try {
-			let textareaValueEq = $("#result").text() != "" 
-				? $("#result").text() 
-				: $("#summernote").summernote("code");
+			let textareaValueEq = $("#result").text() != "" ? $("#result").text() : $("#summernote").summernote("code");
 
 			let counter = parseInt($("#numSvg").val(), 10);
 			let bloco = $("#bloco").val();
@@ -1456,12 +1454,11 @@ $(document).ready(function () {
 
 	$("#imgJpgPng").click(function () {
 		try {
-			let textareaValue = $("#result").text() != "" 
-				? $("#result").text() 
-				: $("#summernote").summernote("code");
+			let textareaValue = $("#result").text() != "" ? $("#result").text() : $("#summernote").summernote("code");
 
 			let counter = parseInt($("#numImg").val(), 10);
 			const bloco = $("#bloco").val();
+			const tagsImg = document.getElementById("imgRound").checked ? " zoom overflow-hidden rounded-4" : "";
 
 			// Tratamento para entradas com @@ ou blocos de imagem existentes
 			textareaValue = textareaValue
@@ -1472,12 +1469,12 @@ $(document).ready(function () {
 				.replace(/@@\s*<p[^>]*?>(Figura[\s\S]*?)<\/p>\s*<p[^>]*?>((?:Disponível em:|Fonte:)[\s\S]*?)<\/p>/gi, (match, caption1, caption2) => {
 					// Formata um novo bloco de imagem quando @@ é encontrado com legenda
 					const imageName = `blo${bloco}-${counter.toString().padStart(2, "0")}.jpg`;
-					return `<div class='mx-400 img-center'><img src='${imageName}'><div class='legend'><b>${caption1}</b><br>${caption2}</div></div>`;
+					return `<div class='mx-400 img-center${tagsImg}'><img src='${imageName}'><div class='legend'><b>${caption1}</b><br>${caption2}</div></div>`;
 				})
 				.replace(/@@/gi, () => {
 					// Formata um novo bloco de imagem quando @@ é encontrado sem legenda
 					const imageName = `blo${bloco}-${counter.toString().padStart(2, "0")}.jpg`;
-					return `<div class='mx-400 img-center'><img src='${imageName}'></div>`;
+					return `<div class='mx-400 img-center${tagsImg}'><img src='${imageName}'></div>`;
 				})
 				.replace(/<img src=['"]blo\d{1,2}-\d{2,3}\.(jpg|png)['"]\s*\/?>/gi, (match, extension) => {
 					// Reorganiza o nome das imagens, extraindo o tipo da imagem (jpg ou png)
