@@ -964,6 +964,7 @@ function organizaTags(textareaValue) {
 		.replace(/ class="\s*"/gi, "")
 		.replace(/ <\/(i|b|u)>/gi, "</$1> ")
 		.replace(/(Acesso em|Disponível em) /gi, "$1: ")
+		.replace(/(?<=(?:Acesso em|Disponível em):)(?=\w)/gi, " ")
 		.replace(/Acesso em: 0(\d)/gi, "Acesso em: $1")
 		.replace(/(?<!<i>)\bet al\.?/gi, "<i>et al.</i>")
 		.replace(/(?:<b>)+(.*?)( )?(?:<\/b>)+/gi, "<b>$1</b>$2")
