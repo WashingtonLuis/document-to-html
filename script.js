@@ -427,6 +427,7 @@ function nLatex(str) {
 function facilidades(str) {
 	let text = str;
 
+	text = organizaTags(text);
 	text = removeTag(text);
 	text = removeImgFromParagraphs(text);
 	text = replaceYoutubeLinks(text);
