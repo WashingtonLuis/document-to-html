@@ -981,13 +981,19 @@ function organizaTags(textareaValue) {
 		.replace(/<\/p>\n{2}<p>(?!<br>)/g, "</p>\n<p>")
 		.replace(/<p><br><\/p>\n+(?=<p><br><b>\d+\)<\/b>)/g, "")
 		.replace(/:<\/b> ?:/gi, ":</b>")
-		.replace(/<div><br>\s?<\/div>\s?<br>/gi, "")
-		// .replace(/<img\s+src="(?!balao)[^"]*"\s+(?:(?:width|height)="[^"]*"\s*)+>/gi, "@@")
-		.replace(/<img\s+src="(?!balao)[^"]*"(?:\s+\w+="[^"]*")*\s+(?:width|height)="[^"]*"(?:\s+\w+="[^"]*")*\s*>/gi, "@@")
-		.replace(/@@((?:<br\s*\/?>)?(?:<\/b>)?<\/p>)/gi, "$1@@")
-		.replace(/<img width="\d+".*?v:shapes=".*?">/gi, "##")
-		.replace(/<img(?!(?:[^>]*\bsrc=['"](eq|blo|balao)))[^>]*>/gi, "@@")
-		.replace(/<p>(?:<b>)?(?:<br\s*\/?>)?@@(?:<br\s*\/?>)?(?:<\/b>)?<\/p>/gi, "@@")
+		.replace(/<div><br>\s?<\/div>\s?<br>/gi, "");
+		
+		if (document.getElementById("trocaTagImg").checked) {
+			// .replace(/<img\s+src="(?!balao)[^"]*"\s+(?:(?:width|height)="[^"]*"\s*)+>/gi, "@@")
+			text = text
+				.replace(/<img\s+src="(?!balao)[^"]*"(?:\s+\w+="[^"]*")*\s+(?:width|height)="[^"]*"(?:\s+\w+="[^"]*")*\s*>/gi, "@@")
+				.replace(/@@((?:<br\s*\/?>)?(?:<\/b>)?<\/p>)/gi, "$1@@")
+				.replace(/<img width="\d+".*?v:shapes=".*?">/gi, "##")
+				.replace(/<img(?!(?:[^>]*\bsrc=['"](eq|blo|balao)))[^>]*>/gi, "@@")
+				.replace(/<p>(?:<b>)?(?:<br\s*\/?>)?@@(?:<br\s*\/?>)?(?:<\/b>)?<\/p>/gi, "@@");
+		}
+
+		text = text
 		.replace(/^\s*/g, "")
 		.replace(/(<br>\s*)*$/gi, "")
 		.replace(/(?:<br><\/p>\s*)$/gi, "</p>")
