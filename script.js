@@ -25,6 +25,26 @@ const nLatexAcentuacao = {
 	"\\^o": "ô",
 };
 
+const padroes = [
+  [/exercícios\s+resolvidos/i, "Exercícios resolvidos"],
+  [/exercícios\s+de\s+fixação/i, "Exercícios de fixação"],
+  [/exercício\s+resolvido/i, "Exercício resolvido"],
+  [/exercício\s+de\s+fixação/i, "Exercício de fixação"],
+  [/pesquisar\s+é\s+descobrir/i, "Pesquisar é descobrir"],
+  [/hora\s+(da|de)\s+leitura/i, "Hora de leitura"],
+  [/dialogando/i, "Dialogando"],
+  [/foco\s+na\s+língua\s+portuguesa/i, "Foco na língua portuguesa"],
+  [/você\s+é\s+o\s+autor/i, "Você é o autor"],
+  [/compreensão\s+do\s+texto/i, "Compreensão do texto"],
+  [/mão\s+na\s+massa/i, "Mão na massa"],
+  [/revise\s+o\s+que\s+você\s+aprendeu/i, "Revise o que você aprendeu"],
+  [/ler\s+e\s+(se\s+)?encantar(,)?\s+é\s+só\s+começar/i, "Ler e se encantar é só começar"],
+  [/texto\s+e\s+contexto/i, "Texto e contexto"],
+  [/momento\s+pipoca/i, "Momento pipoca"],
+  [/saiba\s+mais/i, "Saiba mais"],
+  [/cnec\s+virtual/i, "CNEC virtual"]
+];
+
 function removerParenteses(input) {
 	const output = input.replace(/(?<![■█┴#_]|left)\(([^()<.]*)\)/gi, "#[$1]#");
 	return output === input ? output : removerParenteses(output);
@@ -587,11 +607,35 @@ function manual(str) {
 		.replace(/[ ]{2,}/gi, " ")
 		.replace(/<ol>\s*<li>\s*(Trilha de aprendizagem|Objetivo de aprendizagem do capítulo|Situação-problema|Habilidades utilizadas nessa situação-problema:|Resolvendo a situação-problema)\s*<\/li>\s*<\/ol>/g, "<p><b>$1</b></p>")
 		.replace(/<ul>\s+<li>(<b>(?:Ao Educador|Resumo dos capítulos)<\/b>)<\/li>\s+<\/ul>/gi, '<p>$1</p>')
-
-		.replace(/(?<=<p><b>Capítulo \d+(?::|-) ).*?(?=<\/b><\/p>)/gi, titulo);
+		.replace(/(?<=<p><b>Capítulo \d+(?::|-) ).*?(?=<\/b><\/p>)/gi, titulo)
+		.replace(/(?<=<h5><b>).*?(?=<\/b><\/h5>)/gi, padronizarTitulo)
+		.replace(/<p>\s*<b>\s*\d\.\d\. .*?<\/b>\s*<\/p>/gi, subTitulo)
+		.replace(/<\/h5>\s*<hr>\s*<h5>/gi, '</h5>\n<br>\n<h5>')
+		.replace(/<hr>\s*<hr>/gi, '<hr>')
+		.replace(/<\/h5>\s*<br>\s*<p>/gi, '</h5>\n<p>')
 		;
 
 	return text;
+}
+
+function subTitulo(str){
+	
+	const newStr = str.match(/(?<=<p>\s*<b>\s*\d\.\d\. ).*?(?=<\/b>\s*<\/p>)/i);
+
+	if (!newStr) return str; // se não encontrar, retorna original
+	console.log(newStr);
+	
+	const tituloTexto = titulo(newStr[0]);
+	
+	return `<hr><h5><b>${tituloTexto}</b></h5>`
+}
+
+function padronizarTitulo(titulo) {
+	const limpo = titulo.trim().replace(/\s+/g, ' ');
+  for (const [regex, padrao] of padroes) {
+    if (regex.test(limpo)) return padrao;
+  }
+  return titulo; // retorna original se nenhum padrão for encontrado
 }
 
 function titulo(str) {
