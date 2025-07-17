@@ -585,13 +585,34 @@ function manual(str) {
 		.replace(/(?<=<p><br><b>\d+\)<\/b>) Resolução:?/gi, "")
 		.replace(/\s*(?:<p><br><\/p>|<br>)\s*(?=<p><b>\((?:EM\d{2}[A-Z]{3}\d{3}|EM[A-Z]{4}\d{2}|EM[A-Z]{6}\d{2})\))/g, "")
 		.replace(/[ ]{2,}/gi, " ")
-		.replace(/<ol>\s*<li>\s*(Trilha de aprendizagem|Objetivo de aprendizagem do capítulo|Situação-problema|Habilidades utilizadas nessa situação-problema:|Resolvendo a situação-problema)\s*<\/li>\s*<\/ol>/g, "<p><b>$1</b></p>");
+		.replace(/<ol>\s*<li>\s*(Trilha de aprendizagem|Objetivo de aprendizagem do capítulo|Situação-problema|Habilidades utilizadas nessa situação-problema:|Resolvendo a situação-problema)\s*<\/li>\s*<\/ol>/g, "<p><b>$1</b></p>")
+		.replace(/<ul>\s+<li>(<b>(?:Ao Educador|Resumo dos capítulos)<\/b>)<\/li>\s+<\/ul>/gi, '<p>$1</p>')
+
+		.replace(/(?<=<p><b>Capítulo \d+(?::|-) ).*?(?=<\/b><\/p>)/gi, titulo);
+		;
 
 	return text;
 }
 
+function titulo(str) {
+	let output = str.toLowerCase().trim();
+
+	if (document.getElementById("titleIniMausc").checked) {
+		output = output
+			.replace(/(^\s*\p{L}|\.\s*\p{L})/gu, (match) => match.toUpperCase()) // primeira letra da frase
+			.replace(/\b\p{L}{4,}\b/gu, (match) => match.charAt(0).toUpperCase() + match.slice(1));
+	} else {
+		output = output.replace(/(^\s*[\p{L}])|([.!?]\s*[\p{L}])/gu, (match) => match.toUpperCase());
+	}
+
+	return output;
+}
+
 function semTag(str) {
-	return str.replace(/<(?:\/)?(?:b|i|u|p|font|br)\s?.*?>/gi, " ").replace(/[ ]{2,}/gi, " ");
+	return str
+	.replace(/<br ?(?:\/)?>/gi, "\n")
+	.replace(/<(?:\/)?(?:b|i|u|p|font)\s?.*?>/gi, "")
+	.replace(/[ ]{2,}/gi, " ");
 }
 
 function removeParagrafosBr(tempDiv) {
@@ -1209,7 +1230,8 @@ $(document).ready(function () {
 			textareaValue = _clear(textareaValue);
 			textareaValue = semTag(textareaValue);
 			textareaValue = textareaValue.toLowerCase().replace(/\b[^ <>/]{4,}\b/g, (match) => match.charAt(0).toUpperCase() + match.slice(1));
-
+			textareaValue = textareaValue.charAt(0).toUpperCase() + textareaValue.slice(1);
+			
 			// Definir o texto formatado em outro elemento
 			$("#result").text(textareaValue);
 
