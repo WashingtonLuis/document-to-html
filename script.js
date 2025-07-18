@@ -61,9 +61,9 @@ function removeSpan(input) {
 	return output === input ? output : removeSpan(output);
 }
 
-function removeQuebras(input) {
+function removeEspacosExtras(input) {
 	const output = input.replace(/(?:<p><br><\/p>|<br>|\s)+(?=@@|<ol class="options">|(?:<\/div>\s*<ol class="options">)|<div class="d-print-none">|<div class="d-none d-print-block">)/gi, "\n").replace(/(?=@@)(?:<p><br><\/p>|<br>|\s)+/gi, "\n");
-	return output === input ? output : removeQuebras(output);
+	return output === input ? output : removeEspacosExtras(output);
 }
 
 function textNLatex(input) {
@@ -608,11 +608,14 @@ function manual(str) {
 		.replace(/<ol>\s*<li>\s*(Trilha de aprendizagem|Objetivo de aprendizagem do capítulo|Situação-problema|Habilidades utilizadas nessa situação-problema:|Resolvendo a situação-problema)\s*<\/li>\s*<\/ol>/g, "<p><b>$1</b></p>")
 		.replace(/<ul>\s+<li>(<b>(?:Ao Educador|Resumo dos capítulos)<\/b>)<\/li>\s+<\/ul>/gi, '<p>$1</p>')
 		.replace(/(?<=<p><b>Capítulo \d+(?::|-) ).*?(?=<\/b><\/p>)/gi, titulo)
+		.replace(/(?<=<p><b>Capítulo \d+)(?::|-)/gi, ' -')
 		.replace(/(?<=<h5><b>).*?(?=<\/b><\/h5>)/gi, padronizarTitulo)
 		.replace(/<p>\s*<b>\s*\d\.\d\. .*?<\/b>\s*<\/p>/gi, subTitulo)
 		.replace(/<\/h5>\s*<hr>\s*<h5>/gi, '</h5>\n<br>\n<h5>')
 		.replace(/<hr>\s*<hr>/gi, '<hr>')
 		.replace(/<\/h5>\s*<br>\s*<p>/gi, '</h5>\n<p>')
+		.replace(/<p>\s?(?:<b>)?\s?Pag(?:í|i)nas?\s?\d+\s?(?:<\/b>)?\s?<\/p>/gi, '')
+		.replace(/'Resposta pessoal'/gi, '<b>Resposta pessoal</b>')
 		;
 
 	return text;
@@ -1145,7 +1148,7 @@ function clear() {
 
 		// textareaValue = organizaTags(textareaValue);
 
-		textareaValue = removeQuebras(textareaValue);
+		textareaValue = removeEspacosExtras(textareaValue);
 
 		if (document.getElementById("latex").checked) {
 			textareaValue = textareaValue
