@@ -563,8 +563,159 @@ function padraoResposta(text) {
 		.replace(/(?<=Resolução: )[a-e]/g, (match) => match.toUpperCase());
 }
 
+function alteraElementos(html) {
+	var tempDiv = $("<div>").html(html);
+
+	tempDiv.find("colgroup").remove();
+
+	tempDiv[0].querySelectorAll("table[style]").forEach((table) => {
+		table.removeAttribute("style");
+	});
+
+	tempDiv[0].querySelectorAll("td[style]").forEach((td) => {
+		td.removeAttribute("style");
+	});
+
+	[...tempDiv[0].querySelectorAll("p")].filter((p) => p.children.length == 1 && p.children[0].tagName == "IMG").forEach((p) => (p.outerHTML = `<div class="img-center mx-600">${p.innerHTML}</div>`));
+
+	[...tempDiv[0].querySelectorAll("table")].forEach((a) => a.classList.add("data-table"));
+
+	[...tempDiv[0].querySelectorAll("li")].filter((p) => p.children.length === 1 && p.children[0].tagName === "P").forEach((p) => (p.innerHTML = p.children[0].innerHTML));
+
+	tempDiv[0].querySelectorAll('ol[start][type="1"] > li').forEach((li) => {
+		let nestedOl = li.querySelector('ol[type="a"]');
+		if (nestedOl) {
+			li.parentNode.insertAdjacentElement("afterend", nestedOl);
+			li.innerHTML = "";
+		}
+
+		let br = li.querySelector("br");
+		if (br) {
+			li.parentNode.insertAdjacentElement("afterend", br);
+		}
+	});
+
+	tempDiv[0].querySelectorAll('ol[type="a"]').forEach((ol) => {
+		let nextBr = ol.nextElementSibling;
+		let nextOl = nextBr && nextBr.tagName === "BR" ? nextBr.nextElementSibling : ol.nextElementSibling;
+
+		if (nextOl && nextOl.tagName === "OL" && nextOl.getAttribute("type") === "a" && nextOl.getAttribute("start") === "2") {
+			if (nextBr && nextBr.tagName === "BR") {
+				nextBr.remove();
+			}
+
+			[...nextOl.children].forEach((li) => ol.appendChild(li));
+			nextOl.remove();
+		}
+	});
+
+	tempDiv[0].querySelectorAll('ol[start][type="1"]').forEach((ol) => {
+		let start = parseInt(ol.getAttribute("start"), 10);
+
+		ol.querySelectorAll("li").forEach((li) => {
+			let br = document.createElement("br");
+			let newParagraph = document.createElement("p");
+			newParagraph.innerHTML = `<b>${start})</b> ${li.innerHTML}`;
+
+			ol.parentNode.insertBefore(br, ol);
+			ol.parentNode.insertBefore(newParagraph, ol);
+
+			start++;
+		});
+
+		ol.remove();
+	});
+
+	tempDiv[0].querySelectorAll('ol[type="a"]').forEach((ol) => {
+		let letters = "abcdefghijklmnopqrstuvwxyz".split("");
+		let newHtml = "";
+
+		[...ol.children].forEach((li, index) => {
+			let letter = letters[index] || `${index + 1})`;
+			newHtml += `<p>${letter}) ${li.innerHTML.trim()}</p>\n`;
+		});
+
+		ol.outerHTML = newHtml;
+	});
+
+	const titulos = ["Exercícios resolvidos", "Exercício resolvido", "Exercícios de fixação", "Exercício de fixação", "Pesquisar é descobrir", "Hora da leitura", "Hora de leitura", "Dialogando", "Foco na língua portuguesa", "Você é o autor", "Compreensão do texto", "Mão na massa", "Revise o que você aprendeu", "Ler e se encantar, é só começar", "Ler e encantar, é só começar", "Ler e se encantar é só começar", "Texto e contexto", "Momento pipoca", "Saiba mais", "CNEC virtual"];
+
+	const tituloMap = new Map();
+
+	function normalizar(texto) {
+		return texto
+			.normalize("NFD")
+			.replace(/[\u0300-\u036f]/g, "")
+			.toLowerCase();
+	}
+
+	titulos.forEach((t) => tituloMap.set(normalizar(t), t));
+
+	tempDiv[0].querySelectorAll("ul > li > b").forEach((b) => {
+		const textoLimpo = b.innerHTML
+			.replace(/<br\s*\/?>/gi, "")
+			.replace(/:$/, "")
+			.trim();
+
+		const chaveNormalizada = normalizar(textoLimpo);
+
+		if (tituloMap.has(chaveNormalizada)) {
+			const tituloCorreto = tituloMap.get(chaveNormalizada);
+			const novoTitulo = `<h5><b>${tituloCorreto}</b></h5>`;
+
+			const li = b.closest("li");
+			if (li && li.parentElement.tagName.toLowerCase() === "ul") {
+				li.outerHTML = `<hr>\n${novoTitulo}\n`;
+			}
+		}
+	});
+
+	tempDiv[0].querySelectorAll("ul").forEach((ul) => {
+		const filhosValidos = Array.from(ul.childNodes).every((node) => node.nodeType === Node.TEXT_NODE || (node.nodeType === Node.ELEMENT_NODE && ["BR", "HR", "H5"].includes(node.tagName)));
+
+		if (filhosValidos) {
+			while (ul.firstChild) {
+				ul.parentNode.insertBefore(ul.firstChild, ul);
+			}
+			ul.remove();
+		}
+	});
+
+	tempDiv[0].querySelectorAll('ol[type="1"]').forEach((ol) => {
+		let newHtml = "";
+
+		[...ol.children].forEach((li, index) => {
+			newHtml += `<br><p><b>${index + 1})</b> ${li.innerHTML.trim()}</p>\n`;
+		});
+
+		ol.outerHTML = newHtml;
+	});
+
+	tempDiv[0].querySelectorAll("p").forEach((p) => {
+		const bold = p.querySelector("b");
+
+		if (bold) {
+			const text = bold.textContent.replace(/\s+/g, " ").trim();
+
+			if (text === "Resolução comentada" || text === "Resolução comentada:") {
+				const br = document.createElement("br");
+				p.parentNode.insertBefore(br, p);
+			}
+		}
+	});
+
+	while (tempDiv[0].querySelector("br + br")) {
+		tempDiv[0].querySelectorAll("br + br").forEach((br) => br.remove());
+	}
+
+	return tempDiv.html();
+}
+
 function manual(str) {
 	let text = str;
+
+	text = alteraElementos(text)
+
 	text = text
 		.replace(/<(\w) >/g, "<$1>")
 		.replace(/<p> ?(<b>) ?/gi, "<p>$1")
@@ -621,16 +772,14 @@ function manual(str) {
 	return text;
 }
 
-function subTitulo(str){
-	
+function subTitulo(str) {
 	const newStr = str.match(/(?<=<p>\s*<b>\s*\d\.\d\. ).*?(?=<\/b>\s*<\/p>)/i);
 
 	if (!newStr) return str; // se não encontrar, retorna original
-	console.log(newStr);
-	
+
 	const tituloTexto = titulo(newStr[0]);
-	
-	return `<hr><h5><b>${tituloTexto}</b></h5>`
+
+	return `<hr><h5><b>${tituloTexto}</b></h5>`;
 }
 
 function padronizarTitulo(titulo) {
