@@ -38,9 +38,11 @@ const padroes = [
   [/compreensão\s+do\s+texto/i, "Compreensão do texto"],
   [/mão\s+na\s+massa/i, "Mão na massa"],
   [/revise\s+o\s+que\s+você\s+aprendeu/i, "Revise o que você aprendeu"],
+  [/Revise\s+o\s+que\s+aprendeu/i, "Revise o que você aprendeu"],
   [/ler\s+e\s+(se\s+)?encantar(,)?\s+é\s+só\s+começar/i, "Ler e se encantar é só começar"],
   [/texto\s+e\s+contexto/i, "Texto e contexto"],
   [/momento\s+pipoca/i, "Momento pipoca"],
+  [/Sessão\s+pipoca/i, "Momento pipoca"],
   [/saiba\s+mais/i, "Saiba mais"],
   [/cnec\s+virtual/i, "CNEC virtual"]
 ];
@@ -638,7 +640,29 @@ function alteraElementos(html) {
 		ol.outerHTML = newHtml;
 	});
 
-	const titulos = ["Exercícios resolvidos", "Exercício resolvido", "Exercícios de fixação", "Exercício de fixação", "Pesquisar é descobrir", "Hora da leitura", "Hora de leitura", "Dialogando", "Foco na língua portuguesa", "Você é o autor", "Compreensão do texto", "Mão na massa", "Revise o que você aprendeu", "Ler e se encantar, é só começar", "Ler e encantar, é só começar", "Ler e se encantar é só começar", "Texto e contexto", "Momento pipoca", "Saiba mais", "CNEC virtual"];
+	const titulos = [
+		"Exercícios resolvidos",
+		"Exercício resolvido",
+		"Exercícios de fixação",
+		"Exercício de fixação",
+		"Pesquisar é descobrir",
+		"Hora da leitura",
+		"Hora de leitura",
+		"Dialogando",
+		"Foco na língua portuguesa",
+		"Você é o autor",
+		"Compreensão do texto",
+		"Mão na massa",
+		"Revise o que você aprendeu",
+		"Revise o que aprendeu",
+		"Ler e se encantar, é só começar",
+		"Ler e encantar, é só começar",
+		"Ler e se encantar é só começar",
+		"Texto e contexto",
+		"Momento pipoca",
+		"Sessão pipoca",
+		"Saiba mais",
+		"CNEC virtual"];
 
 	const tituloMap = new Map();
 
@@ -1325,7 +1349,8 @@ function clear() {
 			.replace(/(?<=<(?:[^>]*)) >/gi, ">")
 			.replace(/(<table[^>]*>)\s+(<tbody>)/gi, "$1$2")
 			.replace(/(<\/tbody>)\s+(<\/table>)/gi, "$1$2")
-			.replace(/<a name="[^"]*"><\/a>/gi, "");
+			.replace(/<a name="[^"]*"><\/a>/gi, "")
+			.replace(/^(?:\n<hr>\n+)/gi, "");
 		// Definir o texto formatado em outro elemento
 		$("#result").text(textareaValue);
 
