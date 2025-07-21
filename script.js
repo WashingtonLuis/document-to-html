@@ -1350,6 +1350,7 @@ function clear() {
 			.replace(/(<table[^>]*>)\s+(<tbody>)/gi, "$1$2")
 			.replace(/(<\/tbody>)\s+(<\/table>)/gi, "$1$2")
 			.replace(/<a name="[^"]*"><\/a>/gi, "")
+			.replace(/<h5>\s<b>/gi, "<h5><b>")
 			.replace(/^(?:\n<hr>\n+)/gi, "");
 		// Definir o texto formatado em outro elemento
 		$("#result").text(textareaValue);
