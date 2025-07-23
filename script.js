@@ -732,6 +732,17 @@ function alteraElementos(html) {
 		tempDiv[0].querySelectorAll("br + br").forEach((br) => br.remove());
 	}
 
+	tempDiv[0].querySelectorAll("b").forEach((b) => {
+		const parent = b.parentElement;
+
+		if (!parent) return;
+
+		if (!["P", "DIV", "LI", "TD", "TH", "H5"].includes(parent.tagName) || (parent.tagName === "DIV" && !b.parentElement.parentElement)) {
+			const fragment = document.createRange().createContextualFragment(b.innerHTML);
+			b.replaceWith(fragment);
+		}
+	});
+
 	return tempDiv.html();
 }
 
@@ -752,6 +763,7 @@ function manual(str) {
 		.replace(/<p>(?:<b>)?(\d+)\s?[-.)](?![0-9])\s?(\d+)\s?[-.)](?![0-9])\s?(?:<\/b>)?\s?Professor, es(?:.*?)?<\/p>/gi, "<p><br><b>$1)</b> e <b>$2)</b> Professor, essas atividades encontram-se resolvidas no material didático. Sugerimos que as utilize durante as explicações do tema ao qual elas se referem a fim de aprofundar os conceitos abordados na parte teórica.</p>")
 		.replace(/<p>(?:<b>)?(\d+)\s?[-.)](?![0-9])\s?(?:<\/b>)?\s?Professor, es(?:.*?)?<\/p>/gi, "<p><br><b>$1)</b> Professor, essa atividade encontra-se resolvida no material didático. Sugerimos que a utilize durante as explicações do tema ao qual ela se refere a fim de aprofundar os conceitos abordados na parte teórica.</p>")
 		.replace(/<\/p>/gi, "</p>\n")
+		.replace(/<b>([,.;?!])?<\/b>/gi, "$1")
 		.replace(/<p>(?:<br>)?(?:<b>)?(\d+)\s?[-.)](?![0-9])\s?(?:<b>)?(?:Resolução:|Resposta:|Resposta: Letra|Alternativa correta:|Resolução: Letra|Letra)?\s?([^<]*?)?(?:<\/b>)?(.*?)?(?:<\/b>)?<\/p>/gi, "<p><br><b>$1)</b> $2$3</p>")
 		.replace(/<p><b>Questão 0?(\d)<\/b>\./gi, "<p><br><b>$1)</b> ")
 		.replace(/<p>(?:<br>)?\s?(\d+)\s?[-.)](?![0-9])\s?(?:Resolução:|Resposta:|Resposta: Letra|Resolução: Letra|Letra)?\s?(.*?)?<\/p>/gi, "<p><br><b>$1)</b> $2</p>")
@@ -1221,6 +1233,7 @@ function organizaTags(textareaValue) {
 		.replace(/<p><\/p>/gi, "")
 		.replace(/<p><br><b>(\d+)\)<\/b> Letra /gi, "<p><br><b>$1)</b> ")
 		.replace(/<br>\n+?<p><br><\/p>/gi, "\n<p><br></p>")
+		.replace(/<br>\s+(<p><br>)/gi, "\n$1")
 		.replace(/\n{2,}/gi, "\n\n")
 		.replace(/ \n/g, "\n")
 		.replace(/<\/p>\n{2}<p>(?!<br>)/g, "</p>\n<p>")
@@ -1355,7 +1368,13 @@ function clear() {
 			.replace(/(<\/tbody>)\s+(<\/table>)/gi, "$1$2")
 			.replace(/<a name="[^"]*"><\/a>/gi, "")
 			.replace(/<h5>\s<b>/gi, "<h5><b>")
-			.replace(/^(?:\n<hr>\n+)/gi, "");
+			.replace(/<br>\s+(<p><br>)/gi, "\n$1")
+			.replace(/(?<=<br>)(?:\s+<br>)+/gi, "")
+			.replace(/^(?:\n*<hr>\n*)/gi, "")
+			.replace(/(?<=<hr>)\s+(?=<h5>)/gi, "\n")
+			.replace(/(?<=<\/table>\s+)<br>\s+(?=<\/div>)/gi, "")
+			.replace(/^\n/gi, "")
+			;
 		// Definir o texto formatado em outro elemento
 		$("#result").text(textareaValue);
 
