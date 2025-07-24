@@ -799,7 +799,7 @@ function manual(str) {
 		.replace(/<ol>\s*<li>\s*(Trilha de aprendizagem|Objetivo de aprendizagem do capítulo|Situação-problema|Habilidades utilizadas nessa situação-problema:|Resolvendo a situação-problema)\s*<\/li>\s*<\/ol>/g, "<p><b>$1</b></p>")
 		.replace(/<ul>\s+<li>(<b>(?:Ao Educador|Resumo dos capítulos)<\/b>)<\/li>\s+<\/ul>/gi, '<p>$1</p>')
 		.replace(/(?<=<p><b>Capítulo \d+(?::|-) ).*?(?=<\/b><\/p>)/gi, titulo)
-		.replace(/(?<=<p><b>Capítulo \d+)(?::|-)/gi, ' -')
+		.replace(/Capítulo (\d+) ?(?::|-)/gi, 'Capítulo $1 -')
 		.replace(/(?<=<h5><b>).*?(?=<\/b><\/h5>)/gi, padronizarTitulo)
 		.replace(/<p>\s*<b>\s*\d\.\d\. .*?<\/b>\s*<\/p>/gi, subTitulo)
 		.replace(/<\/h5>\s*<hr>\s*<h5>/gi, '</h5>\n<br>\n<h5>')
