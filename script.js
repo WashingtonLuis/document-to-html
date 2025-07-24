@@ -26,25 +26,27 @@ const nLatexAcentuacao = {
 };
 
 const padroes = [
-  [/exercícios\s+resolvidos/i, "Exercícios resolvidos"],
-  [/exercícios\s+de\s+fixação/i, "Exercícios de fixação"],
-  [/exercício\s+resolvido/i, "Exercício resolvido"],
-  [/exercício\s+de\s+fixação/i, "Exercício de fixação"],
-  [/pesquisar\s+é\s+descobrir/i, "Pesquisar é descobrir"],
-  [/hora\s+(da|de)\s+leitura/i, "Hora de leitura"],
-  [/dialogando/i, "Dialogando"],
-  [/foco\s+na\s+língua\s+portuguesa/i, "Foco na língua portuguesa"],
-  [/você\s+é\s+o\s+autor/i, "Você é o autor"],
-  [/compreensão\s+do\s+texto/i, "Compreensão do texto"],
-  [/mão\s+na\s+massa/i, "Mão na massa"],
-  [/revise\s+o\s+que\s+você\s+aprendeu/i, "Revise o que você aprendeu"],
-  [/Revise\s+o\s+que\s+aprendeu/i, "Revise o que você aprendeu"],
-  [/ler\s+e\s+(se\s+)?encantar(,)?\s+é\s+só\s+começar/i, "Ler e se encantar é só começar"],
-  [/texto\s+e\s+contexto/i, "Texto e contexto"],
-  [/momento\s+pipoca/i, "Momento pipoca"],
-  [/Sessão\s+pipoca/i, "Momento pipoca"],
-  [/saiba\s+mais/i, "Saiba mais"],
-  [/cnec\s+virtual/i, "CNEC virtual"]
+	[/exercícios\s+resolvidos/i, "Exercícios resolvidos"],
+	[/exercícios\s+de\s+fixação/i, "Exercícios de fixação"],
+	[/exercício\s+resolvido/i, "Exercício resolvido"],
+	[/exercício\s+de\s+fixação/i, "Exercício de fixação"],
+	[/pesquisar\s+é\s+descobrir/i, "Pesquisar é descobrir"],
+	[/hora\s+(da|de)\s+leitura/i, "Hora de leitura"],
+	[/dialogando/i, "Dialogando"],
+	[/foco\s+na\s+língua\s+portuguesa/i, "Foco na língua portuguesa"],
+	[/você\s+é\s+o\s+autor/i, "Você é o autor"],
+	[/compreensão\s+do\s+texto/i, "Compreensão do texto"],
+	[/mão\s+na\s+massa/i, "Mão na massa"],
+	[/revise\s+o\s+que\s+você\s+aprendeu/i, "Revise o que você aprendeu"],
+	[/Revise\s+o\s+que\s+aprendeu/i, "Revise o que você aprendeu"],
+	[/Atividades\s+Extras/i, "Atividades extras"],
+	[/Atividade\s+Extra/i, "Atividade extra"],
+	[/ler\s+e\s+(se\s+)?encantar(,)?\s+é\s+só\s+começar/i, "Ler e se encantar é só começar"],
+	[/texto\s+e\s+contexto/i, "Texto e contexto"],
+	[/momento\s+pipoca/i, "Momento pipoca"],
+	[/Sessão\s+pipoca/i, "Momento pipoca"],
+	[/saiba\s+mais/i, "Saiba mais"],
+	[/cnec\s+virtual/i, "CNEC virtual"],
 ];
 
 function removerParenteses(input) {
@@ -756,7 +758,7 @@ function manual(str) {
 		.replace(/<p> ?(<b>) ?/gi, "<p>$1")
 		.replace(/<b><br><\/b>/gi, "<br>")
 		.replace(/(?<!<p>)(<br>)(<\/b>)?(<\/p>)/gi, "$2$3$1")
-		.replace(/<(?!b)([\w]+)>\s*(?:<b>\s*)?(Atividades? Resolvidas?|Atividades de sala|Atividade de sala|Resolução de problemas?|Mão na massa|Vamos pesquisar|Cinefórum|Visita técnica|Ponto de partida|Conectando ideias|Exercícios de fixação|Saiba mais|CNEC virtual|Texto e Contexto|Dialogando|Revise o que você aprendeu|Você é o autor|Momento pipoca|Pesquisar é Descobrir)(?:\s*<\/b>)?\s*<\/\1>/gi, "<hr>\n<h5><b>$2</b></h5><br>")
+		.replace(/<(?!b)([\w]+)>\s*(?:<b>\s*)?(Atividades? Resolvidas?|Atividades de sala|Atividade de sala|Resolução de problemas?|Mão na massa|Vamos pesquisar|Cinefórum|Visita técnica|Ponto de partida|Conectando ideias|Exercícios de fixação|Saiba mais|CNEC virtual|Texto e Contexto|Dialogando|Revise o que você aprendeu|Você é o autor|Momento pipoca|Pesquisar é Descobrir|Ler e Se Encantar, é Só Começar|Revise o que aprendeu|Atividades Extras)(?:\s*<\/b>)?\s*<\/\1>/gi, "<hr>\n<h5><b>$2</b></h5><br>")
 		.replace(/(?<![>])(Atividades? resolvidas?|Atividades de sala|Atividade de sala|Resolução de problemas?|Mão na massa|Vamos pesquisar|Cinefórum|Visita técnica|Conectando ideias|Ponto de partida)/gi, "<b>$1</b>")
 		.replace(/<p>(?:\s?<b>\s?)?(?:Resolução Comentada|Resposta|Resolução)\s*:(?:\s?<\/b>\s?)?<\/p>/gi, "<p><br><b>Resolução Comentada:</b></p>")
 		.replace(/<p>(?:<b>)?(\d+)\s?[-.)](?![0-9])\s?(\d+)\s?[-.)](?![0-9])\s?(\d+)\s?[-.)](?![0-9])\s?(?:<\/b>)?\s?Professor, es(?:.*?)?<\/p>/gi, "<p><br><b>$1)</b>, <b>$2)</b> e <b>$3)</b> Professor, essas atividades encontram-se resolvidas no material didático. Sugerimos que as utilize durante as explicações do tema ao qual elas se referem a fim de aprofundar os conceitos abordados na parte teórica.</p>")
