@@ -745,6 +745,44 @@ function alteraElementos(html) {
 		}
 	});
 
+	tempDiv[0].querySelectorAll("li").forEach((li) => {
+		if (!["UL", "OL"].includes(li.parentElement?.tagName)) {
+			const fragment = document.createDocumentFragment();
+			let currentP = null;
+
+			[...li.childNodes].forEach((node) => {
+				if (node.nodeType === 1) {
+					const tag = node.tagName;
+
+					// Se for um elemento de bloco (bloco fora de <p>)
+					if (["P", "UL", "OL", "HR", "H5", "BR", "DIV"].includes(tag)) {
+						// Adiciona o <p> em construção antes
+						if (currentP) {
+							fragment.appendChild(currentP);
+							currentP = null;
+						}
+						fragment.appendChild(node); // Adiciona o elemento de bloco
+					}
+					// Se for inline, adiciona ao <p>
+					else {
+						if (!currentP) currentP = document.createElement("p");
+						currentP.appendChild(node);
+					}
+				} else if (node.nodeType === 3 && node.textContent.trim() !== "") {
+					if (!currentP) currentP = document.createElement("p");
+					currentP.appendChild(document.createTextNode(node.textContent));
+				}
+			});
+
+			// Adiciona o último parágrafo em construção (se existir)
+			if (currentP) {
+				fragment.appendChild(currentP);
+			}
+
+			li.replaceWith(fragment);
+		}
+	});
+
 	return tempDiv.html();
 }
 
