@@ -839,7 +839,7 @@ function manual(str) {
 		.replace(/(?<=<p><b>Capítulo \d+(?::|-) ).*?(?=<\/b><\/p>)/gi, titulo)
 		.replace(/Capítulo (\d+) ?(?::|-)/gi, 'Capítulo $1 -')
 		.replace(/(?<=<h5><b>).*?(?=<\/b><\/h5>)/gi, padronizarTitulo)
-		.replace(/<p>\s*<b>\s*\d\.\d\. .*?<\/b>\s*<\/p>/gi, subTitulo)
+		.replace(/<p>\s*<b>\s*\d\.\d\.? .*?<\/b>\s*<\/p>/gi, subTitulo)
 		.replace(/<\/h5>\s*<hr>\s*<h5>/gi, '</h5>\n<br>\n<h5>')
 		.replace(/<hr>\s*<hr>/gi, '<hr>')
 		.replace(/<\/h5>\s*<br>\s*<p>/gi, '</h5>\n<p>')
@@ -851,7 +851,7 @@ function manual(str) {
 }
 
 function subTitulo(str) {
-	const newStr = str.match(/(?<=<p>\s*<b>\s*\d\.\d\. ).*?(?=<\/b>\s*<\/p>)/i);
+	const newStr = str.match(/(?<=<p>\s*<b>\s*\d\.\d\.? ).*?(?=<\/b>\s*<\/p>)/i);
 
 	if (!newStr) return str; // se não encontrar, retorna original
 
