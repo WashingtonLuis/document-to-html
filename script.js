@@ -580,7 +580,27 @@ function alteraElementos(html) {
 		td.removeAttribute("style");
 	});
 
-	[...tempDiv[0].querySelectorAll("p")].filter((p) => p.children.length == 1 && p.children[0].tagName == "IMG").forEach((p) => (p.outerHTML = `<div class="img-center mx-600">${p.innerHTML}</div>`));
+	[...tempDiv[0].querySelectorAll("p, div")].forEach((el) => {
+		const isOnlyImg = el.children.length === 1 && el.children[0].tagName === "IMG" && el.textContent.trim() === "";
+
+		const isAlreadyFormatted = el.classList.contains("img-center") || el.classList.contains("mx-600") || el.classList.contains("zoom");
+
+		if (isOnlyImg && !isAlreadyFormatted) {
+			el.outerHTML = `<div class="img-center mx-600 zoom">${el.innerHTML}</div>`;
+		}
+	});
+
+	[...tempDiv[0].querySelectorAll("img")].forEach((img) => {
+		const parent = img.parentElement;
+
+		const isUnwrapped = ["P", "DIV"].includes(parent.tagName);
+		const isOnlyChild = parent.childNodes.length === 1;
+		const isNotFormatted = !(parent.classList.contains("img-center") || parent.classList.contains("mx-") || parent.classList.contains("zoom"));
+
+		if (isUnwrapped && isOnlyChild && isNotFormatted) {
+			img.outerHTML = `<div class="img-center mx-600 zoom">${img.outerHTML}</div>`;
+		}
+	});
 
 	[...tempDiv[0].querySelectorAll("table")].forEach((a) => a.classList.add("data-table"));
 
@@ -795,23 +815,25 @@ function manual(str) {
 		.replace(/<(\w) >/g, "<$1>")
 		.replace(/<p> ?(<b>) ?/gi, "<p>$1")
 		.replace(/<b><br><\/b>/gi, "<br>")
+		.replace(/ ?<\/b> ?<b> ?/gi, " ")
 		.replace(/(?<!<p>)(<br>)(<\/b>)?(<\/p>)/gi, "$2$3$1")
-		.replace(/<(?!b)([\w]+)>\s*(?:<b>\s*)?(Atividades? Resolvidas?|Atividades de sala|Atividade de sala|Resolução de problemas?|Mão na massa|Vamos pesquisar|Cinefórum|Visita técnica|Ponto de partida|Conectando ideias|Exercícios de fixação|Saiba mais|CNEC virtual|Texto e Contexto|Dialogando|Revise o que você aprendeu|Você é o autor|Momento pipoca|Pesquisar é Descobrir|Ler e Se Encantar, é Só Começar|Revise o que aprendeu|Atividades Extras)(?:\s*<\/b>)?\s*<\/\1>/gi, "<hr>\n<h5><b>$2</b></h5><br>")
+		.replace(/<(?!b)([\w]+)>\s*(?:<b>\s*)?(Atividades? Resolvidas?|Atividades de sala|Atividade de sala|Resolução de problemas?|Mão na massa|Vamos pesquisar|Cinefórum|Visita técnica|Ponto de partida|Conectando ideias|Exercícios de fixação|Exercício de fixação|Saiba mais|CNEC virtual|Texto e Contexto|Dialogando|Revise o que você aprendeu|Você é o autor|Momento pipoca|Pesquisar é Descobrir|Ler e Se Encantar, é Só Começar|Ler e se encantar é só começar|Revise o que aprendeu|Atividades Extras)(?:\s*<\/b>)?\s*<\/\1>/gi, "<hr>\n<h5><b>$2</b></h5><br>")
 		.replace(/(?<![>])(Atividades? resolvidas?|Atividades de sala|Atividade de sala|Resolução de problemas?|Mão na massa|Vamos pesquisar|Cinefórum|Visita técnica|Conectando ideias|Ponto de partida)/gi, "<b>$1</b>")
 		.replace(/<p>(?:\s?<b>\s?)?(?:Resolução Comentada|Resposta|Resolução)\s*:(?:\s?<\/b>\s?)?<\/p>/gi, "<p><br><b>Resolução Comentada:</b></p>")
 		.replace(/<p>(?:<b>)?(\d+)\s?[-.)](?![0-9])\s?(\d+)\s?[-.)](?![0-9])\s?(\d+)\s?[-.)](?![0-9])\s?(?:<\/b>)?\s?Professor, es(?:.*?)?<\/p>/gi, "<p><br><b>$1)</b>, <b>$2)</b> e <b>$3)</b> Professor, essas atividades encontram-se resolvidas no material didático. Sugerimos que as utilize durante as explicações do tema ao qual elas se referem a fim de aprofundar os conceitos abordados na parte teórica.</p>")
 		.replace(/<p>(?:<b>)?(\d+)\s?[-.)](?![0-9])\s?(\d+)\s?[-.)](?![0-9])\s?(?:<\/b>)?\s?Professor, es(?:.*?)?<\/p>/gi, "<p><br><b>$1)</b> e <b>$2)</b> Professor, essas atividades encontram-se resolvidas no material didático. Sugerimos que as utilize durante as explicações do tema ao qual elas se referem a fim de aprofundar os conceitos abordados na parte teórica.</p>")
 		.replace(/<p>(?:<b>)?(\d+)\s?[-.)](?![0-9])\s?(?:<\/b>)?\s?Professor, es(?:.*?)?<\/p>/gi, "<p><br><b>$1)</b> Professor, essa atividade encontra-se resolvida no material didático. Sugerimos que a utilize durante as explicações do tema ao qual ela se refere a fim de aprofundar os conceitos abordados na parte teórica.</p>")
 		.replace(/<\/p>/gi, "</p>\n")
-		.replace(/<b>([,.;?!])?<\/b>/gi, "$1")
-		.replace(/<p>(?:<br>)?(?:<b>)?(\d+)\s?[-.)](?![0-9])\s?(?:<b>)?(?:Resolução:|Resposta:|Resposta: Letra|Alternativa correta:|Resolução: Letra|Letra)?\s?([^<]*?)?(?:<\/b>)?(.*?)?(?:<\/b>)?<\/p>/gi, "<p><br><b>$1)</b> $2$3</p>")
+		.replace(/<b>([,.;:?!])?<\/b>/gi, "$1")
+		.replace(/([,.;?!:])<\/b>/gi, "</b>$1")
+		.replace(/<p>(?:<br>)?(?:<b>)?(\d+)\s?[-.)](?![0-9])\s?(?:<b>)?(?:Resolução:|Resposta:|Resposta: Letra|Alternativa correta:|Resolução: Letra|Letra)?\s?([^<]*)?(?:<\/b>)?(.*?)?(?:<\/b>)?<\/p>/gi, "<p><br><b>$1)</b> $2$3</p>")
 		.replace(/<p><b>Questão 0?(\d)<\/b>\./gi, "<p><br><b>$1)</b> ")
 		.replace(/<p>(?:<br>)?\s?(\d+)\s?[-.)](?![0-9])\s?(?:Resolução:|Resposta:|Resposta: Letra|Resolução: Letra|Letra)?\s?(.*?)?<\/p>/gi, "<p><br><b>$1)</b> $2</p>")
 		.replace(/<ol><li>(?:<p>)?(?:<b>)?Resolução:\s?(?:<\/b>)(.*?)(?:<\/p>)?<\/li>\s*<\/ol>/gi, "<p><br><b>$$)</b> $1</p>")
 		.replace(/(?<!<p>)<br><\/p>/gi, "</p>")
 		.replace(/(?:<b>)?(Comentário:)(?:<\/b>)?/gi, "<br><b>Resolução comentada:</b> ")
 		.replace(/<p><br><\/p>\s+(<p><br><b>Resolução comentada:<\/b><\/p>)/gi, "$1")
-		.replace(/ ?<\/b> ?<b> ?/gi, " ")
+		.replace(/\s?<\/b>\s?<b>\s?/gi, " ")
 		.replace(/<p>(?:<b>)(?:Competência Específica|Competência) (\d+)[:.]?(.*?)?(?:<\/b>)?[:]?(.*?)?(?:<\/b>)?<\/p>/gi, "<p><b>Competência Específica $1:</b> $2$3</p>")
 		.replace(/<p>(?:Competência Específica|Competência) (\d+)[:.]?(.*?)?<\/p>/gi, "<p><b>Competência Específica $1:</b> $2</p>")
 		.replace(/^(?:<hr>)/gi, "")
@@ -835,17 +857,22 @@ function manual(str) {
 		.replace(/\s*(?:<p><br><\/p>|<br>)\s*(?=<p><b>\((?:EM\d{2}[A-Z]{3}\d{3}|EM[A-Z]{4}\d{2}|EM[A-Z]{6}\d{2})\))/g, "")
 		.replace(/[ ]{2,}/gi, " ")
 		.replace(/<ol>\s*<li>\s*(Trilha de aprendizagem|Objetivo de aprendizagem do capítulo|Situação-problema|Habilidades utilizadas nessa situação-problema:|Resolvendo a situação-problema)\s*<\/li>\s*<\/ol>/g, "<p><b>$1</b></p>")
-		.replace(/<ul>\s+<li>(<b>(?:Ao Educador|Resumo dos capítulos)<\/b>)<\/li>\s+<\/ul>/gi, '<p>$1</p>')
+		.replace(/<ul>\s*<li>\s*(<b>(?:Ao Educador|Resumo dos capítulos)<\/b>)\s*<\/li>\s*<\/ul>(\s*<br>)?/gi, "<p>$1</p>")
 		.replace(/(?<=<p><b>Capítulo \d+(?::|-) ).*?(?=<\/b><\/p>)/gi, titulo)
-		.replace(/Capítulo (\d+) ?(?::|-)/gi, 'Capítulo $1 -')
+		.replace(/Capítulo (\d+) ?(?::|-)/gi, "Capítulo $1 -")
 		.replace(/(?<=<h5><b>).*?(?=<\/b><\/h5>)/gi, padronizarTitulo)
 		.replace(/<p>\s*<b>\s*\d\.\d\.? .*?<\/b>\s*<\/p>/gi, subTitulo)
-		.replace(/<\/h5>\s*<hr>\s*<h5>/gi, '</h5>\n<br>\n<h5>')
-		.replace(/<hr>\s*<hr>/gi, '<hr>')
-		.replace(/<\/h5>\s*<br>\s*<p>/gi, '</h5>\n<p>')
-		.replace(/<p>\s?(?:<b>)?\s?Pag(?:í|i)nas?\s?\d+\s?(?:<\/b>)?\s?<\/p>/gi, '')
-		.replace(/'Resposta pessoal'/gi, '<b>Resposta pessoal</b>')
-		;
+		.replace(/<\/h5>\s*<hr>\s*<h5>/gi, "</h5>\n<br>\n<h5>")
+		.replace(/<hr>\s*<hr>/gi, "<hr>")
+		.replace(/<\/h5>\s*<br>\s*<p>/gi, "</h5>\n<p>")
+		.replace(/<p>\s?(?:<b>)?\s?Pag(?:í|i)nas?\s?\d+\s?(?:<\/b>)?\s?<\/p>/gi, "")
+		.replace(/<b>(\s)?Resposta\s+pessoal(\s)?<\/b>/gi, "$1<b>Resposta pessoal</b>$2")
+		.replace(/<b>(\s)?Respostas\s+pessoais(\s)?<\/b>/gi, "$1<b>Respostas pessoais</b>$2")
+		.replace(/(?<!<b[^>]*?>)(\s)?Resposta\s+pessoal(\s)?(?![^<]*?<\/b>)/gi, "$1<b>Resposta pessoal</b>$2")
+		.replace(/(?<!<b[^>]*?>)(\s)?Respostas\s+pessoais(\s)?(?![^<]*?<\/b>)/gi, "$1<b>Respostas pessoais</b>$2")
+		.replace(/<div>\s*(.*?)\s*<\/div>/gi, "<p>$1</p>")
+		.replace(/<br>\s*<br>/gi, "<br>")
+		.replace(/\s?<\/b>\s?<b>\s?/gi, " ");
 
 	return text;
 }
