@@ -562,8 +562,8 @@ function padraoFonte(text) {
 
 function padraoResposta(text) {
 	return text
-		.replace(/<p>(?:Letra|Alternativa)[ :-]*([A-E])(?:(?!<\/p>)[\s\S])*?<\/p>\s*<p>(?:Resolução|Comentário)[ :-]*(?:<\/p>\s*<p>)?/gi, "<p><br><b>Resolução: $1</b><br><b>Comentário:</b> ")
-		.replace(/<p>(?:Resolução: )?Letra ([A-E]) - /gi, "<p><br><b>Resolução: $1</b><br><b>Comentário:</b> ")
+		.replace(/<p>(?:Letra|Alternativa)[ :-]*([A-E])(?:(?!<\/p>)[\s\S])*?<\/p>\s*<p>(?:Resolução|Comentário)[ :-]*(?:<\/p>\s*<p>)?/gi, "<br><p><b>Resolução: $1</b><br><b>Comentário:</b> ")
+		.replace(/<p>(?:Resolução: )?Letra ([A-E]) - /gi, "<br><p><b>Resolução: $1</b><br><b>Comentário:</b> ")
 		.replace(/(?<=Resolução: )[a-e]/g, (match) => match.toUpperCase());
 }
 
@@ -819,42 +819,42 @@ function manual(str) {
 		.replace(/(?<!<p>)(<br>)(<\/b>)?(<\/p>)/gi, "$2$3$1")
 		.replace(/<(?!b)([\w]+)>\s*(?:<b>\s*)?(Atividades? Resolvidas?|Atividades de sala|Atividade de sala|Resolução de problemas?|Mão na massa|Vamos pesquisar|Cinefórum|Visita técnica|Ponto de partida|Conectando ideias|Exercícios de fixação|Exercício de fixação|Saiba mais|CNEC virtual|Texto e Contexto|Dialogando|Revise o que você aprendeu|Você é o autor|Momento pipoca|Pesquisar é Descobrir|Ler e Se Encantar, é Só Começar|Ler e se encantar é só começar|Revise o que aprendeu|Atividades Extras)(?:\s*<\/b>)?\s*<\/\1>/gi, "<hr>\n<h5><b>$2</b></h5><br>")
 		.replace(/(?<![>])(Atividades? resolvidas?|Atividades de sala|Atividade de sala|Resolução de problemas?|Mão na massa|Vamos pesquisar|Cinefórum|Visita técnica|Conectando ideias|Ponto de partida)/gi, "<b>$1</b>")
-		.replace(/<p>(?:\s?<b>\s?)?(?:Resolução Comentada|Resposta|Resolução)\s*:(?:\s?<\/b>\s?)?<\/p>/gi, "<p><br><b>Resolução Comentada:</b></p>")
-		.replace(/<p>(?:<b>)?(\d+)\s?[-.)](?![0-9])\s?(\d+)\s?[-.)](?![0-9])\s?(\d+)\s?[-.)](?![0-9])\s?(?:<\/b>)?\s?Professor, es(?:.*?)?<\/p>/gi, "<p><br><b>$1)</b>, <b>$2)</b> e <b>$3)</b> Professor, essas atividades encontram-se resolvidas no material didático. Sugerimos que as utilize durante as explicações do tema ao qual elas se referem a fim de aprofundar os conceitos abordados na parte teórica.</p>")
-		.replace(/<p>(?:<b>)?(\d+)\s?[-.)](?![0-9])\s?(\d+)\s?[-.)](?![0-9])\s?(?:<\/b>)?\s?Professor, es(?:.*?)?<\/p>/gi, "<p><br><b>$1)</b> e <b>$2)</b> Professor, essas atividades encontram-se resolvidas no material didático. Sugerimos que as utilize durante as explicações do tema ao qual elas se referem a fim de aprofundar os conceitos abordados na parte teórica.</p>")
-		.replace(/<p>(?:<b>)?(\d+)\s?[-.)](?![0-9])\s?(?:<\/b>)?\s?Professor, es(?:.*?)?<\/p>/gi, "<p><br><b>$1)</b> Professor, essa atividade encontra-se resolvida no material didático. Sugerimos que a utilize durante as explicações do tema ao qual ela se refere a fim de aprofundar os conceitos abordados na parte teórica.</p>")
+		.replace(/<p>(?:\s?<b>\s?)?(?:Resolução Comentada|Resposta|Resolução)\s*:(?:\s?<\/b>\s?)?<\/p>/gi, "<br><p><b>Resolução Comentada:</b></p>")
+		.replace(/<p>(?:<b>)?(\d+)\s?[-.)](?![0-9])\s?(\d+)\s?[-.)](?![0-9])\s?(\d+)\s?[-.)](?![0-9])\s?(?:<\/b>)?\s?Professor, es(?:.*?)?<\/p>/gi, "<br><p><b>$1)</b>, <b>$2)</b> e <b>$3)</b> Professor, essas atividades encontram-se resolvidas no material didático. Sugerimos que as utilize durante as explicações do tema ao qual elas se referem a fim de aprofundar os conceitos abordados na parte teórica.</p>")
+		.replace(/<p>(?:<b>)?(\d+)\s?[-.)](?![0-9])\s?(\d+)\s?[-.)](?![0-9])\s?(?:<\/b>)?\s?Professor, es(?:.*?)?<\/p>/gi, "<br><p><b>$1)</b> e <b>$2)</b> Professor, essas atividades encontram-se resolvidas no material didático. Sugerimos que as utilize durante as explicações do tema ao qual elas se referem a fim de aprofundar os conceitos abordados na parte teórica.</p>")
+		.replace(/<p>(?:<b>)?(\d+)\s?[-.)](?![0-9])\s?(?:<\/b>)?\s?Professor, es(?:.*?)?<\/p>/gi, "<br><p><b>$1)</b> Professor, essa atividade encontra-se resolvida no material didático. Sugerimos que a utilize durante as explicações do tema ao qual ela se refere a fim de aprofundar os conceitos abordados na parte teórica.</p>")
 		.replace(/<\/p>/gi, "</p>\n")
 		.replace(/<b>([,.;:?!])?<\/b>/gi, "$1")
 		.replace(/([,.;?!:])<\/b>/gi, "</b>$1")
-		.replace(/<p>(?:<br>)?(?:<b>)?(\d+)\s?[-.)](?![0-9])\s?(?:<b>)?(?:Resolução:|Resposta:|Resposta: Letra|Alternativa correta:|Resolução: Letra|Letra)?\s?([^<]*)?(?:<\/b>)?(.*?)?(?:<\/b>)?<\/p>/gi, "<p><br><b>$1)</b> $2$3</p>")
-		.replace(/<p><b>Questão 0?(\d)<\/b>\./gi, "<p><br><b>$1)</b> ")
-		.replace(/<p>(?:<br>)?\s?(\d+)\s?[-.)](?![0-9])\s?(?:Resolução:|Resposta:|Resposta: Letra|Resolução: Letra|Letra)?\s?(.*?)?<\/p>/gi, "<p><br><b>$1)</b> $2</p>")
-		.replace(/<ol><li>(?:<p>)?(?:<b>)?Resolução:\s?(?:<\/b>)(.*?)(?:<\/p>)?<\/li>\s*<\/ol>/gi, "<p><br><b>$$)</b> $1</p>")
+		.replace(/<p>(?:<br>)?(?:<b>)?(\d+)\s?[-.)](?![0-9])\s?(?:<b>)?(?:Resolução:|Resposta:|Resposta: Letra|Alternativa correta:|Resolução: Letra|Letra)?\s?([^<]*)?(?:<\/b>)?(.*?)?(?:<\/b>)?<\/p>/gi, "<br><p><b>$1)</b> $2$3</p>")
+		.replace(/<p><b>Questão 0?(\d)<\/b>\./gi, "<br><p><b>$1)</b> ")
+		.replace(/<p>(?:<br>)?\s?(\d+)\s?[-.)](?![0-9])\s?(?:Resolução:|Resposta:|Resposta: Letra|Resolução: Letra|Letra)?\s?(.*?)?<\/p>/gi, "<br><p><b>$1)</b> $2</p>")
+		.replace(/<ol><li>(?:<p>)?(?:<b>)?Resolução:\s?(?:<\/b>)(.*?)(?:<\/p>)?<\/li>\s*<\/ol>/gi, "<br><p><b>$$)</b> $1</p>")
 		.replace(/(?<!<p>)<br><\/p>/gi, "</p>")
 		.replace(/(?:<b>)?(Comentário:)(?:<\/b>)?/gi, "<br><b>Resolução comentada:</b> ")
-		.replace(/<p><br><\/p>\s+(<p><br><b>Resolução comentada:<\/b><\/p>)/gi, "$1")
+		.replace(/<p><br><\/p>\s+(<br><p><b>Resolução comentada:<\/b><\/p>)/gi, "$1")
 		.replace(/\s?<\/b>\s?<b>\s?/gi, " ")
 		.replace(/<p>(?:<b>)(?:Competência Específica|Competência) (\d+)[:.]?(.*?)?(?:<\/b>)?[:]?(.*?)?(?:<\/b>)?<\/p>/gi, "<p><b>Competência Específica $1:</b> $2$3</p>")
 		.replace(/<p>(?:Competência Específica|Competência) (\d+)[:.]?(.*?)?<\/p>/gi, "<p><b>Competência Específica $1:</b> $2</p>")
 		.replace(/^(?:<hr>)/gi, "")
 		.replace(/(<br>\s*)*$/gi, "")
-		.replace(/<p><b>(\d+)\)/gi, "<p><br><b>$1)")
+		.replace(/<p><b>(\d+)\)/gi, "<br><p><b>$1)")
 		.replace(/<p><b>Orientação\/Sugestão<\/b><\/p>/gi, "<p><b><br>Orientação e Sugestão</b></p>")
-		.replace(/<p><br><b>(\d+)\)<\/b> (?:Resposta: Letra|Resposta:) /gi, "<p><br><b>$1)</b> ")
+		.replace(/<br><p><b>(\d+)\)<\/b> (?:Resposta: Letra|Resposta:) /gi, "<br><p><b>$1)</b> ")
 		.replace(/<p><b>([abcde]\))<\/b>/gi, "<p>$1")
-		.replace(/<p><b><br>Orientação e Sugestão<\/b><\/p>\s?<p><br>/gi, "<p><b><br>Orientação e Sugestão</b></p><p>")
+		.replace(/<p><b><br>Orientação e Sugestão<\/b><\/p>\s?<br><p>/gi, "<p><b><br>Orientação e Sugestão</b></p><p>")
 		.replace(/<p>([abcde]\))\s*(?:<b>)?\s*(?:Incorret|Errad)[ao][.,:]?\s*(?:<\/b>)?[.,:]?/gi, "<p>$1 <b>Incorreta.</b> ")
 		.replace(/<p>([abcde]\))\s*(?:<b>)?\s*(?:corret|cert)[ao][.,:]?\s*(?:<\/b>)?[.,:]?/gi, "<p>$1 <b>Correta.</b> ")
 		.replace(/<br>\s+<p><br>/gi, "<p><br>")
 		.replace(/(?:<br>)?(?:<b>)?\((EM\d{2}[A-Z]{3}\d{3}|EM[A-Z]{4}\d{2}|EM[A-Z]{6}\d{2})\)(?:<\/b>)?/g, "<b>($1)</b>")
-		.replace(/<p>(?:<br>)?<b>(\d+)\)<\/b>\./gi, "<p><br><b>$1)</b>")
+		.replace(/<p>(?:<br>)?<b>(\d+)\)<\/b>\./gi, "<br><p><b>$1)</b>")
 		.replace(/<br><p><br>/gi, "<p><br>")
 		.replace(/<(p|br)>Resolução: /gi, "<$1><b>Resolução:</b> ")
 		.replace(/<p><b> ?Resolução:<\/b> ?(?:Resolução:)?/gi, "<p><b>Resolução:</b> ")
 		.replace(/<ol><li><b>(.*?)<\/b><\/li><\/ol>/gi, "<h5>$1</h5>")
-		.replace(/<p><br><b>0(\d)\)/gi, "<p><br><b>$1)")
-		.replace(/(?<=<p><br><b>\d+\)<\/b>) Resolução:?/gi, "")
-		.replace(/\s*(?:<p><br><\/p>|<br>)\s*(?=<p><b>\((?:EM\d{2}[A-Z]{3}\d{3}|EM[A-Z]{4}\d{2}|EM[A-Z]{6}\d{2})\))/g, "")
+		.replace(/<br><p><b>0(\d)\)/gi, "<br><p><b>$1)")
+		.replace(/(?<=<br><p><b>\d+\)<\/b>) Resolução:?/gi, "")
+		.replace(/\s*(?:<br><p><\/p>|<br>)\s*(?=<p><b>\((?:EM\d{2}[A-Z]{3}\d{3}|EM[A-Z]{4}\d{2}|EM[A-Z]{6}\d{2})\))/g, "")
 		.replace(/[ ]{2,}/gi, " ")
 		.replace(/<ol>\s*<li>\s*(Trilha de aprendizagem|Objetivo de aprendizagem do capítulo|Situação-problema|Habilidades utilizadas nessa situação-problema:|Resolvendo a situação-problema)\s*<\/li>\s*<\/ol>/g, "<p><b>$1</b></p>")
 		.replace(/<ul>\s*<li>\s*(<b>(?:Ao Educador|Resumo dos capítulos)<\/b>)\s*<\/li>\s*<\/ul>(\s*<br>)?/gi, "<p>$1</p>")
@@ -872,7 +872,9 @@ function manual(str) {
 		.replace(/(?<!<b[^>]*?>)(\s)?Respostas\s+pessoais(\s)?(?![^<]*?<\/b>)/gi, "$1<b>Respostas pessoais</b>$2")
 		.replace(/<div>\s*(.*?)\s*<\/div>/gi, "<p>$1</p>")
 		.replace(/<br>\s*<br>/gi, "<br>")
-		.replace(/\s?<\/b>\s?<b>\s?/gi, " ");
+		.replace(/\s?<\/b>\s?<b>\s?/gi, " ")
+		.replace(/(?<!p>|div>)(?:<br>)?(<b>)(\d+\))\s*(<\/b>)/gi, "<p>$1$2$3</p>")
+		;
 
 	return text;
 }
@@ -1227,6 +1229,7 @@ function _clear(str) {
 		.replace(/<colgroup>.*?<\/colgroup>/gi, "")
 		.replace(/(\s*<br>\s*)+/gi, "<br>")
 		.replace(/(<p>\s*<\/p>)+/gi, "")
+		.replace(/<p><br>(?!<\/p>)/gi, "<br><p>")
 		.replace(/(\s*<p><br><\/p>\s*)+/gi, "<p><br></p>")
 		.replace(/(?:<b>)+(.*?)( )?(?:<\/b>)+/gi, "<b>$1</b>$2")
 
@@ -1298,7 +1301,7 @@ function organizaTags(textareaValue) {
 		.replace(/ <\/p>/gi, "</p>")
 		.replace(/<p[^>]*> /gi, "<p>")
 		.replace(/<p><\/p>/gi, "")
-		.replace(/<p><br><b>(\d+)\)<\/b> Letra /gi, "<p><br><b>$1)</b> ")
+		.replace(/<br><p><b>(\d+)\)<\/b> Letra /gi, "<br><p><b>$1)</b> ")
 		.replace(/<br>\n+?<p><br><\/p>/gi, "\n<p><br></p>")
 		.replace(/<br>\s+(<p><br>)/gi, "\n$1")
 		.replace(/\n{2,}/gi, "\n\n")
@@ -1441,6 +1444,7 @@ function clear() {
 			.replace(/(?<=<hr>)\s+(?=<h5>)/gi, "\n")
 			.replace(/(?<=<\/table>\s+)<br>\s+(?=<\/div>)/gi, "")
 			.replace(/^\n/gi, "")
+			.replace(/<br>\s*<br>/gi, "<br>")
 			;
 		// Definir o texto formatado em outro elemento
 		$("#result").text(textareaValue);
