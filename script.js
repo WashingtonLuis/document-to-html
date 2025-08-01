@@ -567,19 +567,8 @@ function padraoResposta(text) {
 		.replace(/(?<=Resolução: )[a-e]/g, (match) => match.toUpperCase());
 }
 
-function alteraElementos(html) {
+function tagImg(html) {
 	var tempDiv = $("<div>").html(html);
-
-	tempDiv.find("colgroup").remove();
-
-	tempDiv[0].querySelectorAll("table[style]").forEach((table) => {
-		table.removeAttribute("style");
-	});
-
-	tempDiv[0].querySelectorAll("td[style]").forEach((td) => {
-		td.removeAttribute("style");
-	});
-
 	[...tempDiv[0].querySelectorAll("p, div")].forEach((el) => {
 		const isOnlyImg = el.children.length === 1 && el.children[0].tagName === "IMG" && el.textContent.trim() === "";
 
@@ -601,6 +590,24 @@ function alteraElementos(html) {
 			img.outerHTML = `<div class="img-center mx-600 zoom">${img.outerHTML}</div>`;
 		}
 	});
+
+	return tempDiv.html();
+}
+
+function alteraElementos(html) {
+	var tempDiv = $("<div>").html(html);
+
+	tempDiv.find("colgroup").remove();
+
+	tempDiv[0].querySelectorAll("table[style]").forEach((table) => {
+		table.removeAttribute("style");
+	});
+
+	tempDiv[0].querySelectorAll("td[style]").forEach((td) => {
+		td.removeAttribute("style");
+	});
+
+	tempDiv = $("<div>").html(tagImg(tempDiv.html()));
 
 	[...tempDiv[0].querySelectorAll("table")].forEach((a) => a.classList.add("data-table"));
 
@@ -809,13 +816,17 @@ function alteraElementos(html) {
 function manual(str) {
 	let text = str;
 
-	text = alteraElementos(text)
+	text = alteraElementos(text);
 
 	text = text
 		.replace(/<(\w) >/g, "<$1>")
 		.replace(/<p> ?(<b>) ?/gi, "<p>$1")
 		.replace(/<b><br><\/b>/gi, "<br>")
 		.replace(/ ?<\/b> ?<b> ?/gi, " ")
+		.replace(/\s*<br\s*\/?>\s*<\/b>/gi, "</b></p>\n<p>")
+		.replace(/\s*<\/b>\s*<br\s*\/?>/gi, "</b></p>\n<p>")
+		.replace(/\s*<br\s*\/?>\s*<b>/gi, "</p>\n<p><b>")
+		.replace(/\s*<b>\s*<br\s*\/?>/gi, "</p>\n<p><b>")
 		.replace(/(?<!<p>)(<br>)(<\/b>)?(<\/p>)/gi, "$2$3$1")
 		.replace(/<(?!b)([\w]+)>\s*(?:<b>\s*)?(Atividades? Resolvidas?|Atividades de sala|Atividade de sala|Resolução de problemas?|Mão na massa|Vamos pesquisar|Cinefórum|Visita técnica|Ponto de partida|Conectando ideias|Exercícios de fixação|Exercício de fixação|Saiba mais|CNEC virtual|Texto e Contexto|Dialogando|Revise o que você aprendeu|Você é o autor|Momento pipoca|Pesquisar é Descobrir|Ler e Se Encantar, é Só Começar|Ler e se encantar é só começar|Revise o que aprendeu|Atividades Extras)(?:\s*<\/b>)?\s*<\/\1>/gi, "<hr>\n<h5><b>$2</b></h5><br>")
 		.replace(/(?<![>])(Atividades? resolvidas?|Atividades de sala|Atividade de sala|Resolução de problemas?|Mão na massa|Vamos pesquisar|Cinefórum|Visita técnica|Conectando ideias|Ponto de partida)/gi, "<b>$1</b>")
@@ -866,15 +877,26 @@ function manual(str) {
 		.replace(/<hr>\s*<hr>/gi, "<hr>")
 		.replace(/<\/h5>\s*<br>\s*<p>/gi, "</h5>\n<p>")
 		.replace(/<p>\s?(?:<b>)?\s?Pag(?:í|i)nas?\s?\d+\s?(?:<\/b>)?\s?<\/p>/gi, "")
-		.replace(/<b>(\s)?Resposta\s+pessoal(\s)?<\/b>/gi, "$1<b>Resposta pessoal</b>$2")
-		.replace(/<b>(\s)?Respostas\s+pessoais(\s)?<\/b>/gi, "$1<b>Respostas pessoais</b>$2")
-		.replace(/(?<!<b[^>]*?>)(\s)?Resposta\s+pessoal(\s)?(?![^<]*?<\/b>)/gi, "$1<b>Resposta pessoal</b>$2")
-		.replace(/(?<!<b[^>]*?>)(\s)?Respostas\s+pessoais(\s)?(?![^<]*?<\/b>)/gi, "$1<b>Respostas pessoais</b>$2")
 		.replace(/<div>\s*(.*?)\s*<\/div>/gi, "<p>$1</p>")
-		.replace(/<br>\s*<br>/gi, "<br>")
+		.replace(/<br(?: \/)?>\s*<br(?: \/)?>/gi, "<br>")
 		.replace(/\s?<\/b>\s?<b>\s?/gi, " ")
 		.replace(/(?<!p>|div>)(?:<br>)?(<b>)(\d+\))\s*(<\/b>)/gi, "<p>$1$2$3</p>")
+		.replace(/(?<=<p><b>\d+\)<\/b>)\s*<br\s*\/?>\s*(?=<img)/gi, "</p>\n<p>")
 		;
+
+	const termos = ["Resposta pessoal", "Respostas pessoais", "Resposta circunstancial", "Respostas circunstanciais", "Observação", "Resposta esperada"];
+
+	termos.forEach((term) => {
+		// Cria um padrão que aceita qualquer quantidade de espaços entre as palavras
+		const escapedTerm = term.replace(/\s+/g, "\\s+"); // ex: "Resposta\\s+pessoal"
+
+		const patternTag = new RegExp(`<b>\\s*${escapedTerm}\\s*<\\/b>`, "gi");
+		const patternPlain = new RegExp(`(?<!<b[^>]*?>\s*)${escapedTerm}(?=\s*[.:!?])`, "gi");
+
+		text = text.replace(patternTag, `<b>${term}</b>`).replace(patternPlain, `<b>${term}</b>`).replace(/\s?<\/b>\s?<b>\s?/gi, " ");
+	});
+
+	text = tagImg(text);
 
 	return text;
 }
@@ -1493,9 +1515,19 @@ $(document).ready(function () {
 	$("#summernote").summernote({
 		placeholder: "..",
 		tabsize: 2,
-		height: 110,
+		height: 350,
 		toolbar: [["view", ["codeview"]]],
+		callbacks: {
+      onChange: function(contents, $editable) {
+        $('#htmlView').val(contents);
+      }
+    }
 	});
+
+	// Atualiza o editor se o HTML for editado
+  $('#htmlView').on('input', function () {
+    $('#summernote').summernote('code', $(this).val());
+  });
 
 	// Quando o botão é clicado, formatar o texto e exibi-lo em outro elemento
 	$("#clear").click(clear);
