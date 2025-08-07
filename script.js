@@ -69,7 +69,11 @@ function removeSpan(input) {
 }
 
 function removeEspacosExtras(input) {
-	const output = input.replace(/(?:<p><br><\/p>|<br>|\s)+(?=@@|<ol class="options">|(?:<\/div>\s*<ol class="options">)|<div class="d-print-none">|<div class="d-none d-print-block">)/gi, "\n").replace(/(?=@@)(?:<p><br><\/p>|<br>|\s)+/gi, "\n");
+	const output = input
+		.replace(/(?:<p><br><\/p>|<br>|\s)+(?=@@|<ol class="options">|(?:<\/div>\s*<ol class="options">)|<div class="d-print-none">|<div class="d-none d-print-block">)/gi, "\n")
+		.replace(/(?=@@)(?:<p><br><\/p>|<br>|\s)+/gi, "\n")
+		.replace(/\n{2,}(?=<\/div>)/gi, "\n")
+		;
 	return output === input ? output : removeEspacosExtras(output);
 }
 
@@ -505,7 +509,7 @@ function removeImgFromParagraphs(text) {
 }
 
 function replaceYoutubeLinks(text) {
-	return text.replace(/(<p>[\s\S]*?)(https?:\/\/(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+))([\s\S]*?<\/p>)/gi, "$1$4<div class='youtube'><div><div><iframe src='https://www.youtube.com/embed/$3?rel=0' frameborder='0' allowfullscreen=''></iframe></div></div></div><p class='d-none d-print-block'><span><a href='https://youtu.be/$3' target='blank' rel='nofollow'>https://youtu.be/$3</a></span></p>");
+	return text.replace(/(<p>[\s\S]*?)(https?:\/\/(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+))([\s\S]*?<\/p>)/gi, "$1$4<div class='youtube'><div><div><iframe src='https://www.youtube.com/embed/$3?rel=0' frameborder='0' allowfullscreen=''></iframe></div></div></div><p class='d-none d-print-block'><span><a href='https://youtu.be/$3' target='blank' rel='nofollow' class='url'>https://youtu.be/$3</a></span></p>");
 }
 
 function wrapTablesWithResponsiveDiv(text) {
@@ -1304,7 +1308,7 @@ function insereQuebras(textareaValue) {
 		.replace(/<(li|script|iframe|tr|\/tr)([^>]*)>/gi, "\t<$1$2>")
 		.replace(/(<tr>|<\/td>|<\/th>)\n<(td|th)([^>]*)>/gi, "$1\n\t\t<$2$3>")
 		.replace(/ \n/gi, "\n")
-		.replace(/<\/(ol|ul|table|blockquote|div)>/gi, "</$1>\n<br>\n")
+		.replace(/<\/(ol|ul|table|blockquote|div)>/gi, "</$1>\n")
 		.replace(/(<div class="legend">)/gi, "\t$1")
 		.replace(/(<div class="youtube">)/gi, "$1\n\t")
 		.replace(/(<div class='d-print-none'>)/gi, "\n$1\n\t")
@@ -1404,10 +1408,6 @@ function clear() {
 			textareaValue = nLatex(textareaValue);
 		}
 
-		if (document.getElementById("facilidades").checked) {
-			textareaValue = facilidades(textareaValue);
-		}
-
 		if (document.getElementById("manual").checked) {
 			textareaValue = manual(textareaValue);
 		}
@@ -1434,12 +1434,6 @@ function clear() {
 			textareaValue = exerciciosFundamental1(textareaValue);
 		}
 
-		textareaValue = insereQuebras(textareaValue);
-
-		// textareaValue = organizaTags(textareaValue);
-
-		textareaValue = removeEspacosExtras(textareaValue);
-
 		if (document.getElementById("latex").checked) {
 			textareaValue = textareaValue
 				.replace(/\n+/gi, " ")
@@ -1451,10 +1445,20 @@ function clear() {
 		if (document.getElementById("removePontoLista").checked) {
 			textareaValue = textareaValue.replace(/•|● ?/gi, "");
 		}
+		
+		if (document.getElementById("facilidades").checked) {
+			textareaValue = facilidades(textareaValue);
+		}
 
 		if (document.getElementById("semTag").checked) {
 			textareaValue = semTag(textareaValue);
 		}
+		
+		textareaValue = insereQuebras(textareaValue);
+
+		// textareaValue = organizaTags(textareaValue);
+
+		textareaValue = removeEspacosExtras(textareaValue);
 
 		textareaValue = textareaValue
 			.replace(/&lt;/gi, "<")
