@@ -28,8 +28,10 @@ const nLatexAcentuacao = {
 const padroes = [
 	[/exercícios\s+resolvidos/i, "Exercícios resolvidos"],
 	[/exercícios\s+de\s+fixação/i, "Exercícios de fixação"],
+	[/atividades\s+de\s+fixação/i, "Exercícios de fixação"],
 	[/exercício\s+resolvido/i, "Exercício resolvido"],
 	[/exercício\s+de\s+fixação/i, "Exercício de fixação"],
+	[/atividade\s+de\s+fixação/i, "Exercício de fixação"],
 	[/pesquisar\s+é\s+descobrir/i, "Pesquisar é descobrir"],
 	[/hora\s+(da|de)\s+leitura/i, "Hora de leitura"],
 	[/dialogando/i, "Dialogando"],
@@ -47,6 +49,7 @@ const padroes = [
 	[/Sessão\s+pipoca/i, "Momento pipoca"],
 	[/saiba\s+mais/i, "Saiba mais"],
 	[/cnec\s+virtual/i, "CNEC virtual"],
+	[/Referências/i, "Referências"]
 ];
 
 function removerParenteses(input) {
@@ -460,7 +463,7 @@ function facilidades(str) {
 	text = clearTableCell(text);
 	text = formatLinks(text);
 	text = fixMalformedLinks(text);
-	text = padraoFonte(text);
+	// text = padraoFonte(text);
 
 	return text;
 }
@@ -542,7 +545,7 @@ function formatLinks(text) {
 function fixMalformedLinks(text) {
 	const processedLinks = new Set();
 
-	return text.replace(/(?:<)?(?<!src=")\b((https?:\/\/|www\.)[^\s<>]+(?:\.[a-z]{2,})(?:[\/?#%][^\s<>]*)?)\b(?:<\/p>|>)?/gi, (match, url) => {
+	return text.replace(/(?<!href=['"])(?<!src=['"])(?<!<iframe[^>]*src=['"])(?<!<a[^>]*href=['"])(?<!<img[^>]*src=['"])\b((https?:\/\/|www\.)(?!(?:www\.)?(youtube\.com|youtu\.be))[^\s<>"]+(?:\.[a-z]{2,})[^\s<]*)/gi, (match, url) => {
 		const cleanedUrl = url.replace(/\s+/g, ""); // Remove espaços dentro da URL
 
 		if (processedLinks.has(cleanedUrl)) return match; // Se o link já foi processado, retorne como está
@@ -691,6 +694,7 @@ function alteraElementos(html) {
 		"Momento pipoca",
 		"Sessão pipoca",
 		"Saiba mais",
+		"Referências",
 		"CNEC virtual"];
 
 	const tituloMap = new Map();
@@ -819,6 +823,7 @@ function manual(str) {
 	text = alteraElementos(text);
 
 	text = text
+		.replace(/\.\/media\//gi, "")
 		.replace(/<(\w) >/g, "<$1>")
 		.replace(/<p> ?(<b>) ?/gi, "<p>$1")
 		.replace(/<b><br><\/b>/gi, "<br>")
@@ -828,7 +833,7 @@ function manual(str) {
 		.replace(/\s*<br\s*\/?>\s*<b>/gi, "</p>\n<p><b>")
 		.replace(/\s*<b>\s*<br\s*\/?>/gi, "</p>\n<p><b>")
 		.replace(/(?<!<p>)(<br>)(<\/b>)?(<\/p>)/gi, "$2$3$1")
-		.replace(/<(?!b)([\w]+)>\s*(?:<b>\s*)?(Atividades? Resolvidas?|Atividades de sala|Atividade de sala|Resolução de problemas?|Mão na massa|Vamos pesquisar|Cinefórum|Visita técnica|Ponto de partida|Conectando ideias|Exercícios de fixação|Exercício de fixação|Saiba mais|CNEC virtual|Texto e Contexto|Dialogando|Revise o que você aprendeu|Você é o autor|Momento pipoca|Pesquisar é Descobrir|Ler e Se Encantar, é Só Começar|Ler e se encantar é só começar|Revise o que aprendeu|Atividades Extras)(?:\s*<\/b>)?\s*<\/\1>/gi, "<hr>\n<h5><b>$2</b></h5><br>")
+		.replace(/<(?!b)([\w]+)>\s*(?:<b>\s*)?(Atividades? Resolvidas?|Atividades de sala|Atividade de sala|Resolução de problemas?|Mão na massa|Vamos pesquisar|Cinefórum|Visita técnica|Ponto de partida|Conectando ideias|Exercícios de fixação|Exercício de fixação|Atividades de fixação|Atividade de fixação|Saiba mais|CNEC virtual|Texto e Contexto|Dialogando|Revise o que você aprendeu|Você é o autor|Momento pipoca|Pesquisar é Descobrir|Ler e Se Encantar, é Só Começar|Ler e se encantar é só começar|Revise o que aprendeu|Atividades Extras|Hora da leitura|Foco na língua portuguesa|Referências)(?:\s*<\/b>)?\s*<\/\1>/gi, "<hr>\n<h5><b>$2</b></h5><br>")
 		.replace(/(?<![>])(Atividades? resolvidas?|Atividades de sala|Atividade de sala|Resolução de problemas?|Mão na massa|Vamos pesquisar|Cinefórum|Visita técnica|Conectando ideias|Ponto de partida)/gi, "<b>$1</b>")
 		.replace(/<p>(?:\s?<b>\s?)?(?:Resolução Comentada|Resposta|Resolução)\s*:(?:\s?<\/b>\s?)?<\/p>/gi, "<br><p><b>Resolução Comentada:</b></p>")
 		.replace(/<p>(?:<b>)?(\d+)\s?[-.)](?![0-9])\s?(\d+)\s?[-.)](?![0-9])\s?(\d+)\s?[-.)](?![0-9])\s?(?:<\/b>)?\s?Professor, es(?:.*?)?<\/p>/gi, "<br><p><b>$1)</b>, <b>$2)</b> e <b>$3)</b> Professor, essas atividades encontram-se resolvidas no material didático. Sugerimos que as utilize durante as explicações do tema ao qual elas se referem a fim de aprofundar os conceitos abordados na parte teórica.</p>")
@@ -837,9 +842,11 @@ function manual(str) {
 		.replace(/<\/p>/gi, "</p>\n")
 		.replace(/<b>([,.;:?!])?<\/b>/gi, "$1")
 		.replace(/([,.;?!:])<\/b>/gi, "</b>$1")
-		.replace(/<p>(?:<br>)?(?:<b>)?(\d+)\s?[-.)](?![0-9])\s?(?:<b>)?(?:Resolução:|Resposta:|Resposta: Letra|Alternativa correta:|Resolução: Letra|Letra)?\s?([^<]*)?(?:<\/b>)?(.*?)?(?:<\/b>)?<\/p>/gi, "<br><p><b>$1)</b> $2$3</p>")
+		// .replace(/<p>(?:<br>)?(?:<b>)?(\d+)\s?[-.)](?![0-9])\s?(?:<b>)?(?:Resolução:|Resposta:|Resposta: Letra|Alternativa correta:|Resolução: Letra|Letra)?\s?([^<]*)?(?:<\/b>)?(.*?)?(?:<\/b>)?<\/p>/gi, "<br><p><b>$1)</b> $2$3</p>")
+		.replace(/<p>(?:<br>)?(?:<b>)?\s*(\d{1,3})\s*[-.)]\s+(?![\d=+*/-])(?:<b>)?(?:Resolução:|Resposta:|Resposta: Letra|Alternativa correta:|Resolução: Letra|Letra)?\s*([^<]*)?(?:<\/b>)?(.*?)?(?:<\/b>)?<\/p>/gi,
+  "<br><p><b>$1)</b> $2$3</p>")
 		.replace(/<p><b>Questão 0?(\d)<\/b>\./gi, "<br><p><b>$1)</b> ")
-		.replace(/<p>(?:<br>)?\s?(\d+)\s?[-.)](?![0-9])\s?(?:Resolução:|Resposta:|Resposta: Letra|Resolução: Letra|Letra)?\s?(.*?)?<\/p>/gi, "<br><p><b>$1)</b> $2</p>")
+		.replace(/<p>(?:<br>)?\s*(\d{1,3})\s*[-.)]\s+(?![\d=+*/-])(?:Resolução:|Resposta:|Resposta: Letra|Resolução: Letra|Letra)?([\s\S]*?)<\/p>/gi, "<br><p><b>$1)</b> $2</p>")
 		.replace(/<ol><li>(?:<p>)?(?:<b>)?Resolução:\s?(?:<\/b>)(.*?)(?:<\/p>)?<\/li>\s*<\/ol>/gi, "<br><p><b>$$)</b> $1</p>")
 		.replace(/(?<!<p>)<br><\/p>/gi, "</p>")
 		.replace(/(?:<b>)?(Comentário:)(?:<\/b>)?/gi, "<br><b>Resolução comentada:</b> ")
@@ -1200,6 +1207,7 @@ function _clear(str) {
 		.replace(/\t/g, "")
 		.replace(/\n/g, " ")
 		.replace(/\s+/g, " ")
+		.replace(/%20/g, "")
 		.replace(/<!--[\s\S]*?-->/g, " ")
 		.replace(/&#160;|(&nbsp;)+|(&quot;)+|<o:p>|<\/o:p>/gi, " ")
 		.replace(/[\u201C\u201D]/g, '"')
