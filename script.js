@@ -620,18 +620,58 @@ function alteraElementos(html) {
 
 	[...tempDiv[0].querySelectorAll("li")].filter((p) => p.children.length === 1 && p.children[0].tagName === "P").forEach((p) => (p.innerHTML = p.children[0].innerHTML));
 
-	tempDiv[0].querySelectorAll('ol[start][type="1"] > li').forEach((li) => {
-		let nestedOl = li.querySelector('ol[type="a"]');
-		if (nestedOl) {
-			li.parentNode.insertAdjacentElement("afterend", nestedOl);
-			li.innerHTML = "";
-		}
+	// ============
 
-		let br = li.querySelector("br");
-		if (br) {
-			li.parentNode.insertAdjacentElement("afterend", br);
-		}
-	});
+	// tempDiv[0].querySelectorAll('ol[start][type="1"] > li').forEach((li) => {
+	// 	let nestedOl = li.querySelector('ol[type="a"]');
+	// 	if (nestedOl) {
+	// 		li.parentNode.insertAdjacentElement("afterend", nestedOl);
+	// 		li.innerHTML = "";
+	// 	}
+
+	// 	let br = li.querySelector("br");
+	// 	if (br) {
+	// 		li.parentNode.insertAdjacentElement("afterend", br);
+	// 	}
+	// });
+
+let ol = tempDiv[0].querySelector('ol[start][type="1"]');
+if (ol) {
+	const start = parseInt(ol.getAttribute("start"), 10) || 1;
+
+	// Encontra a sublista do tipo 'a'
+	let nestedOl = ol.querySelector('ol[type="a"]');
+	if (nestedOl) {
+		// Cria marcador <p><b>3)</b></p>
+		let marker = document.createElement("p");
+		marker.innerHTML = `<b>${start})</b>`;
+		ol.parentNode.insertBefore(marker, ol);
+
+		// Converte os itens da sublista
+		let letterCode = "a".charCodeAt(0);
+		let newItems = [];
+
+		nestedOl.querySelectorAll("li").forEach((li, index) => {
+			let text = li.innerHTML.trim();
+			let letter = String.fromCharCode(letterCode + index);
+			let p = document.createElement("p");
+			p.innerHTML = `${letter}) ${text}`;
+			newItems.push(p);
+		});
+
+		// Insere os novos <p> depois do marcador
+		newItems.forEach((p) => {
+			marker.insertAdjacentElement("afterend", p);
+			marker = p;
+		});
+
+		// Remove as listas originais
+		ol.remove();
+	}
+}
+
+
+	// ============
 
 	tempDiv[0].querySelectorAll('ol[type="a"]').forEach((ol) => {
 		let nextBr = ol.nextElementSibling;
@@ -676,30 +716,7 @@ function alteraElementos(html) {
 		ol.outerHTML = newHtml;
 	});
 
-	const titulos = [
-		"Exercícios resolvidos",
-		"Exercício resolvido",
-		"Exercícios de fixação",
-		"Exercício de fixação",
-		"Pesquisar é descobrir",
-		"Hora da leitura",
-		"Hora de leitura",
-		"Dialogando",
-		"Foco na língua portuguesa",
-		"Você é o autor",
-		"Compreensão do texto",
-		"Mão na massa",
-		"Revise o que você aprendeu",
-		"Revise o que aprendeu",
-		"Ler e se encantar, é só começar",
-		"Ler e encantar, é só começar",
-		"Ler e se encantar é só começar",
-		"Texto e contexto",
-		"Momento pipoca",
-		"Sessão pipoca",
-		"Saiba mais",
-		"Referências",
-		"CNEC virtual"];
+	const titulos = ["Exercícios resolvidos", "Exercício resolvido", "Exercícios de fixação", "Exercício de fixação", "Pesquisar é descobrir", "Hora da leitura", "Hora de leitura", "Dialogando", "Foco na língua portuguesa", "Você é o autor", "Compreensão do texto", "Mão na massa", "Revise o que você aprendeu", "Revise o que aprendeu", "Ler e se encantar, é só começar", "Ler e encantar, é só começar", "Ler e se encantar é só começar", "Texto e contexto", "Momento pipoca", "Sessão pipoca", "Saiba mais", "Referências", "CNEC virtual"];
 
 	const tituloMap = new Map();
 
@@ -847,8 +864,7 @@ function manual(str) {
 		.replace(/<b>([,.;:?!])?<\/b>/gi, "$1")
 		.replace(/([,.;?!:])<\/b>/gi, "</b>$1")
 		// .replace(/<p>(?:<br>)?(?:<b>)?(\d+)\s?[-.)](?![0-9])\s?(?:<b>)?(?:Resolução:|Resposta:|Resposta: Letra|Alternativa correta:|Resolução: Letra|Letra)?\s?([^<]*)?(?:<\/b>)?(.*?)?(?:<\/b>)?<\/p>/gi, "<br><p><b>$1)</b> $2$3</p>")
-		.replace(/<p>(?:<br>)?(?:<b>)?\s*(\d{1,3})\s*[-.)]\s+(?![\d=+*/-])(?:<b>)?(?:Resolução:|Resposta:|Resposta: Letra|Alternativa correta:|Resolução: Letra|Letra)?\s*([^<]*)?(?:<\/b>)?(.*?)?(?:<\/b>)?<\/p>/gi,
-  "<br><p><b>$1)</b> $2$3</p>")
+		.replace(/<p>(?:<br>)?(?:<b>)?\s*(\d{1,3})\s*[-.)]\s+(?![\d=+*/-])(?:<b>)?(?:Resolução:|Resposta:|Resposta: Letra|Alternativa correta:|Resolução: Letra|Letra)?\s*([^<]*)?(?:<\/b>)?(.*?)?(?:<\/b>)?<\/p>/gi,"<br><p><b>$1)</b> $2$3</p>")
 		.replace(/<p><b>Questão 0?(\d)<\/b>\./gi, "<br><p><b>$1)</b> ")
 		.replace(/<p>(?:<br>)?\s*(\d{1,3})\s*[-.)]\s+(?![\d=+*/-])(?:Resolução:|Resposta:|Resposta: Letra|Resolução: Letra|Letra)?([\s\S]*?)<\/p>/gi, "<br><p><b>$1)</b> $2</p>")
 		.replace(/<ol><li>(?:<p>)?(?:<b>)?Resolução:\s?(?:<\/b>)(.*?)(?:<\/p>)?<\/li>\s*<\/ol>/gi, "<br><p><b>$$)</b> $1</p>")
@@ -883,11 +899,11 @@ function manual(str) {
 		.replace(/(?<=<p><b>Capítulo \d+(?::|-) ).*?(?=<\/b><\/p>)/gi, titulo)
 		.replace(/Capítulo (\d+) ?(?::|-)/gi, "Capítulo $1 -")
 		.replace(/(?<=<h5><b>).*?(?=<\/b><\/h5>)/gi, padronizarTitulo)
-		.replace(/<p>\s*<b>\s*\d\.\d\.? .*?<\/b>\s*<\/p>/gi, subTitulo)
+		.replace(/<p>\s*<b>\s*\d\.\d\.? .*?<\/b>.*?<\/p>/gi, subTitulo)
 		.replace(/<\/h5>\s*<hr>\s*<h5>/gi, "</h5>\n<br>\n<h5>")
 		.replace(/<hr>\s*<hr>/gi, "<hr>")
 		.replace(/<\/h5>\s*<br>\s*<p>/gi, "</h5>\n<p>")
-		.replace(/<p>\s?(?:<b>)?\s?Pag(?:í|i)nas?\s?\d+\s?(?:<\/b>)?\s?<\/p>/gi, "")
+		.replace(/<p>\s?(?:<b>)?\s?P(?:á|a)ginas?\s?\d+\s?(?:<\/b>)?\s?<\/p>/gi, "")
 		.replace(/<div>\s*(.*?)\s*<\/div>/gi, "<p>$1</p>")
 		.replace(/<br(?: \/)?>\s*<br(?: \/)?>/gi, "<br>")
 		.replace(/\s?<\/b>\s?<b>\s?/gi, " ")
@@ -913,13 +929,14 @@ function manual(str) {
 }
 
 function subTitulo(str) {
-	const newStr = str.match(/(?<=<p>\s*<b>\s*\d\.\d\.? ).*?(?=<\/b>\s*<\/p>)/i);
-
+	const newStr = str.match(/<p>\s*<b>\s*\d\.\d\.?\s*(.*?)<\/b>(.*?)<\/p>/i);
+	
 	if (!newStr) return str; // se não encontrar, retorna original
 
-	const tituloTexto = titulo(newStr[0]);
+	const tituloTexto = titulo(newStr[1]);
+	const extraTexto = newStr[2] || "";
 
-	return `<hr><h5><b>${tituloTexto}</b></h5>`;
+	return `<hr><h5><b>${tituloTexto}</b>${extraTexto}</h5>`;
 }
 
 function padronizarTitulo(titulo) {
