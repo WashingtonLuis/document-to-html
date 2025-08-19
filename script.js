@@ -35,7 +35,7 @@ const padroes = [
 	[/pesquisar\s+é\s+descobrir/i, "Pesquisar é descobrir"],
 	[/hora\s+(da|de)\s+leitura/i, "Hora de leitura"],
 	[/dialogando/i, "Dialogando"],
-	[/foco\s+na\s+língua\s+portuguesa/i, "Foco na língua portuguesa"],
+	[/foco\s+na\s+língua\s+portuguesa/i, "Foco na Língua Portuguesa"],
 	[/você\s+é\s+o\s+autor/i, "Você é o autor"],
 	[/compreensão\s+do\s+texto/i, "Compreensão do texto"],
 	[/mão\s+na\s+massa/i, "Mão na massa"],
@@ -49,7 +49,8 @@ const padroes = [
 	[/Sessão\s+pipoca/i, "Momento pipoca"],
 	[/saiba\s+mais/i, "Saiba mais"],
 	[/cnec\s+virtual/i, "CNEC virtual"],
-	[/Referências/i, "Referências"]
+	[/Referências/i, "Referências"],
+	[/Bibliografia/i, "Referências"]
 ];
 
 function removerParenteses(input) {
@@ -716,7 +717,7 @@ if (ol) {
 		ol.outerHTML = newHtml;
 	});
 
-	const titulos = ["Exercícios resolvidos", "Exercício resolvido", "Exercícios de fixação", "Exercício de fixação", "Pesquisar é descobrir", "Hora da leitura", "Hora de leitura", "Dialogando", "Foco na língua portuguesa", "Você é o autor", "Compreensão do texto", "Mão na massa", "Revise o que você aprendeu", "Revise o que aprendeu", "Ler e se encantar, é só começar", "Ler e encantar, é só começar", "Ler e se encantar é só começar", "Texto e contexto", "Momento pipoca", "Sessão pipoca", "Saiba mais", "Referências", "CNEC virtual"];
+	const titulos = ["Exercícios resolvidos", "Exercício resolvido", "Exercícios de fixação", "Exercício de fixação", "Pesquisar é descobrir", "Hora da leitura", "Hora de leitura", "Dialogando", "Foco na Língua Portuguesa", "Você é o autor", "Compreensão do texto", "Mão na massa", "Revise o que você aprendeu", "Revise o que aprendeu", "Ler e se encantar, é só começar", "Ler e encantar, é só começar", "Ler e se encantar é só começar", "Texto e contexto", "Momento pipoca", "Sessão pipoca", "Saiba mais", "Referências", "Bibliografia", "CNEC virtual"];
 
 	const tituloMap = new Map();
 
@@ -854,7 +855,7 @@ function manual(str) {
 		.replace(/\s*<br\s*\/?>\s*<b>/gi, "</p>\n<p><b>")
 		.replace(/\s*<b>\s*<br\s*\/?>/gi, "</p>\n<p><b>")
 		.replace(/(?<!<p>)(<br>)(<\/b>)?(<\/p>)/gi, "$2$3$1")
-		.replace(/<(?!b)([\w]+)>\s*(?:<b>\s*)?(Atividades? Resolvidas?|Atividades de sala|Atividade de sala|Resolução de problemas?|Mão na massa|Vamos pesquisar|Cinefórum|Visita técnica|Ponto de partida|Conectando ideias|Exercícios de fixação|Exercício de fixação|Atividades de fixação|Atividade de fixação|Saiba mais|CNEC virtual|Texto e Contexto|Dialogando|Revise o que você aprendeu|Você é o autor|Momento pipoca|Pesquisar é Descobrir|Ler e Se Encantar, é Só Começar|Ler e se encantar é só começar|Revise o que aprendeu|Atividades Extras|Hora da leitura|Foco na língua portuguesa|Referências)(?:\s*<\/b>)?\s*<\/\1>/gi, "<hr>\n<h5><b>$2</b></h5><br>")
+		.replace(/<(?!b)([\w]+)>\s*(?:<b>\s*)?(Atividades? Resolvidas?|Atividades de sala|Atividade de sala|Resolução de problemas?|Mão na massa|Vamos pesquisar|Cinefórum|Visita técnica|Ponto de partida|Conectando ideias|Exercícios de fixação|Exercício de fixação|Atividades de fixação|Atividade de fixação|Saiba mais|CNEC virtual|Texto e Contexto|Dialogando|Revise o que você aprendeu|Você é o autor|Momento pipoca|Pesquisar é Descobrir|Ler e Se Encantar, é Só Começar|Ler e se encantar é só começar|Revise o que aprendeu|Atividades Extras|Hora da leitura|Foco na Língua Portuguesa|Referências|Bibliografia|Compreensão do texto)(?:\s*<\/b>)?\s*<\/\1>/gi, "<hr>\n<h5><b>$2</b></h5><br>")
 		.replace(/(?<![>])(Atividades? resolvidas?|Atividades de sala|Atividade de sala|Resolução de problemas?|Mão na massa|Vamos pesquisar|Cinefórum|Visita técnica|Conectando ideias|Ponto de partida)/gi, "<b>$1</b>")
 		.replace(/<p>(?:\s?<b>\s?)?(?:Resolução Comentada|Resposta|Resolução)\s*:(?:\s?<\/b>\s?)?<\/p>/gi, "<br><p><b>Resolução Comentada:</b></p>")
 		.replace(/<p>(?:<b>)?(\d+)\s?[-.)](?![0-9])\s?(\d+)\s?[-.)](?![0-9])\s?(\d+)\s?[-.)](?![0-9])\s?(?:<\/b>)?\s?Professor, es(?:.*?)?<\/p>/gi, "<br><p><b>$1)</b>, <b>$2)</b> e <b>$3)</b> Professor, essas atividades encontram-se resolvidas no material didático. Sugerimos que as utilize durante as explicações do tema ao qual elas se referem a fim de aprofundar os conceitos abordados na parte teórica.</p>")
@@ -909,6 +910,7 @@ function manual(str) {
 		.replace(/\s?<\/b>\s?<b>\s?/gi, " ")
 		.replace(/(?<!p>|div>)(?:<br>)?(<b>)(\d+\))\s*(<\/b>)/gi, "<p>$1$2$3</p>")
 		.replace(/(?<=<p><b>\d+\)<\/b>)\s*<br\s*\/?>\s*(?=<img)/gi, "</p>\n<p>")
+		.replace(/(?<=\))(?=\w)/gi, " ")
 		;
 
 	const termos = ["Resposta pessoal", "Respostas pessoais", "Resposta circunstancial", "Respostas circunstanciais", "Observação", "Resposta esperada"];
