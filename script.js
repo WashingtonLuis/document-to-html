@@ -468,6 +468,7 @@ function facilidades(str) {
 	text = clearTableCell(text);
 	text = formatLinks(text);
 	text = fixMalformedLinks(text);
+	text = imgLacunas(text);
 	// text = padraoFonte(text);
 
 	return text;
@@ -562,6 +563,14 @@ function fixMalformedLinks(text) {
 		const isAlreadyLinked = new RegExp(`<a[^>]*href=["']?${formattedLink}["']?[^>]*>`, "i").test(match);
 		return isAlreadyLinked ? match : `<a href="${formattedLink}" class="url" target="_blank" rel="nofollow">${cleanedUrl}</a>`;
 	});
+}
+
+function imgLacunas(text) {
+	return (
+		text
+			.replace(/_{9,}/gi, "<img src='linha.png' />")
+			.replace(/_{3,8}/gi, "<img src='lacuna.png' />")
+	);
 }
 
 function padraoFonte(text) {
@@ -901,7 +910,7 @@ function manual(str) {
 		.replace(/Capítulo (\d+) ?(?::|-)/gi, "Capítulo $1 -")
 		.replace(/(?<=<h5><b>).*?(?=<\/b><\/h5>)/gi, padronizarTitulo)
 		.replace(/<p>\s*<b>\s*\d\.\d\.? .*?<\/b>.*?<\/p>/gi, subTitulo)
-		.replace(/<\/h5>\s*<hr>\s*<h5>/gi, "</h5>\n<br>\n<h5>")
+		.replace(/<\/h5>\s*<hr>\s*<h5>/gi, "</h5>\n<h5>")
 		.replace(/<hr>\s*<hr>/gi, "<hr>")
 		.replace(/<\/h5>\s*<br>\s*<p>/gi, "</h5>\n<p>")
 		.replace(/<p>\s?(?:<b>)?\s?P(?:á|a)ginas?\s?\d+\s?(?:<\/b>)?\s?<\/p>/gi, "")
@@ -911,6 +920,7 @@ function manual(str) {
 		.replace(/(?<!p>|div>)(?:<br>)?(<b>)(\d+\))\s*(<\/b>)/gi, "<p>$1$2$3</p>")
 		.replace(/(?<=<p><b>\d+\)<\/b>)\s*<br\s*\/?>\s*(?=<img)/gi, "</p>\n<p>")
 		.replace(/(?<=\))(?=\w)/gi, " ")
+		.replace(/<\/h5>\s*<br\s*\/?>\s*<h5>/gi, "</h5>\n<h5>")
 		;
 
 	const termos = ["Resposta pessoal", "Respostas pessoais", "Resposta circunstancial", "Respostas circunstanciais", "Observação", "Resposta esperada"];
@@ -1263,7 +1273,7 @@ function _clear(str) {
 
 		.replace(/style="[^"]*?"(?!><\/iframe>)/gi, "")
 
-		.replace(/<(?!a)(\w+)\s*(?![^>]*\b(?:class\s*=\s*["']?\s*(?:text-danger|text-center|data-table|table-responsive|mx-auto|text-right|legend|url|img-center|img-right|img-left|box-item|d-none|d-print-block|d-print-none|youtube|box-book|mx-\d+|row|col-sm-\d+)\b|type="[1aAiI]"|colspan="\d"|rowspan="\d"|src="|exercise|exercise-circle|options|list-item|balao))[^>]*>/gi, "<$1>")
+		.replace(/<(?!a)(\w+)\s*(?![^>]*\b(?:class\s*=\s*["']?\s*(?:text-danger|text-center|data-table|table-responsive|mx-auto|text-right|legend|url|img-center|img-right|img-left|box-item|d-none|d-print-block|d-print-none|youtube|box-book|mx-\d+|row|col-sm-\d+)\b|type="[1aAiI]"|colspan="\d"|rowspan="\d"|src="|exercise|exercise-circle|options|list-item|student-only|teacher-only|teacher-gap|balao|caixinha|caixinhax|linha|lacuna|espaco))[^>]*>/gi, "<$1>")
 
 		.replace(/\<b\b[^>]*\>/gi, "<b>")
 		.replace(/\<li\b[^>]*\>/gi, "<li>")
@@ -1307,6 +1317,8 @@ function _clear(str) {
 		.replace(/<p>(?:\s*)<\/p>/g, "")
 		// .replace(/<p>(?:\s*)(?:<br>)*(?:\s*)<\/p>/gi, "\n")
 		.replace(/(<div class="box-book">)(.*?)(?:<br>)?<\/div>/gi, "\n$1\n\t$2</div><br>\n")
+		.replace(/alt=""/gi, "")
+		.replace(/class="_idGenObjectAttribute-\d+"/gi, "")
 		.replace(/[ ]{2,}/gi, " ")
 		.replace(/<p> ?(<b>) ?/gi, "<p>$1")
 		.replace(/<b><br><\/b>/gi, "<br>")
@@ -1367,10 +1379,10 @@ function organizaTags(textareaValue) {
 		if (document.getElementById("trocaTagImg").checked) {
 			// .replace(/<img\s+src="(?!balao)[^"]*"\s+(?:(?:width|height)="[^"]*"\s*)+>/gi, "@@")
 			text = text
-				.replace(/<img\s+src="(?!balao)[^"]*"(?:\s+\w+="[^"]*")*\s+(?:width|height)="[^"]*"(?:\s+\w+="[^"]*")*\s*>/gi, "@@")
+				.replace(/<img\s+src="(?!balao|caixinha|caixinhax|linha|lacuna|espaco)[^"]*"(?:\s+\w+="[^"]*")*\s+(?:width|height)="[^"]*"(?:\s+\w+="[^"]*")*\s*>/gi, "@@")
 				.replace(/@@((?:<br\s*\/?>)?(?:<\/b>)?<\/p>)/gi, "$1@@")
 				.replace(/<img width="\d+".*?v:shapes=".*?">/gi, "##")
-				.replace(/<img(?!(?:[^>]*\bsrc=['"](eq|blo|balao)))[^>]*>/gi, "@@")
+				.replace(/<img(?!(?:[^>]*\bsrc=['"](eq|blo|balao|caixinha|caixinhax|linha|lacuna|espaco)))[^>]*>/gi, "@@")
 				.replace(/<p>(?:<b>)?(?:<br\s*\/?>)?@@(?:<br\s*\/?>)?(?:<\/b>)?<\/p>/gi, "@@");
 		}
 
@@ -1392,23 +1404,17 @@ function clear() {
 			textareaValue = textareaValue.replace(/<(\w+)[^>]*(?:color: ?rgb\(255, ?0, ?0\);|color:#ff0000;).*?>(.*?)<\/\1>/gi, "{\\color{Red}$2}");
 		}
 		if (document.getElementById("exerciciosFundamental1").checked) {
-			textareaValue = textareaValue.replace(/<p class="[^"]*textos_titulos[^"]*">(.*?)<\/p>/gi, "<h5>$1</h5>").replace(/<img[^>]*\bsrc=['"][^'"]*Atividade_Oral[^'"]*['"][^>]*>/gi, "<img src='balao.png' height='35'> ");
+			textareaValue = textareaValue
+				.replace(/<p class="[^"]*textos_titulos[^"]*">(.*?)<\/p>/gi, "<h5>$1</h5>")
+				.replace(/<img[^>]*\bsrc=['"][^'"]*Atividade_Oral[^'"]*['"][^>]*>/gi, "<img src='balao.png' height='35'> ")
+				.replace(/<span[^>]*class="NUM-EXERCICIO[^"]*"[^>]*>(\d+)\.<\/span>/gi, "<b>$1)</b> ")
+				.replace(/<span[^>]*class="LETRA-EXERCICIO[^"]*"[^>]*>([A-Z]\))<\/span>/gi, "$1 ")
+				.replace(/<span[^>]*class="CAIXA-RESPOSTA[^"]*"[^>]*>C<\/span>/gi, "<img src='caixinha.png' height='35'> ")
+				.replace(/<[^>]*class="MATERIAL-DIDATICO_BOX-ATIVIDADE[^"]*"[^>]*>(.*?)<\/[^>]+>/gi, "<div class='mx-900 zoom img-center'><img src='espaco.png'></div>");
 		}
 
 		if (document.getElementById("uperCase").checked) {
-			var tempDiv = $("<div>").html(textareaValue);
-
-			tempDiv
-				.find("*")
-				.contents()
-				.each(function () {
-					if (this.nodeType === 3) {
-						// Verifica se é um nó de texto
-						this.nodeValue = this.nodeValue.toUpperCase();
-					}
-				});
-
-			textareaValue = tempDiv.html();
+			textareaValue = upperCase(textareaValue);
 		}
 
 		// Limpar espaços, estilos e tags indesejados
@@ -1509,6 +1515,23 @@ function clear() {
 	} catch (error) {
 		console.error("Erro ao formatar o texto:", error);
 	}
+}
+
+function upperCase(textareaValue) {
+	var tempDiv = $("<div>").html(textareaValue);
+
+	tempDiv
+		.find("*")
+		.contents()
+		.each(function () {
+			if (this.nodeType === 3) {
+				// Verifica se é um nó de texto
+				this.nodeValue = this.nodeValue.toUpperCase();
+			}
+		});
+
+	textareaValue = tempDiv.html();
+	return textareaValue;
 }
 
 function limpaTela() {
@@ -1737,6 +1760,21 @@ $(document).ready(function () {
 			textareaValue = removeSpan(textareaValue);
 			textareaValue = textareaValue.replace(/&nbsp;/g, " ");
 
+			// Definir o texto formatado em outro elemento
+			$("#result").text(textareaValue);
+
+			navigator.clipboard.writeText(textareaValue);
+		} catch (error) {
+			console.error("Erro ao formatar o texto:", error);
+		}
+	});
+
+	$("#textUpperCase").click(function () {
+		try {
+			let textareaValue = $("#summernote").summernote("code");
+
+			textareaValue = upperCase(textareaValue);
+			
 			// Definir o texto formatado em outro elemento
 			$("#result").text(textareaValue);
 
