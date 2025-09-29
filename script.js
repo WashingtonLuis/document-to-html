@@ -1,3 +1,5 @@
+import { alteraElementos } from "./alteraElementos.js";
+
 const latexAcentuacao = {
 	á: "\\'a",
 	é: "\\'e",
@@ -49,8 +51,15 @@ const padroes = [
 	[/Sessão\s+pipoca/i, "Momento pipoca"],
 	[/saiba\s+mais/i, "Saiba mais"],
 	[/cnec\s+virtual/i, "CNEC virtual"],
+	[/Setting\s+the\s+scene/i, "Setting the scene"],
+	[/Speak\s+up\!?/i, "Speak up!"],
+	[/Reading\s+Time/i, "Reading time"],
+	[/Let's\s+review/i, "Let's review"],
+	[/Activities/i, "Activities"],
+	[/Popcorn\s+time/i, "Popcorn time"],
+	[/Did you know\??/i, "Did you know?"],
 	[/Referências/i, "Referências"],
-	[/Bibliografia/i, "Referências"]
+	[/Bibliografia/i, "Referências"],
 ];
 
 function removerParenteses(input) {
@@ -64,7 +73,7 @@ function voltaParenteses(input) {
 }
 
 function removeSpan(input) {
-	const output = input.replace(/<span(?! class="(?:d-none|fs-2 vertical-align-symbol))[^<]*?>(?!<span)(.*?)<\/span>/gi, "$1");
+	const output = input.replace(/<span(?! class="(?:d-none|fs-2 vertical-align-symbol|student-only|teacher-only|teacher-gap))[^<]*?>(?!<span)(.*?)<\/span>/gi, "$1");
 	// const output = input.replace(/<span[^<]*?>(.*?[^<span>].*?)<\/span>/gi, "$1");
 	return output === input ? output : removeSpan(output);
 }
@@ -73,8 +82,7 @@ function removeEspacosExtras(input) {
 	const output = input
 		.replace(/(?:<p><br><\/p>|<br>|\s)+(?=@@|<ol class="options">|(?:<\/div>\s*<ol class="options">)|<div class="d-print-none">|<div class="d-none d-print-block">)/gi, "\n")
 		.replace(/(?=@@)(?:<p><br><\/p>|<br>|\s)+/gi, "\n")
-		.replace(/\n{2,}(?=<\/div>)/gi, "\n")
-		;
+		.replace(/\n{2,}(?=<\/div>)/gi, "\n");
 	return output === input ? output : removeEspacosExtras(output);
 }
 
@@ -462,13 +470,17 @@ function facilidades(str) {
 	text = organizaTags(text);
 	text = removeTag(text);
 	text = removeImgFromParagraphs(text);
-	text = replaceYoutubeLinks(text);
+	if (!document.getElementById('naoVideo').checked) {
+		text = replaceYoutubeLinks(text);
+	}
 	text = wrapTablesWithResponsiveDiv(text);
 	text = convertTableCellsToHeaders(text);
 	text = clearTableCell(text);
 	text = formatLinks(text);
 	text = fixMalformedLinks(text);
-	text = imgLacunas(text);
+	if (document.getElementById('imgLacuna').checked) {
+		text = imgLacunas(text);
+	}
 	// text = padraoFonte(text);
 
 	return text;
@@ -551,26 +563,28 @@ function formatLinks(text) {
 function fixMalformedLinks(text) {
 	const processedLinks = new Set();
 
-	return text.replace(/(?<!href=['"])(?<!src=['"])(?<!<iframe[^>]*src=['"])(?<!<a[^>]*href=['"])(?<!<img[^>]*src=['"])\b((https?:\/\/|www\.)(?!(?:www\.)?(youtube\.com|youtu\.be))[^\s<>"]+(?:\.[a-z]{2,})[^\s<]*)/gi, (match, url) => {
-		const cleanedUrl = url.replace(/\s+/g, ""); // Remove espaços dentro da URL
-
-		if (processedLinks.has(cleanedUrl)) return match; // Se o link já foi processado, retorne como está
+	return text.replace(/\b((https?:\/\/|www\.)[^\s<>")]+[^\s<>.,;:")])/gi, (match, url) => {
+		const cleanedUrl = url.replace(/\s+/g, "");
+		if (processedLinks.has(cleanedUrl)) return match;
 
 		const formattedLink = cleanedUrl.startsWith("www.") ? `https://${cleanedUrl}` : cleanedUrl;
-		processedLinks.add(cleanedUrl); // Marca o link como processado
 
-		// Verifica se o link já está envolto em <a>
-		const isAlreadyLinked = new RegExp(`<a[^>]*href=["']?${formattedLink}["']?[^>]*>`, "i").test(match);
+		processedLinks.add(cleanedUrl);
+
+		const safeUrl = escapeRegex(formattedLink);
+
+		const isAlreadyLinked = new RegExp(`<a[^>]*href=["']?${safeUrl}["']?[^>]*>`, "i").test(match);
+
 		return isAlreadyLinked ? match : `<a href="${formattedLink}" class="url" target="_blank" rel="nofollow">${cleanedUrl}</a>`;
 	});
+
+	function escapeRegex(string) {
+		return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+	}
 }
 
 function imgLacunas(text) {
-	return (
-		text
-			.replace(/_{9,}/gi, "<img src='linha.png' />")
-			.replace(/_{3,8}/gi, "<img src='lacuna.png' />")
-	);
+	return text.replace(/_{9,}/gi, "<img src='linha.png' />").replace(/_{3,8}/gi, "<img src='lacuna.png' />");
 }
 
 function padraoFonte(text) {
@@ -584,7 +598,7 @@ function padraoResposta(text) {
 		.replace(/(?<=Resolução: )[a-e]/g, (match) => match.toUpperCase());
 }
 
-function tagImg(html) {
+export function tagImg(html) {
 	var tempDiv = $("<div>").html(html);
 	[...tempDiv[0].querySelectorAll("p, div")].forEach((el) => {
 		const isOnlyImg = el.children.length === 1 && el.children[0].tagName === "IMG" && el.textContent.trim() === "";
@@ -611,238 +625,65 @@ function tagImg(html) {
 	return tempDiv.html();
 }
 
-function alteraElementos(html) {
-	var tempDiv = $("<div>").html(html);
+function fixOlStructure(tempHtml) {
 
-	tempDiv.find("colgroup").remove();
+	var tempDiv = $("<div>").html(tempHtml);
 
-	tempDiv[0].querySelectorAll("table[style]").forEach((table) => {
-		table.removeAttribute("style");
-	});
+	const splitOl = (ol) => {
+		var type = ol.getAttribute("type") || "1";
+		var start = parseInt(ol.getAttribute("start") || "1", 10);
 
-	tempDiv[0].querySelectorAll("td[style]").forEach((td) => {
-		td.removeAttribute("style");
-	});
+		// percorre os filhos
+		var lis = Array.from(ol.querySelectorAll(":scope > li"));
+		var expected = start;
 
-	tempDiv = $("<div>").html(tagImg(tempDiv.html()));
+		for (var i = 0; i < lis.length; i++) {
+			var li = lis[i];
 
-	[...tempDiv[0].querySelectorAll("table")].forEach((a) => a.classList.add("data-table"));
+			// procura <ol start> logo abaixo do <li>
+			var childOls = Array.from(li.querySelectorAll(":scope > ol[start]"));
+			for (var j = 0; j < childOls.length; j++) {
+				var childOl = childOls[j];
+				var childStart = parseInt(childOl.getAttribute("start") || "1", 10);
+				var childType = childOl.getAttribute("type") || "1";
 
-	[...tempDiv[0].querySelectorAll("li")].filter((p) => p.children.length === 1 && p.children[0].tagName === "P").forEach((p) => (p.innerHTML = p.children[0].innerHTML));
-
-	// ============
-
-	// tempDiv[0].querySelectorAll('ol[start][type="1"] > li').forEach((li) => {
-	// 	let nestedOl = li.querySelector('ol[type="a"]');
-	// 	if (nestedOl) {
-	// 		li.parentNode.insertAdjacentElement("afterend", nestedOl);
-	// 		li.innerHTML = "";
-	// 	}
-
-	// 	let br = li.querySelector("br");
-	// 	if (br) {
-	// 		li.parentNode.insertAdjacentElement("afterend", br);
-	// 	}
-	// });
-
-let ol = tempDiv[0].querySelector('ol[start][type="1"]');
-if (ol) {
-	const start = parseInt(ol.getAttribute("start"), 10) || 1;
-
-	// Encontra a sublista do tipo 'a'
-	let nestedOl = ol.querySelector('ol[type="a"]');
-	if (nestedOl) {
-		// Cria marcador <p><b>3)</b></p>
-		let marker = document.createElement("p");
-		marker.innerHTML = `<b>${start})</b>`;
-		ol.parentNode.insertBefore(marker, ol);
-
-		// Converte os itens da sublista
-		let letterCode = "a".charCodeAt(0);
-		let newItems = [];
-
-		nestedOl.querySelectorAll("li").forEach((li, index) => {
-			let text = li.innerHTML.trim();
-			let letter = String.fromCharCode(letterCode + index);
-			let p = document.createElement("p");
-			p.innerHTML = `${letter}) ${text}`;
-			newItems.push(p);
-		});
-
-		// Insere os novos <p> depois do marcador
-		newItems.forEach((p) => {
-			marker.insertAdjacentElement("afterend", p);
-			marker = p;
-		});
-
-		// Remove as listas originais
-		ol.remove();
-	}
-}
-
-
-	// ============
-
-	tempDiv[0].querySelectorAll('ol[type="a"]').forEach((ol) => {
-		let nextBr = ol.nextElementSibling;
-		let nextOl = nextBr && nextBr.tagName === "BR" ? nextBr.nextElementSibling : ol.nextElementSibling;
-
-		if (nextOl && nextOl.tagName === "OL" && nextOl.getAttribute("type") === "a" && nextOl.getAttribute("start") === "2") {
-			if (nextBr && nextBr.tagName === "BR") {
-				nextBr.remove();
-			}
-
-			[...nextOl.children].forEach((li) => ol.appendChild(li));
-			nextOl.remove();
-		}
-	});
-
-	tempDiv[0].querySelectorAll('ol[start][type="1"]').forEach((ol) => {
-		let start = parseInt(ol.getAttribute("start"), 10);
-
-		ol.querySelectorAll("li").forEach((li) => {
-			let br = document.createElement("br");
-			let newParagraph = document.createElement("p");
-			newParagraph.innerHTML = `<b>${start})</b> ${li.innerHTML}`;
-
-			ol.parentNode.insertBefore(br, ol);
-			ol.parentNode.insertBefore(newParagraph, ol);
-
-			start++;
-		});
-
-		ol.remove();
-	});
-
-	tempDiv[0].querySelectorAll('ol[type="a"]').forEach((ol) => {
-		let letters = "abcdefghijklmnopqrstuvwxyz".split("");
-		let newHtml = "";
-
-		[...ol.children].forEach((li, index) => {
-			let letter = letters[index] || `${index + 1})`;
-			newHtml += `<p>${letter}) ${li.innerHTML.trim()}</p>\n`;
-		});
-
-		ol.outerHTML = newHtml;
-	});
-
-	const titulos = ["Exercícios resolvidos", "Exercício resolvido", "Exercícios de fixação", "Exercício de fixação", "Pesquisar é descobrir", "Hora da leitura", "Hora de leitura", "Dialogando", "Foco na Língua Portuguesa", "Você é o autor", "Compreensão do texto", "Mão na massa", "Revise o que você aprendeu", "Revise o que aprendeu", "Ler e se encantar, é só começar", "Ler e encantar, é só começar", "Ler e se encantar é só começar", "Texto e contexto", "Momento pipoca", "Sessão pipoca", "Saiba mais", "Referências", "Bibliografia", "CNEC virtual"];
-
-	const tituloMap = new Map();
-
-	function normalizar(texto) {
-		return texto
-			.normalize("NFD")
-			.replace(/[\u0300-\u036f]/g, "")
-			.toLowerCase();
-	}
-
-	titulos.forEach((t) => tituloMap.set(normalizar(t), t));
-
-	tempDiv[0].querySelectorAll("ul > li > b").forEach((b) => {
-		const textoLimpo = b.innerHTML
-			.replace(/<br\s*\/?>/gi, "")
-			.replace(/:$/, "")
-			.trim();
-
-		const chaveNormalizada = normalizar(textoLimpo);
-
-		if (tituloMap.has(chaveNormalizada)) {
-			const tituloCorreto = tituloMap.get(chaveNormalizada);
-			const novoTitulo = `<h5><b>${tituloCorreto}</b></h5>`;
-
-			const li = b.closest("li");
-			if (li && li.parentElement.tagName.toLowerCase() === "ul") {
-				li.outerHTML = `<hr>\n${novoTitulo}\n`;
-			}
-		}
-	});
-
-	tempDiv[0].querySelectorAll("ul").forEach((ul) => {
-		const filhosValidos = Array.from(ul.childNodes).every((node) => node.nodeType === Node.TEXT_NODE || (node.nodeType === Node.ELEMENT_NODE && ["BR", "HR", "H5"].includes(node.tagName)));
-
-		if (filhosValidos) {
-			while (ul.firstChild) {
-				ul.parentNode.insertBefore(ul.firstChild, ul);
-			}
-			ul.remove();
-		}
-	});
-
-	tempDiv[0].querySelectorAll('ol[type="1"]').forEach((ol) => {
-		let newHtml = "";
-
-		[...ol.children].forEach((li, index) => {
-			newHtml += `<br><p><b>${index + 1})</b> ${li.innerHTML.trim()}</p>\n`;
-		});
-
-		ol.outerHTML = newHtml;
-	});
-
-	tempDiv[0].querySelectorAll("p").forEach((p) => {
-		const bold = p.querySelector("b");
-
-		if (bold) {
-			const text = bold.textContent.replace(/\s+/g, " ").trim();
-
-			if (text === "Resolução comentada" || text === "Resolução comentada:") {
-				const br = document.createElement("br");
-				p.parentNode.insertBefore(br, p);
-			}
-		}
-	});
-
-	while (tempDiv[0].querySelector("br + br")) {
-		tempDiv[0].querySelectorAll("br + br").forEach((br) => br.remove());
-	}
-
-	tempDiv[0].querySelectorAll("b").forEach((b) => {
-		const parent = b.parentElement;
-
-		if (!parent) return;
-
-		if (!["P", "DIV", "LI", "TD", "TH", "H5"].includes(parent.tagName) || (parent.tagName === "DIV" && !b.parentElement.parentElement)) {
-			const fragment = document.createRange().createContextualFragment(b.innerHTML);
-			b.replaceWith(fragment);
-		}
-	});
-
-	tempDiv[0].querySelectorAll("li").forEach((li) => {
-		if (!["UL", "OL"].includes(li.parentElement?.tagName)) {
-			const fragment = document.createDocumentFragment();
-			let currentP = null;
-
-			[...li.childNodes].forEach((node) => {
-				if (node.nodeType === 1) {
-					const tag = node.tagName;
-
-					// Se for um elemento de bloco (bloco fora de <p>)
-					if (["P", "UL", "OL", "HR", "H5", "BR", "DIV"].includes(tag)) {
-						// Adiciona o <p> em construção antes
-						if (currentP) {
-							fragment.appendChild(currentP);
-							currentP = null;
-						}
-						fragment.appendChild(node); // Adiciona o elemento de bloco
+				// se for o mesmo tipo e devia ser sequência, junta
+				if (childType === type && childStart === expected + 1) {
+					// mover todos os <li> do childOl para o ol atual
+					while (childOl.firstElementChild) {
+						ol.appendChild(childOl.firstElementChild);
 					}
-					// Se for inline, adiciona ao <p>
-					else {
-						if (!currentP) currentP = document.createElement("p");
-						currentP.appendChild(node);
+					childOl.remove();
+				} else if (childType === type) {
+					// precisa dividir
+					var newOl = document.createElement("ol");
+					newOl.setAttribute("start", String(childStart));
+					newOl.setAttribute("type", childType);
+
+					// mover os próximos irmãos do parent de childOl para o novo <ol>
+					var liParent = childOl.parentElement;
+					var moveFrom = liParent.nextElementSibling;
+					while (moveFrom) {
+						var next = moveFrom.nextElementSibling;
+						newOl.appendChild(moveFrom);
+						moveFrom = next;
 					}
-				} else if (node.nodeType === 3 && node.textContent.trim() !== "") {
-					if (!currentP) currentP = document.createElement("p");
-					currentP.appendChild(document.createTextNode(node.textContent));
+
+					// insere depois do ol atual
+					ol.insertAdjacentElement("afterend", newOl);
+
+					// recursivo no novo <ol>
+					splitOl(newOl);
+					return; // já dividiu, encerrar
 				}
-			});
-
-			// Adiciona o último parágrafo em construção (se existir)
-			if (currentP) {
-				fragment.appendChild(currentP);
+				expected = childStart;
 			}
-
-			li.replaceWith(fragment);
+			expected++;
 		}
+	};
+
+	Array.from(tempDiv[0].querySelectorAll("ol")).forEach(function (ol) {
+		splitOl(ol);
 	});
 
 	return tempDiv.html();
@@ -851,6 +692,7 @@ if (ol) {
 function manual(str) {
 	let text = str;
 
+	text = fixOlStructure(text);
 	text = alteraElementos(text);
 
 	text = text
@@ -864,7 +706,7 @@ function manual(str) {
 		.replace(/\s*<br\s*\/?>\s*<b>/gi, "</p>\n<p><b>")
 		.replace(/\s*<b>\s*<br\s*\/?>/gi, "</p>\n<p><b>")
 		.replace(/(?<!<p>)(<br>)(<\/b>)?(<\/p>)/gi, "$2$3$1")
-		.replace(/<(?!b)([\w]+)>\s*(?:<b>\s*)?(Atividades? Resolvidas?|Atividades de sala|Atividade de sala|Resolução de problemas?|Mão na massa|Vamos pesquisar|Cinefórum|Visita técnica|Ponto de partida|Conectando ideias|Exercícios de fixação|Exercício de fixação|Atividades de fixação|Atividade de fixação|Saiba mais|CNEC virtual|Texto e Contexto|Dialogando|Revise o que você aprendeu|Você é o autor|Momento pipoca|Pesquisar é Descobrir|Ler e Se Encantar, é Só Começar|Ler e se encantar é só começar|Revise o que aprendeu|Atividades Extras|Hora da leitura|Foco na Língua Portuguesa|Referências|Bibliografia|Compreensão do texto)(?:\s*<\/b>)?\s*<\/\1>/gi, "<hr>\n<h5><b>$2</b></h5><br>")
+		.replace(/<(?!b)([\w]+)>\s*(?:<b>\s*)?(Atividades? Resolvidas?|Atividades de sala|Atividade de sala|Resolução de problemas?|Mão na massa|Vamos pesquisar|Cinefórum|Visita técnica|Ponto de partida|Conectando ideias|Exercícios de fixação|Exercício de fixação|Atividades de fixação|Atividade de fixação|Saiba mais|CNEC virtual|Texto e Contexto|Dialogando|Revise o que você aprendeu|Você é o autor|Momento pipoca|Pesquisar é Descobrir|Ler e Se Encantar, é Só Começar|Ler e se encantar é só começar|Revise o que aprendeu|Atividades Extras|Hora da leitura|Foco na Língua Portuguesa|Referências|Bibliografia|Compreensão do texto|Setting the scene|Speak up!|Reading Time|Activities|Let's review|Popcorn time|Did you know\?)(?:\s*<\/b>)?\s*<\/\1>/gi, "<hr>\n<h5><b>$2</b></h5><br>")
 		.replace(/(?<![>])(Atividades? resolvidas?|Atividades de sala|Atividade de sala|Resolução de problemas?|Mão na massa|Vamos pesquisar|Cinefórum|Visita técnica|Conectando ideias|Ponto de partida)/gi, "<b>$1</b>")
 		.replace(/<p>(?:\s?<b>\s?)?(?:Resolução Comentada|Resposta|Resolução)\s*:(?:\s?<\/b>\s?)?<\/p>/gi, "<br><p><b>Resolução Comentada:</b></p>")
 		.replace(/<p>(?:<b>)?(\d+)\s?[-.)](?![0-9])\s?(\d+)\s?[-.)](?![0-9])\s?(\d+)\s?[-.)](?![0-9])\s?(?:<\/b>)?\s?Professor, es(?:.*?)?<\/p>/gi, "<br><p><b>$1)</b>, <b>$2)</b> e <b>$3)</b> Professor, essas atividades encontram-se resolvidas no material didático. Sugerimos que as utilize durante as explicações do tema ao qual elas se referem a fim de aprofundar os conceitos abordados na parte teórica.</p>")
@@ -874,7 +716,7 @@ function manual(str) {
 		.replace(/<b>([,.;:?!])?<\/b>/gi, "$1")
 		.replace(/([,.;?!:])<\/b>/gi, "</b>$1")
 		// .replace(/<p>(?:<br>)?(?:<b>)?(\d+)\s?[-.)](?![0-9])\s?(?:<b>)?(?:Resolução:|Resposta:|Resposta: Letra|Alternativa correta:|Resolução: Letra|Letra)?\s?([^<]*)?(?:<\/b>)?(.*?)?(?:<\/b>)?<\/p>/gi, "<br><p><b>$1)</b> $2$3</p>")
-		.replace(/<p>(?:<br>)?(?:<b>)?\s*(\d{1,3})\s*[-.)]\s+(?![\d=+*/-])(?:<b>)?(?:Resolução:|Resposta:|Resposta: Letra|Alternativa correta:|Resolução: Letra|Letra)?\s*([^<]*)?(?:<\/b>)?(.*?)?(?:<\/b>)?<\/p>/gi,"<br><p><b>$1)</b> $2$3</p>")
+		.replace(/<p>(?:<br>)?(?:<b>)?\s*(\d{1,3})\s*[-.)]\s+(?![\d=+*/-])(?:<b>)?(?:Resolução:|Resposta:|Resposta: Letra|Alternativa correta:|Resolução: Letra|Letra)?\s*([^<]*)?(?:<\/b>)?(.*?)?(?:<\/b>)?<\/p>/gi, "<br><p><b>$1)</b> $2$3</p>")
 		.replace(/<p><b>Questão 0?(\d)<\/b>\./gi, "<br><p><b>$1)</b> ")
 		.replace(/<p>(?:<br>)?\s*(\d{1,3})\s*[-.)]\s+(?![\d=+*/-])(?:Resolução:|Resposta:|Resposta: Letra|Resolução: Letra|Letra)?([\s\S]*?)<\/p>/gi, "<br><p><b>$1)</b> $2</p>")
 		.replace(/<ol><li>(?:<p>)?(?:<b>)?Resolução:\s?(?:<\/b>)(.*?)(?:<\/p>)?<\/li>\s*<\/ol>/gi, "<br><p><b>$$)</b> $1</p>")
@@ -920,8 +762,7 @@ function manual(str) {
 		.replace(/(?<!p>|div>)(?:<br>)?(<b>)(\d+\))\s*(<\/b>)/gi, "<p>$1$2$3</p>")
 		.replace(/(?<=<p><b>\d+\)<\/b>)\s*<br\s*\/?>\s*(?=<img)/gi, "</p>\n<p>")
 		.replace(/(?<=\))(?=\w)/gi, " ")
-		.replace(/<\/h5>\s*<br\s*\/?>\s*<h5>/gi, "</h5>\n<h5>")
-		;
+		.replace(/<\/h5>\s*<br\s*\/?>\s*<h5>/gi, "</h5>\n<h5>");
 
 	const termos = ["Resposta pessoal", "Respostas pessoais", "Resposta circunstancial", "Respostas circunstanciais", "Observação", "Resposta esperada"];
 
@@ -932,7 +773,10 @@ function manual(str) {
 		const patternTag = new RegExp(`<b>\\s*${escapedTerm}\\s*<\\/b>`, "gi");
 		const patternPlain = new RegExp(`(?<!<b[^>]*?>\s*)${escapedTerm}(?=\s*[.:!?])`, "gi");
 
-		text = text.replace(patternTag, `<b>${term}</b>`).replace(patternPlain, `<b>${term}</b>`).replace(/\s?<\/b>\s?<b>\s?/gi, " ");
+		text = text
+			.replace(patternTag, `<b>${term}</b>`)
+			.replace(patternPlain, `<b>${term}</b>`)
+			.replace(/\s?<\/b>\s?<b>\s?/gi, " ");
 	});
 
 	text = tagImg(text);
@@ -942,7 +786,7 @@ function manual(str) {
 
 function subTitulo(str) {
 	const newStr = str.match(/<p>\s*<b>\s*\d\.\d\.?\s*(.*?)<\/b>(.*?)<\/p>/i);
-	
+
 	if (!newStr) return str; // se não encontrar, retorna original
 
 	const tituloTexto = titulo(newStr[1]);
@@ -952,11 +796,11 @@ function subTitulo(str) {
 }
 
 function padronizarTitulo(titulo) {
-	const limpo = titulo.trim().replace(/\s+/g, ' ');
-  for (const [regex, padrao] of padroes) {
-    if (regex.test(limpo)) return padrao;
-  }
-  return titulo; // retorna original se nenhum padrão for encontrado
+	const limpo = titulo.trim().replace(/\s+/g, " ");
+	for (const [regex, padrao] of padroes) {
+		if (regex.test(limpo)) return padrao;
+	}
+	return titulo; // retorna original se nenhum padrão for encontrado
 }
 
 function titulo(str) {
@@ -975,9 +819,9 @@ function titulo(str) {
 
 function semTag(str) {
 	return str
-	.replace(/<br ?(?:\/)?>/gi, "\n")
-	.replace(/<(?:\/)?(?:b|i|u|p|font)\s?.*?>/gi, "")
-	.replace(/[ ]{2,}/gi, " ");
+		.replace(/<br ?(?:\/)?>/gi, "\n")
+		.replace(/<(?:\/)?(?:b|i|u|p|font)\s?.*?>/gi, "")
+		.replace(/[ ]{2,}/gi, " ");
 }
 
 function removeParagrafosBr(tempDiv) {
@@ -1251,6 +1095,8 @@ function _clear(str) {
 		.replace(/∙/g, " · ")
 		.replace(/\s+(!|\?|\.|\,)/g, "$1 ")
 		.replace(/[ ]{2,}/gi, " ")
+		.replace(/&lt;\s*(?=<a)/gi, " ")
+		.replace(/(<\/a>)\s*&gt;/gi, "$1 ")
 		// .replace(/(<(?:\/)?(?!b|i|u|span)[^>]*>) (<(?:\/)?(?!b|i|u|span)[^>]*>)/gi, "$1$2")
 
 		.replace(/(<(\w+)\s+style="[^"]*font-weight:\s*700[^"]*"[^>]*>)(.*?)(<\/\2>)/gi, "$1<b>$3</b>$4")
@@ -1375,18 +1221,18 @@ function organizaTags(textareaValue) {
 		.replace(/<p><br><\/p>\n+(?=<p><br><b>\d+\)<\/b>)/g, "")
 		.replace(/:<\/b> ?:/gi, ":</b>")
 		.replace(/<div><br>\s?<\/div>\s?<br>/gi, "");
-		
-		if (document.getElementById("trocaTagImg").checked) {
-			// .replace(/<img\s+src="(?!balao)[^"]*"\s+(?:(?:width|height)="[^"]*"\s*)+>/gi, "@@")
-			text = text
-				.replace(/<img\s+src="(?!balao|caixinha|caixinhax|linha|lacuna|espaco)[^"]*"(?:\s+\w+="[^"]*")*\s+(?:width|height)="[^"]*"(?:\s+\w+="[^"]*")*\s*>/gi, "@@")
-				.replace(/@@((?:<br\s*\/?>)?(?:<\/b>)?<\/p>)/gi, "$1@@")
-				.replace(/<img width="\d+".*?v:shapes=".*?">/gi, "##")
-				.replace(/<img(?!(?:[^>]*\bsrc=['"](eq|blo|balao|caixinha|caixinhax|linha|lacuna|espaco)))[^>]*>/gi, "@@")
-				.replace(/<p>(?:<b>)?(?:<br\s*\/?>)?@@(?:<br\s*\/?>)?(?:<\/b>)?<\/p>/gi, "@@");
-		}
 
+	if (document.getElementById("trocaTagImg").checked) {
+		// .replace(/<img\s+src="(?!balao)[^"]*"\s+(?:(?:width|height)="[^"]*"\s*)+>/gi, "@@")
 		text = text
+			.replace(/<img\s+src="(?!balao|caixinha|caixinhax|linha|lacuna|espaco)[^"]*"(?:\s+\w+="[^"]*")*\s+(?:width|height)="[^"]*"(?:\s+\w+="[^"]*")*\s*>/gi, "@@")
+			.replace(/@@((?:<br\s*\/?>)?(?:<\/b>)?<\/p>)/gi, "$1@@")
+			.replace(/<img width="\d+".*?v:shapes=".*?">/gi, "##")
+			.replace(/<img(?!(?:[^>]*\bsrc=['"](eq|blo|balao|caixinha|caixinhax|linha|lacuna|espaco)))[^>]*>/gi, "@@")
+			.replace(/<p>(?:<b>)?(?:<br\s*\/?>)?@@(?:<br\s*\/?>)?(?:<\/b>)?<\/p>/gi, "@@");
+	}
+
+	text = text
 		.replace(/^\s*/g, "")
 		.replace(/(<br>\s*)*$/gi, "")
 		.replace(/(?:<br><\/p>\s*)$/gi, "</p>")
@@ -1470,7 +1316,7 @@ function clear() {
 		if (document.getElementById("removePontoLista").checked) {
 			textareaValue = textareaValue.replace(/•|● ?/gi, "");
 		}
-		
+
 		if (document.getElementById("facilidades").checked) {
 			textareaValue = facilidades(textareaValue);
 		}
@@ -1478,7 +1324,7 @@ function clear() {
 		if (document.getElementById("semTag").checked) {
 			textareaValue = semTag(textareaValue);
 		}
-		
+
 		textareaValue = insereQuebras(textareaValue);
 
 		// textareaValue = organizaTags(textareaValue);
@@ -1503,8 +1349,7 @@ function clear() {
 			.replace(/(?<=<hr>)\s+(?=<h5>)/gi, "\n")
 			.replace(/(?<=<\/table>\s+)<br>\s+(?=<\/div>)/gi, "")
 			.replace(/^\n/gi, "")
-			.replace(/<br>\s*<br>/gi, "<br>")
-			;
+			.replace(/<br>\s*<br>/gi, "<br>");
 		// Definir o texto formatado em outro elemento
 		$("#result").text(textareaValue);
 
@@ -1572,16 +1417,16 @@ $(document).ready(function () {
 		height: 350,
 		toolbar: [["view", ["codeview"]]],
 		callbacks: {
-      onChange: function(contents, $editable) {
-        $('#htmlView').val(contents);
-      }
-    }
+			onChange: function (contents, $editable) {
+				$("#htmlView").val(contents);
+			},
+		},
 	});
 
 	// Atualiza o editor se o HTML for editado
-  $('#htmlView').on('input', function () {
-    $('#summernote').summernote('code', $(this).val());
-  });
+	$("#htmlView").on("input", function () {
+		$("#summernote").summernote("code", $(this).val());
+	});
 
 	// Quando o botão é clicado, formatar o texto e exibi-lo em outro elemento
 	$("#clear").click(clear);
@@ -1633,7 +1478,7 @@ $(document).ready(function () {
 			textareaValue = semTag(textareaValue);
 			textareaValue = textareaValue.toLowerCase().replace(/\b[^ <>/]{4,}\b/g, (match) => match.charAt(0).toUpperCase() + match.slice(1));
 			textareaValue = textareaValue.charAt(0).toUpperCase() + textareaValue.slice(1);
-			
+
 			// Definir o texto formatado em outro elemento
 			$("#result").text(textareaValue);
 
@@ -1774,7 +1619,7 @@ $(document).ready(function () {
 			let textareaValue = $("#summernote").summernote("code");
 
 			textareaValue = upperCase(textareaValue);
-			
+
 			// Definir o texto formatado em outro elemento
 			$("#result").text(textareaValue);
 
