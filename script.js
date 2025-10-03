@@ -396,7 +396,7 @@ function nLatex(str) {
 		.replace(/\{([^}]*)\}(?:\^|_)(?!\w)( |\.|\,|:|;|!|\?|=|\+)/g, "$1$2")
 		.replace(/\{([^}]*)\}(\^|_)/g, "$1$2")
 
-		.replace(/R ?\\?\$/g, "R$ ")
+		.replace(/R\s*\\?\s*\$/g, "R$ ")
 		.replace(/¹/g, "<sup>1</sup>")
 		.replace(/²/g, "<sup>2</sup>")
 		.replace(/³/g, "<sup>3</sup>")
@@ -1338,6 +1338,7 @@ function clear() {
 			.replace(/&amp;/g, "&")
 			.replace(/(?:\n )$/gi, "")
 			.replace(/(?<!<[a-zA-Z]+|\/[a-zA-Z]{1,4}|=|\n|\.|\/|"|>) ?(<|>) ?(?!\/[a-zA-Z]{1,4}>|[a-zA-Z]{1,4}|\/|\n|$)/gi, " $1 ")
+			.replace(/R\s*\\?\s*\$/g, "R$ ")
 			.replace(/(?<=<(?:[^>]*)) >/gi, ">")
 			.replace(/(<table[^>]*>)\s+(<tbody>)/gi, "$1$2")
 			.replace(/(<\/tbody>)\s+(<\/table>)/gi, "$1$2")
