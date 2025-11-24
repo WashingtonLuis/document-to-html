@@ -1254,6 +1254,7 @@ function clear() {
 				.replace(/<p class="[^"]*textos_titulos[^"]*">(.*?)<\/p>/gi, "<h5>$1</h5>")
 				.replace(/<img[^>]*\bsrc=['"][^'"]*Atividade_Oral[^'"]*['"][^>]*>/gi, "<img src='balao.png' height='35'> ")
 				.replace(/<span[^>]*class="NUM-EXERCICIO[^"]*"[^>]*>(\d+)\.<\/span>/gi, "<b>$1)</b> ")
+				.replace(/<span[^>]*class="CharOverride-3[^"]*"[^>]*>(.*?)<\/span>/gi, "<i>$1</i> ")
 				.replace(/<span[^>]*class="LETRA-EXERCICIO[^"]*"[^>]*>([A-Z]\))<\/span>/gi, "$1 ")
 				.replace(/<span[^>]*class="CAIXA-RESPOSTA[^"]*"[^>]*>C<\/span>/gi, "<img src='caixinha.png' height='35'> ")
 				.replace(/<[^>]*class="MATERIAL-DIDATICO_BOX-ATIVIDADE[^"]*"[^>]*>(.*?)<\/[^>]+>/gi, "<div class='mx-900 zoom img-center'><img src='espaco.png'></div>");
