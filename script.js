@@ -353,7 +353,11 @@ function alternativasAlexandria(text) {
 
 function circuit(text) {
 	text = text
-		.replace(/<p># Address<\/p><p>Estimated Arrival<\/p><p>Time<\/p><p>Actual Arrival Time Notes<\/p>/gi, "")
+		.replace(/<p># Address<\/p>\n?<p>Estimated Arrival<\/p>\n?<p>Time<\/p>\n?<p>Actual Arrival Time Notes<\/p>\n?/gi, "")
+		.replace(/<p># Address<\/p>\n?<p>Estimated<\/p>\n?<p>Arrival Time<\/p>\n?<p>Notes<\/p>\n?/gi, "")
+		.replace(/(?<=<p>\d+)<\/p>\n<p>(?=Rua|Avenida)/gi, "\t")
+		.replace(/(\d+-)<\/p>\n<p>(\d+)/gi, "$1$2")
+		.replace(/(\d+)<\/p>\n<p>(-\d+)/gi, "$1$2")
 		.replace(/<p>/gi, "")
 		.replace(/<\/p>/gi, "\n")
 		.replace(/\# Address Estimated Arrival Time Actual Arrival Time Notes/gi, "")
@@ -370,7 +374,15 @@ function circuit(text) {
 		.replace(/\t[ ]+/gi, "\t")
 		.replace(/apto\b|apartamento|apt\b|AP\b/gi, "ap")
 		.replace(/bloco|bl\b/gi, "b")
-		.replace(/torre|T\b/gi, "t");
+		.replace(/torre|T\b/gi, "t")
+		.replace(/[\t ]*(\d{2}:\d{2})[\t ]*/g, "\t$1\t")
+		.replace(/, Uberaba, /gi, "\t")
+		.replace(/(?<=\d+) (?=Rua|Avenida)/gi, "\t")
+		.replace(/(?<=(?:Avenida|Rua)[^,]*, ?\d+), ?/gi, "\t")
+		.replace(/(?<=(?:Avenida|Rua)[^,]*), ??/gi, "\t")
+		.replace(/(?<=\n\d+) /gi, "\t")
+		.replace(/(?<=\n\d+) /gi, "\t")
+		;
 	return text;
 }
 
