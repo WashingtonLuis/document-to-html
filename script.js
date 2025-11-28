@@ -356,6 +356,7 @@ function circuit(text) {
 		.replace(/<p># Address<\/p>\n?<p>Estimated Arrival<\/p>\n?<p>Time<\/p>\n?<p>Actual Arrival Time Notes<\/p>\n?/gi, "")
 		.replace(/<p># Address<\/p>\n?<p>Estimated<\/p>\n?<p>Arrival Time<\/p>\n?<p>Notes<\/p>\n?/gi, "")
 		.replace(/(?<=<p>\d+)<\/p>\n<p>(?=Rua|Avenida)/gi, "\t")
+		.replace(/<\/p>\n?<p>((?:\d+)?min)/gi, "$1")
 		.replace(/(\d+-)<\/p>\n<p>(\d+)/gi, "$1$2")
 		.replace(/(\d+)<\/p>\n<p>(-\d+)/gi, "$1$2")
 		.replace(/<p>/gi, "")
@@ -382,6 +383,9 @@ function circuit(text) {
 		.replace(/(?<=(?:Avenida|Rua)[^,]*), ??/gi, "\t")
 		.replace(/(?<=\n\d+) /gi, "\t")
 		.replace(/(?<=\n\d+) /gi, "\t")
+		.replace(/(?<=\d+:\d+)\t\t ?(?=\d+:\d+)/gi, "\t")
+		.replace(/\t?\((?:Adiantado|Atrasado).*?\)/gi, "")
+		.replace(/(380\d{0,2}-?)\n(\d|-)/gi, "$1$2")
 		;
 	return text;
 }
