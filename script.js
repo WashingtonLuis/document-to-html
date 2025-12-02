@@ -352,11 +352,18 @@ function alternativasAlexandria(text) {
 }
 
 function circuit(text) {
+	text = padronizaCircuit(text);
+	text = corrigirPalavras(text);
+	text = padronizaCircuit(text);
+	return text;
+}
+
+function padronizaCircuit(text) {
 	text = text
 		.replace(/<p># Address<\/p>\n?<p>Estimated Arrival<\/p>\n?<p>Time<\/p>\n?<p>Actual Arrival Time Notes<\/p>\n?/gi, "")
 		.replace(/<p># Address<\/p>\n?<p>Estimated<\/p>\n?<p>Arrival Time<\/p>\n?<p>Notes<\/p>\n?/gi, "")
 		.replace(/(?<=<p>\d+)<\/p>\n<p>(?=Rua|Avenida)/gi, "\t")
-		.replace(/<\/p>\n?<p>((?:\d+)?min)/gi, "$1")
+		.replace(/<\/p>\n?<p>((?:\d+)? ?min)/gi, "$1")
 		.replace(/(\d+-)<\/p>\n<p>(\d+)/gi, "$1$2")
 		.replace(/(\d+)<\/p>\n<p>(-\d+)/gi, "$1$2")
 		.replace(/<p>/gi, "")
@@ -370,7 +377,6 @@ function circuit(text) {
 		.replace(/(\d\d:\d\d)/gi, " $1 ")
 		.replace(/[ ]+/gi, " ")
 		.replace(/(?<=(?:R|Rua|Av\.|Avenida).*?,)\n(\d+)/gi, " $1")
-		.replace(/m ?i ?n/gi, "min")
 		.replace(/(\d+) (.*?), (?:número )?(\d+)(?: |, )?((?:ap|apto|apartamento|bl|b|bloco|t|torre|casa|sala) ?(?:\d+)? ?(?:(?:ap|apto|apartamento|bl|b|bloco|t|torre|casa|sala) ?(?:\d+)?)?)? ?,? (.*?), ?(?:Uberaba,)? ?(\d{5}-\d{3}) (\d+:\d+) ?(\d+:\d+)? ?(?:\((?:Adiantado|Atrasado) .*?\))?(.*?)?/gi, "$1\t$2\t$3\t$5\t$6\t$7\t$8\t$4 $9")
 		.replace(/\t[ ]+/gi, "\t")
 		.replace(/apto\b|apartamento|apt\b|AP\b/gi, "ap")
@@ -378,6 +384,7 @@ function circuit(text) {
 		.replace(/torre|T\b/gi, "t")
 		.replace(/[\t ]*(\d{2}:\d{2})[\t ]*/g, "\t$1\t")
 		.replace(/, Uberaba, /gi, "\t")
+		.replace(/\tUberaba\t/gi, "\t")
 		.replace(/(?<=\d+) (?=Rua|Avenida)/gi, "\t")
 		.replace(/(?<=(?:Avenida|Rua)[^,]*, ?\d+), ?/gi, "\t")
 		.replace(/(?<=(?:Avenida|Rua)[^,]*), ??/gi, "\t")
@@ -386,9 +393,34 @@ function circuit(text) {
 		.replace(/(?<=\d+:\d+)\t\t ?(?=\d+:\d+)/gi, "\t")
 		.replace(/\t?\((?:Adiantado|Atrasado).*?\)/gi, "")
 		.replace(/(380\d{0,2}-?)\n(\d|-)/gi, "$1$2")
+		.replace(/<div><br><\/div>/gi, "")
 		;
 	return text;
 }
+
+	function corrigirPalavras(texto) {
+  const regras = [
+    { correto: "mecânica", base: "mecânica" },
+    { correto: "Uberaba", base: "Uberaba" },
+    { correto: "Cartafina", base: "Cartafina" },
+    { correto: "rota", base: "rota" },
+    { correto: "Costa", base: "Costa" },
+    { correto: "min", base: "min" },
+    { correto: "Oliveira Prata", base: "Oliveira Prata" },
+  ];
+
+  for (const { correto, base } of regras) {
+    // Monta regex tipo m\s*e\s*c\s*â\s*n\s*i\s*c\s*a
+    const regex = new RegExp(
+      base.split("").join("\\s*"),
+      "gi"
+    );
+    texto = texto.replace(regex, correto);
+  }
+
+  return texto;
+}
+
 
 function nLatex(str) {
 	let text = textNLatex(str);
