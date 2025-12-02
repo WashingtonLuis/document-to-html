@@ -364,6 +364,7 @@ function padronizaCircuit(text) {
 		.replace(/<p># Address<\/p>\n?<p>Estimated<\/p>\n?<p>Arrival Time<\/p>\n?<p>Notes<\/p>\n?/gi, "")
 		.replace(/(?<=<p>\d+)<\/p>\n<p>(?=Rua|Avenida)/gi, "\t")
 		.replace(/<\/p>\n?<p>((?:\d+)? ?min)/gi, "$1")
+		.replace(/<\/p>\n?<p>((?:\d+)? ?h ?\d+ ?min)/gi, "$1")
 		.replace(/(\d+-)<\/p>\n<p>(\d+)/gi, "$1$2")
 		.replace(/(\d+)<\/p>\n<p>(-\d+)/gi, "$1$2")
 		.replace(/<p>/gi, "")
@@ -394,6 +395,7 @@ function padronizaCircuit(text) {
 		.replace(/\t?\((?:Adiantado|Atrasado).*?\)/gi, "")
 		.replace(/(380\d{0,2}-?)\n(\d|-)/gi, "$1$2")
 		.replace(/<div><br><\/div>/gi, "")
+		.replace(/^\n1/gi, "1")
 		;
 	return text;
 }
@@ -407,6 +409,9 @@ function padronizaCircuit(text) {
     { correto: "Costa", base: "Costa" },
     { correto: "min", base: "min" },
     { correto: "Oliveira Prata", base: "Oliveira Prata" },
+    { correto: "morador", base: "morador" },
+    { correto: "Abadia", base: "Abadia" },
+    { correto: " Silva", base: " Silva" }, 
   ];
 
   for (const { correto, base } of regras) {
