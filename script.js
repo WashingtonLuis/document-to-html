@@ -408,10 +408,23 @@ function padronizaCircuit(text) {
     { correto: "rota", base: "rota" },
     { correto: "Costa", base: "Costa" },
     { correto: "min", base: "min" },
+    { correto: "Prata", base: "Prata" },
+    { correto: "Oliveira", base: "Oliveira" },
     { correto: "Oliveira Prata", base: "Oliveira Prata" },
     { correto: "morador", base: "morador" },
     { correto: "Abadia", base: "Abadia" },
-    { correto: " Silva", base: " Silva" }, 
+    { correto: "Silva", base: "Silva" }, 
+    { correto: "Adiantado", base: "Adiantado" }, 
+    { correto: "Atrasado", base: "Atrasado" }, 
+    { correto: "Umuarama", base: "Umuarama" }, 
+    { correto: "Palmeiras", base: "Palmeiras" }, 
+    { correto: "tutunas", base: "tutunas" }, 
+    { correto: "Freire", base: "Freire" }, 
+    { correto: "Sol", base: "Sol" }, 
+    { correto: "Canadá", base: "Canadá" }, 
+    { correto: "Residencial", base: "Residencial" }, 
+    { correto: "Alfredo", base: "Alfredo" }, 
+    { correto: "Gerais", base: "Gerais" }, 
   ];
 
   for (const { correto, base } of regras) {
@@ -1307,7 +1320,7 @@ function clear() {
 				.replace(/<p class="[^"]*textos_titulos[^"]*">(.*?)<\/p>/gi, "<h5>$1</h5>")
 				.replace(/<img[^>]*\bsrc=['"][^'"]*Atividade_Oral[^'"]*['"][^>]*>/gi, "<img src='balao.png' height='35'> ")
 				.replace(/<span[^>]*class="NUM-EXERCICIO[^"]*"[^>]*>(\d+)\.<\/span>/gi, "<b>$1)</b> ")
-				.replace(/<span[^>]*class="CharOverride-3[^"]*"[^>]*>(.*?)<\/span>/gi, "<i>$1</i> ")
+				.replace(/<span[^>]*class="CharOverride-(?:3|10)[^"]*"[^>]*>(.*?)<\/span>/gi, "<i>$1</i> ")
 				.replace(/<span[^>]*class="LETRA-EXERCICIO[^"]*"[^>]*>([A-Z]\))<\/span>/gi, "$1 ")
 				.replace(/<span[^>]*class="CAIXA-RESPOSTA[^"]*"[^>]*>C<\/span>/gi, "<img src='caixinha.png' height='35'> ")
 				.replace(/<[^>]*class="MATERIAL-DIDATICO_BOX-ATIVIDADE[^"]*"[^>]*>(.*?)<\/[^>]+>/gi, "<div class='mx-900 zoom img-center'><img src='espaco.png'></div>");
