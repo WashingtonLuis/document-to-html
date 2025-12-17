@@ -1,36 +1,51 @@
-export function circuit(text) {
-	// 1️⃣ Padronizações gerais
+export 
+function circuit(text) {
 	text = padronizaCircuit(text);
 	text = corrigirPalavras(text);
+	
+	const registros = agruparRegistros(text);
+	const linhas = registros.map(blocoParaLinha);
 
-	// 2️⃣ Normaliza TODAS as linhas primeiro
-	text = text
-		.split(/\n+/)
-		.map((l) => normalizarLinhaTabs(l.replace(/\t{2,}/g, '\t').trim()))
-		.filter((l) => l && !l.startsWith('# Address') && !l.startsWith('<br>'))
-		.join('\n');
-
-	text = text.replace(/\t\t(\d{5}-\d{3})/g, '\t\t\t$1');
-
-	// 3️⃣ Processa linha por linha
-	const resultado = [];
-
-	for (const linha of text.split('\n')) {
-		if (!linha || !linha.replace(/\t/g, '').trim()) continue;
-
-		const parsed = parseEndereco(linha);
-
-		if (!parsed) {
-			console.warn('❌ Endereço não reconhecido:', JSON.stringify(linha));
-			continue;
-		}
-
-		resultado.push(enderecoParaLinha(parsed));
-	}
-
-	// 4️⃣ Retorna SEMPRE com cabeçalho
-	return resultado.join('\n');
+	return [...linhas].join('\n');
 }
+
+// export 
+// function circuit(text) {
+// 	// 1️⃣ Padronizações gerais
+// 	text = padronizaCircuit(text);
+// 	text = corrigirPalavras(text);
+
+// 	// 2️⃣ Normaliza TODAS as linhas primeiro
+// 	text = text
+// 		.split(/\n+/)
+// 		.map((l) => normalizarLinhaTabs(l.replace(/\t{2,}/g, '\t').trim()))
+// 		.filter((l) => l && !l.startsWith('# Address') && !l.startsWith('<br>'))
+// 		.join('\n');
+
+// 	text = text.replace(/\t\t(\d{5}-\d{3})/g, '\t\t\t$1');
+
+// 	// 3️⃣ Processa linha por linha
+// 	const resultado = [];
+
+// 	for (const linha of text.split('\n')) {
+// 		if (!linha || !linha.replace(/\t/g, '').trim()) continue;
+
+// 		const parsed = parseEndereco(linha);
+
+// 		if (!parsed) {
+// 			console.warn('❌ Endereço não reconhecido:', JSON.stringify(linha));
+// 			continue;
+// 		}
+
+// 		resultado.push(enderecoParaLinha(parsed));
+// 	}
+
+// 	// 4️⃣ Retorna SEMPRE com cabeçalho
+// 	return resultado.join('\n');
+// }
+
+
+
 function extrairBairroCep(texto = '') {
 	let bairro = texto;
 	let cep = '';
@@ -49,6 +64,7 @@ function extrairBairroCep(texto = '') {
 
 	return { bairro, cep };
 }
+
 function corrigirEnderecoQuebrado(cols) {
 	// caso: Endereço, Nº e Bairro vieram juntos
 	if (!cols[2] && /,\s*\d+/.test(cols[1])) {
@@ -61,20 +77,24 @@ function corrigirEnderecoQuebrado(cols) {
 	}
 	return cols;
 }
+
 function garantirArrayColunas(cols, total = 11) {
 	while (cols.length < total) cols.push('');
 	return cols.slice(0, total);
 }
 
+
 function garantirLinhaColunas(cols, total = 11) {
 	return garantirArrayColunas(cols, total).join('\t');
 }
+
 
 function limparBairro(bairro) {
 	if (!bairro) return '';
 	if (/^(uberaba|minas gerais)$/i.test(bairro.trim())) return '';
 	return bairro.trim();
 }
+
 function padronizaCircuit(text) {
 	text = text
 
@@ -132,6 +152,63 @@ function padronizaCircuit(text) {
 
 	return text;
 }
+
+function agruparRegistros(text) {
+	const linhas = text
+		.split('\n')
+		.map((l) => l.trim())
+		.filter(Boolean);
+
+	const registros = [];
+	let atual = [];
+
+	for (const linha of linhas) {
+		if (/^\d+$/.test(linha)) {
+			if (atual.length) registros.push(atual);
+			atual = [linha];
+		} else {
+			atual.push(linha);
+		}
+	}
+	if (atual.length) registros.push(atual);
+
+	return registros;
+}
+
+function blocoParaLinha(bloco) {
+	const id = bloco[0];
+
+	let endereco = '';
+	let numero = '';
+	let bairro = '';
+	let cep = '';
+	let estimativa = '';
+	let entrega = '';
+	let notas = '';
+
+	for (const linha of bloco.slice(1)) {
+		if (/\d{2}:\d{2}/.test(linha)) {
+			if (!estimativa) estimativa = linha;
+			else entrega = linha;
+		} else if (/\d{5}-\d{3}/.test(linha)) {
+			const m = linha.match(/^(.*?),\s*(\d+),\s*(.*?),.*?(\d{5}-\d{3})$/);
+			if (m) {
+				endereco = m[1];
+				numero = m[2];
+				bairro = m[3];
+				cep = m[4];
+			}
+		} else if (/^\(.*?\)$/.test(linha)) {
+			// ignora atraso/adiantado
+		} else {
+			notas = linha;
+		}
+	}
+
+	return [id, endereco, numero, bairro, cep, estimativa, entrega, notas, '', '', ''].join('\t');
+}
+
+
 function parseEndereco(linha) {
 	let cols = linha.split('\t').map((c) => c.trim());
 	cols = garantirArrayColunas(cols);
@@ -155,6 +232,7 @@ function parseEndereco(linha) {
 		situacao,
 	};
 }
+
 function normalizarLinhaTabs(linha) {
 	// quebra em colunas
 	let cols = linha.split('\t').map((c) => c.trim());
@@ -170,9 +248,11 @@ function normalizarLinhaTabs(linha) {
 	while (cols.length < 11) cols.push('');
 	return cols.slice(0, 11).join('\t');
 }
+
 function enderecoParaLinha(obj) {
 	return garantirLinhaColunas([obj.id, obj.endereco, obj.numero, limparBairro(obj.bairro), obj.cep, obj.estimativa, obj.entrega, obj.notas || '', obj.data || '', obj.qtd || '', obj.situacao || '']);
 }
+
 function corrigirPalavras(texto) {
 	const regras = [
 		{ correto: 'mecânica', base: 'mecânica' },
