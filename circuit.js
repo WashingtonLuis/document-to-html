@@ -47,6 +47,9 @@ function padronizaCircuit(text) {
 		.replace(/(\d+:\d+) +(\w+)/gi, '$1\t$2')
 		.replace(/(Morumbi)	 ?Uberaba/gi, '$1')
 		.replace(/(\d+\t ?(?:minas gerais|Morumbi))\t ?(\d+:\d+)/gi, '$1\t\t$2')
+		.replace(/(\d+\tCondomínio Portal Beija-Flor\t151)\tRua Professor Antônio Simões Borges/gi, '$1')
+		.replace(/<span style="white-space:pre">	<\/span>/gi, '\t')
+		.replace(/<br>\n?/gi, '')
 		.replace(/I I/gi, 'II')
 		.replace(/^\n1/gi, '1');
 	return text;
@@ -92,9 +95,27 @@ function corrigirPalavras(texto) {
 		{ correto: 'na', base: 'na' },
 		{ correto: 'da', base: 'da' },
 		{ correto: 'du', base: 'du' },
+		{ correto: 'de', base: 'de' },
 		{ correto: 'Morada', base: 'Morada' },
 		{ correto: 'deixar', base: 'deixar' },
 		{ correto: 'Beatriz', base: 'Beatriz' },
+		{ correto: 'Address', base: 'Address' },
+		{ correto: 'Estimated ', base: 'Estimated' },
+		{ correto: 'Arrival', base: 'Arrival' },
+		{ correto: 'Estimated Arrival', base: 'EstimatedArrival' },
+		{ correto: 'Time', base: 'Time' },
+		{ correto: 'Actual', base: 'Actual' },
+		{ correto: 'Notes', base: 'Notes' },
+		{ correto: 'Avenida', base: 'Avenida' },
+		{ correto: 'Doutor', base: 'Doutor' },
+		{ correto: 'José', base: 'José' },
+		{ correto: 'Ferreira', base: 'Ferreira' },
+		{ correto: 'Jockey', base: 'Jockey' },
+		{ correto: 'Park', base: 'Park' },
+		{ correto: 'buraco', base: 'buraco' },
+		{ correto: 'energia', base: 'energia' },
+		{ correto: 'cima', base: 'cima' },
+		{ correto: 'Antônio', base: 'Antônio' },
 	];
 
 	for (const { correto, base } of regras) {
