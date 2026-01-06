@@ -116,6 +116,11 @@ function corrigirPalavras(texto) {
 		{ correto: 'energia', base: 'energia' },
 		{ correto: 'cima', base: 'cima' },
 		{ correto: 'Antônio', base: 'Antônio' },
+		{ correto: 'Fatureto', base: 'Fatureto' },
+		{ correto: 'Horizonte', base: 'Horizonte' },
+		{ correto: 'Azevedo', base: 'Azevedo' },
+		{ correto: 'destino', base: 'destino' },
+		{ correto: 'Industrial', base: 'Industrial' },
 	];
 
 	for (const { correto, base } of regras) {
