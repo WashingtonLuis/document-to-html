@@ -121,6 +121,11 @@ function corrigirPalavras(texto) {
 		{ correto: 'Azevedo', base: 'Azevedo' },
 		{ correto: 'destino', base: 'destino' },
 		{ correto: 'Industrial', base: 'Industrial' },
+		{ correto: 'Jardim', base: 'Jardim' },
+		{ correto: 'Fiori', base: 'Fiori' },
+		{ correto: 'número', base: 'número' },
+		{ correto: 'lemes', base: 'lemes' },
+		{ correto: 'apartamento', base: 'apartamento' },
 	];
 
 	for (const { correto, base } of regras) {
