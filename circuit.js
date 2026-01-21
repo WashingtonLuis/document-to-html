@@ -126,6 +126,18 @@ function corrigirPalavras(texto) {
 		{ correto: 'número', base: 'número' },
 		{ correto: 'lemes', base: 'lemes' },
 		{ correto: 'apartamento', base: 'apartamento' },
+		{ correto: 'Fontes', base: 'Fontes' },
+		{ correto: 'Afrânio', base: 'Afrânio' },
+		{ correto: 'Universitário', base: 'Universitário' },
+		{ correto: 'Olinda', base: 'Olinda' },
+		{ correto: 'Leblon', base: 'Leblon' },
+		{ correto: 'Retiro', base: 'Retiro' },
+		{ correto: 'São', base: 'São' },
+		{ correto: 'vizinho', base: 'vizinho' },
+		{ correto: 'Geraldo', base: 'Geraldo' },
+		{ correto: 'Santa', base: 'Santa' },
+		{ correto: 'Maria', base: 'Maria' },
+		{ correto: 'dumont', base: 'dumont' },
 	];
 
 	for (const { correto, base } of regras) {
