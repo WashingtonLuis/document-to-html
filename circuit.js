@@ -117,6 +117,7 @@ function corrigirPalavras(texto) {
 		{ correto: 'cima', base: 'cima' },
 		{ correto: 'Antônio', base: 'Antônio' },
 		{ correto: 'Fatureto', base: 'Fatureto' },
+		{ correto: 'Grande', base: 'Grande' },
 		{ correto: 'Horizonte', base: 'Horizonte' },
 		{ correto: 'Azevedo', base: 'Azevedo' },
 		{ correto: 'destino', base: 'destino' },
@@ -138,6 +139,8 @@ function corrigirPalavras(texto) {
 		{ correto: 'Santa', base: 'Santa' },
 		{ correto: 'Maria', base: 'Maria' },
 		{ correto: 'dumont', base: 'dumont' },
+		{ correto: 'Alameda', base: 'Alameda' },
+		{ correto: 'Lilás', base: 'Lilás' },
 	];
 
 	for (const { correto, base } of regras) {
