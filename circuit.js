@@ -141,6 +141,7 @@ function corrigirPalavras(texto) {
 		{ correto: 'dumont', base: 'dumont' },
 		{ correto: 'Alameda', base: 'Alameda' },
 		{ correto: 'Lilás', base: 'Lilás' },
+		{ correto: 'balcão', base: 'balcão' },
 	];
 
 	for (const { correto, base } of regras) {
