@@ -142,6 +142,15 @@ function corrigirPalavras(texto) {
 		{ correto: 'Alameda', base: 'Alameda' },
 		{ correto: 'Lilás', base: 'Lilás' },
 		{ correto: 'balcão', base: 'balcão' },
+		{ correto: 'esquina', base: 'esquina' },
+		{ correto: 'correio', base: 'correio' },
+		{ correto: 'para', base: 'para' },
+		{ correto: 'amarelo', base: 'amarelo' },
+		{ correto: 'Neves', base: 'Neves' },
+		{ correto: 'Presidente', base: 'Presidente' },
+		{ correto: 'Tancredo', base: 'Tancredo' },
+		{ correto: 'terrenos', base: 'terrenos' },
+		{ correto: 'Bento', base: 'Bento' },
 	];
 
 	for (const { correto, base } of regras) {
