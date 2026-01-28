@@ -151,6 +151,17 @@ function corrigirPalavras(texto) {
 		{ correto: 'Tancredo', base: 'Tancredo' },
 		{ correto: 'terrenos', base: 'terrenos' },
 		{ correto: 'Bento', base: 'Bento' },
+		{ correto: 'Teles', base: 'Teles' },
+		{ correto: 'Santo', base: 'Santo' },
+		{ correto: 'América', base: 'América' },
+		{ correto: 'Esperança', base: 'Esperança' },
+		{ correto: 'Habitacional', base: 'Habitacional' },
+		{ correto: 'Silverio', base: 'Silverio' },
+		{ correto: 'Barbosa', base: 'Barbosa' },
+		{ correto: 'Lebon', base: 'Lebon' },
+		{ correto: 'Nossa', base: 'Nossa' },
+		{ correto: 'Rodrigues', base: 'Rodrigues' },
+		{ correto: 'Telles', base: 'Telles' },
 	];
 
 	for (const { correto, base } of regras) {
