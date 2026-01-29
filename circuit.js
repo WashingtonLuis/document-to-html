@@ -162,6 +162,7 @@ function corrigirPalavras(texto) {
 		{ correto: 'Nossa', base: 'Nossa' },
 		{ correto: 'Rodrigues', base: 'Rodrigues' },
 		{ correto: 'Telles', base: 'Telles' },
+		{ correto: 'Imperador', base: 'Imperador' },
 	];
 
 	for (const { correto, base } of regras) {
