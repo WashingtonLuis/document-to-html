@@ -30,7 +30,7 @@ function padronizaCircuit(text) {
 		.replace(/(\d+) (.*?), (?:número )?(\d+)(?: |, )?((?:ap|apto|apartamento|bl|b|bloco|t|torre|casa|sala) ?(?:\d+)? ?(?:(?:ap|apto|apartamento|bl|b|bloco|t|torre|casa|sala) ?(?:\d+)?)?)? ?,? (.*?), ?(?:Uberaba,)? ?(\d{5}-\d{3}) (\d+:\d+) ?(\d+:\d+)? ?(?:\((?:Adiantado|Atrasado) .*?\))?(.*?)?/gi, '$1\t$2\t$3\t$5\t$6\t$7\t$8\t$4 $9')
 		.replace(/\t[ ]+/gi, '\t')
 		.replace(/apto\b|apartamento|apt\b|AP\b/gi, 'ap')
-		.replace(/bloco|bl\b/gi, 'b')
+		// .replace(/bloco|bl\b/gi, 'b')
 		.replace(/torre|T\b/gi, 't')
 		.replace(/[\t ]*(\d{2}:\d{2})[\t ]*/g, '\t$1\t')
 		.replace(/, Uberaba, /gi, '\t')
