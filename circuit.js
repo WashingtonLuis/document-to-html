@@ -165,6 +165,18 @@ function corrigirPalavras(texto) {
 		{ correto: 'Imperador', base: 'Imperador' },
 		{ correto: 'Pontal', base: 'Pontal' },
 		{ correto: 'Álamos', base: 'Álamos' },
+		{ correto: 'Gameleiras', base: 'Gameleiras' },
+		{ correto: 'por', base: 'por' },
+		{ correto: 'Parque', base: 'Parque' },
+		{ correto: 'Jessica', base: 'Jessica' },
+		{ correto: 'Jéssica', base: 'Jéssica' },
+		{ correto: 'Mello', base: 'Mello' },
+		{ correto: 'Valim', base: 'Valim' },
+		{ correto: 'Chica', base: 'Chica' },
+		{ correto: 'serralheria', base: 'serralheria' },
+		{ correto: 'frente', base: 'frente' },
+		{ correto: 'Senhora', base: 'Senhora' },
+		{ correto: 'lado', base: 'lado' },
 	];
 
 	for (const { correto, base } of regras) {
