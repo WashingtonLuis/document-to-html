@@ -12,6 +12,7 @@ function padronizaCircuit(text) {
 		.replace(/<p># Address<\/p>\n?<p>Estimated Arrival<\/p>\n?<p>Time<\/p>\n?<p>Notes<\/p>\n?/gi, '')
 		.replace(/<p># Address<\/p>\n?<p>Estimated<\/p>\n?<p>Arrival Time<\/p>\n?<p>Notes<\/p>\n?/gi, '')
 		.replace(/(?<=<p>\d+)<\/p>\n<p>(?=Rua|Avenida)/gi, '\t')
+		.replace(/(?<=vizinho|a)<\/p><p>(?=\d+)/gi, ' ')
 		.replace(/<\/p>\n?<p>((?:\d+)? ?min)/gi, '$1')
 		.replace(/<\/p>\n?<p>((?:\d+)? ?h ?\d+ ?min)/gi, '$1')
 		.replace(/(\d+-)<\/p>\n<p>(\d+)/gi, '$1$2')
@@ -51,6 +52,10 @@ function padronizaCircuit(text) {
 		.replace(/<span style="white-space:pre">	<\/span>/gi, '\t')
 		.replace(/<br>\n?/gi, '')
 		.replace(/I I/gi, 'II')
+		.replace(/do s /gi, 'dos ')
+		.replace(/da s /gi, 'dos ')
+		.replace(/ n o /gi, ' no ')
+		.replace(/de\tPaiva/gi, 'de Paiva')
 		.replace(/^\n1/gi, '1');
 	return text;
 }
@@ -177,6 +182,11 @@ function corrigirPalavras(texto) {
 		{ correto: 'frente', base: 'frente' },
 		{ correto: 'Senhora', base: 'Senhora' },
 		{ correto: 'lado', base: 'lado' },
+		{ correto: 'dentro', base: 'dentro' },
+		{ correto: 'Marajo', base: 'Marajo' },
+		{ correto: 'Marajó', base: 'Marajó' },
+		{ correto: 'Girassóis', base: 'Girassóis' },
+		{ correto: 'Margarida', base: 'Margarida' },
 	];
 
 	for (const { correto, base } of regras) {
