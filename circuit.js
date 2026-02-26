@@ -27,12 +27,10 @@ function padronizaCircuit(text) {
 		.replace(/(\d{1,5}-\d{0,2})\n(\d{1,3})/gi, '$1$2')
 		.replace(/(\d\d:\d\d)/gi, ' $1 ')
 		.replace(/[ ]+/gi, ' ')
-		.replace(/(?<=(?:R|Rua|Av\.|Avenida).*?,)\n(\d+)/gi, ' $1')
+		.replace(/(?<=(?:R\.?|Rua|Av\.?|Avenida).*?,)\n(\d+)/gi, ' $1')
 		.replace(/(\d+) (.*?), (?:número )?(\d+)(?: |, )?((?:ap|apto|apartamento|bl|b|bloco|t|torre|casa|sala) ?(?:\d+)? ?(?:(?:ap|apto|apartamento|bl|b|bloco|t|torre|casa|sala) ?(?:\d+)?)?)? ?,? (.*?), ?(?:Uberaba,)? ?(\d{5}-\d{3}) (\d+:\d+) ?(\d+:\d+)? ?(?:\((?:Adiantado|Atrasado) .*?\))?(.*?)?/gi, '$1\t$2\t$3\t$5\t$6\t$7\t$8\t$4 $9')
 		.replace(/\t[ ]+/gi, '\t')
 		.replace(/apto\b|apartamento|apt\b|AP\b/gi, 'ap')
-		// .replace(/bloco|bl\b/gi, 'b')
-		.replace(/torre|T\b/gi, 't')
 		.replace(/[\t ]*(\d{2}:\d{2})[\t ]*/g, '\t$1\t')
 		.replace(/, Uberaba, /gi, '\t')
 		.replace(/\tUberaba\t/gi, '\t')
@@ -56,7 +54,12 @@ function padronizaCircuit(text) {
 		.replace(/da s /gi, 'dos ')
 		.replace(/ n o /gi, ' no ')
 		.replace(/de\tPaiva/gi, 'de Paiva')
-		.replace(/^\n1/gi, '1');
+		.replace(/^\n1/gi, '1')
+		.replace(/, (\d+)\b(?!;)/gi, '\t$1')
+		.replace(/(bloco)\n(\d+)/gi, '$1 $2')
+		.replace(/(\b\d+\t(?:R\.?|Rua|Av\.?|Avenida|Trav\.?|Travessa|Al\.?|Alameda|Estr\.?|Estrada)[^\t]*?) (\d+)(?=\t)/gi, '$1\t$2')
+		.replace(/(\b\d+\t[^\t]+\t\d+\t[^\t]+)\t(?=\d{2}:\d{2})/g,'$1\t\t')
+		;
 	return text;
 }
 
@@ -187,6 +190,11 @@ function corrigirPalavras(texto) {
 		{ correto: 'Marajó', base: 'Marajó' },
 		{ correto: 'Girassóis', base: 'Girassóis' },
 		{ correto: 'Margarida', base: 'Margarida' },
+		{ correto: 'damasceno', base: 'damasceno' },
+		{ correto: 'tomate', base: 'tomate' },
+		{ correto: 'Paula', base: 'Paula' },
+		{ correto: 'Hileia', base: 'Hileia' },
+		{ correto: 'Hiléia', base: 'Hiléia' },
 	];
 
 	for (const { correto, base } of regras) {
