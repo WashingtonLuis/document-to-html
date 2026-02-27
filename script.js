@@ -1,5 +1,6 @@
 import { alteraElementos } from "./alteraElementos.js";
 import { circuit } from "./circuit.js";
+import { rota } from "./rota.js";
 
 const latexAcentuacao = {
 	á: "\\'a",
@@ -1617,6 +1618,21 @@ $(document).ready(function () {
 			let textareaValueEq = $("#summernote").summernote("code");
 
 			textareaValueEq = circuit(textareaValueEq);
+
+			// Definir o texto formatado em outro elemento
+			$("#result").text(textareaValueEq);
+
+			navigator.clipboard.writeText(textareaValueEq);
+		} catch (error) {
+			console.error("Erro ao formatar o texto:", error);
+		}
+	});
+
+	$("#rota").click(function () {
+		try {
+			let textareaValueEq = $("#summernote").summernote("code");
+
+			textareaValueEq = rota(textareaValueEq);
 
 			// Definir o texto formatado em outro elemento
 			$("#result").text(textareaValueEq);
