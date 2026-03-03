@@ -195,6 +195,7 @@ function corrigirPalavras(texto) {
 		{ correto: 'Paula', base: 'Paula' },
 		{ correto: 'Hileia', base: 'Hileia' },
 		{ correto: 'Hiléia', base: 'Hiléia' },
+		{ correto: 'tocar', base: 'tocar' },
 	];
 
 	for (const { correto, base } of regras) {
