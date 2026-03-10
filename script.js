@@ -1232,13 +1232,14 @@ function clear() {
 		}
 		if (document.getElementById("exerciciosFundamental1").checked) {
 			textareaValue = textareaValue
-				.replace(/<p class="[^"]*textos_titulos[^"]*">(.*?)<\/p>/gi, "<h5>$1</h5>")
+				.replace(/<p[^>]*class="[^"]*\btextos_titulos\b[^"]*"[^>]*>([\s\S]*?)<\/p>/gi, "<h5>$1</h5>")
 				.replace(/<img[^>]*\bsrc=['"][^'"]*Atividade_Oral[^'"]*['"][^>]*>/gi, "<img src='balao.png' height='35'> ")
-				.replace(/<span[^>]*class="NUM-EXERCICIO[^"]*"[^>]*>(\d+)\.<\/span>/gi, "<b>$1)</b> ")
-				.replace(/<span[^>]*class="CharOverride-(?:3|10)[^"]*"[^>]*>(.*?)<\/span>/gi, "<i>$1</i> ")
-				.replace(/<span[^>]*class="LETRA-EXERCICIO[^"]*"[^>]*>([A-Z]\))<\/span>/gi, "$1 ")
-				.replace(/<span[^>]*class="CAIXA-RESPOSTA[^"]*"[^>]*>C<\/span>/gi, "<img src='caixinha.png' height='35'> ")
-				.replace(/<[^>]*class="MATERIAL-DIDATICO_BOX-ATIVIDADE[^"]*"[^>]*>(.*?)<\/[^>]+>/gi, "<div class='mx-900 zoom img-center'><img src='espaco.png'></div>");
+				.replace(/<span[^>]*class="[^"]*\bNUM-EXERCICIO\b[^"]*"[^>]*>(\d+)\.<\/span>/gi, "<b>$1)</b> ")
+				.replace(/<span[^>]*class="[^"]*\bCharOverride-(?:3|10)\b[^"]*"[^>]*>([\s\S]*?)<\/span>/gi, "<i>$1</i> ")
+				.replace(/<span[^>]*class="[^"]*\bLETRA-EXERCICIO\b[^"]*"[^>]*>([A-Z]\))<\/span>/gi, "$1 ")
+				.replace(/<span[^>]*class="[^"]*\bCAIXA-RESPOSTA\b[^"]*"[^>]*>\s*C\s*<\/span>/gi, "<img src='caixinha.png' height='35'> ")
+				.replace(/<[^>]*class="[^"]*\bMATERIAL-DIDATICO_BOX-ATIVIDADE\b[^"]*"[^>]*>[\s\S]*?<\/[^>]+>/gi, "<div class='mx-900 zoom img-center'><img src='espaco.png'></div>")
+				.replace(/<span[^>]*class="[^"]*\bCOR-PRINCIPAL\b[^"]*"[^>]*>([\s\S]*?)<\/span>/gi,"<b>$1</b>");
 		}
 
 		if (document.getElementById("uperCase").checked) {

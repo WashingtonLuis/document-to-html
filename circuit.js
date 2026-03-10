@@ -44,7 +44,7 @@ function padronizaCircuit(text) {
 		.replace(/(380\d{0,2}-?)\n(\d|-)/gi, '$1$2')
 		.replace(/<div><br><\/div>/gi, '')
 		.replace(/(\d+:\d+) +(\w+)/gi, '$1\t$2')
-		.replace(/(Morumbi)	 ?Uberaba/gi, '$1')
+		.replace(/(Morumbi|Benedito|Maria)[,	 ]*Uberaba/gi, '$1')
 		.replace(/(\d+\t ?(?:minas gerais|Morumbi))\t ?(\d+:\d+)/gi, '$1\t\t$2')
 		.replace(/(\d+\tCondomínio Portal Beija-Flor\t151)\tRua Professor Antônio Simões Borges/gi, '$1')
 		.replace(/<span style="white-space:pre">	<\/span>/gi, '\t')
@@ -198,6 +198,8 @@ function corrigirPalavras(texto) {
 		{ correto: 'tocar', base: 'tocar' },
 		{ correto: 'Benedito', base: 'Benedito' },
 		{ correto: 'Villaggio', base: 'Villaggio' },
+		{ correto: 'Salomão', base: 'Salomão' },
+		{ correto: 'Aquarius', base: 'Aquarius' },
 	];
 
 	for (const { correto, base } of regras) {
