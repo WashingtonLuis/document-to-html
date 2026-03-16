@@ -200,6 +200,7 @@ function corrigirPalavras(texto) {
 		{ correto: 'Villaggio', base: 'Villaggio' },
 		{ correto: 'Salomão', base: 'Salomão' },
 		{ correto: 'Aquarius', base: 'Aquarius' },
+		{ correto: 'vizinha', base: 'vizinha' },
 	];
 
 	for (const { correto, base } of regras) {
