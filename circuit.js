@@ -44,7 +44,7 @@ function padronizaCircuit(text) {
 		.replace(/(380\d{0,2}-?)\n(\d|-)/gi, '$1$2')
 		.replace(/<div><br><\/div>/gi, '')
 		.replace(/(\d+:\d+) +(\w+)/gi, '$1\t$2')
-		.replace(/(Morumbi|Benedito|Maria)[,	 ]*Uberaba/gi, '$1')
+		.replace(/(Morumbi|Benedito|Maria|Beija Flor|Residencial Nova Era|Jockey Park|Pacaembu II)[,	 ]*Uberaba/gi, '$1')
 		.replace(/(\d+\t ?(?:minas gerais|Morumbi))\t ?(\d+:\d+)/gi, '$1\t\t$2')
 		.replace(/(\d+\tCondomínio Portal Beija-Flor\t151)\tRua Professor Antônio Simões Borges/gi, '$1')
 		.replace(/<span style="white-space:pre">	<\/span>/gi, '\t')
@@ -59,6 +59,7 @@ function padronizaCircuit(text) {
 		.replace(/(bloco)\n(\d+)/gi, '$1 $2')
 		.replace(/(\b\d+\t(?:R\.?|Rua|Av\.?|Avenida|Trav\.?|Travessa|Al\.?|Alameda|Estr\.?|Estrada)[^\t]*?) (\d+)(?=\t)/gi, '$1\t$2')
 		.replace(/(\b\d+\t[^\t]+\t\d+\t[^\t]+)\t(?=\d{2}:\d{2})/g,'$1\t\t')
+		.replace(/(ap ?\d+)\t+([A-Za-z]+)/g,'$1 $2')
 		;
 	return text;
 }
@@ -201,13 +202,25 @@ function corrigirPalavras(texto) {
 		{ correto: 'Salomão', base: 'Salomão' },
 		{ correto: 'Aquarius', base: 'Aquarius' },
 		{ correto: 'vizinha', base: 'vizinha' },
+		{ correto: 'Cândida', base: 'Cândida' },
+		{ correto: 'Cândida', base: 'Candida' },
+		{ correto: 'Lourdes', base: 'Lourdes' },
+		{ correto: 'Era', base: 'Era' },
+		{ correto: 'Nova', base: 'Nova' },
 	];
 
 	for (const { correto, base } of regras) {
-		// Monta regex tipo m\s*e\s*c\s*â\s*n\s*i\s*c\s*a
-		const regex = new RegExp(base.split('').join('\\s*'), 'gi');
-		texto = texto.replace(regex, correto);
-	}
+	const pattern = base.split('').join('\\s*');
+
+	const regex = new RegExp(
+		'(?<![A-Za-zÀ-ÿ0-9])' +
+		pattern +
+		'(?![A-Za-zÀ-ÿ0-9])',
+		'gi'
+	);
+
+	texto = texto.replace(regex, correto);
+}
 
 	return texto;
 }
