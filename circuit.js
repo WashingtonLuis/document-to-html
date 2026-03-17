@@ -207,6 +207,8 @@ function corrigirPalavras(texto) {
 		{ correto: 'Lourdes', base: 'Lourdes' },
 		{ correto: 'Era', base: 'Era' },
 		{ correto: 'Nova', base: 'Nova' },
+		{ correto: 'informado', base: 'informado' },
+		{ correto: 'horas', base: 'horas' },
 	];
 
 	for (const { correto, base } of regras) {
