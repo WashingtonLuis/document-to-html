@@ -2,6 +2,7 @@ export function circuit(text) {
 	text = padronizaCircuit(text);
 	text = corrigirPalavras(text);
 	text = padronizaCircuit(text);
+	text = text.replace(/(?<=\n)(\d+\t(?:Rua|R\.?|Avenida|Av\.?|Travessa|Alameda|Estrada)[^\t]+)\t(?!\d)([^\t]+)/gi,'$1\t\t$2');
 	return text;
 }
 
@@ -44,7 +45,8 @@ function padronizaCircuit(text) {
 		.replace(/(380\d{0,2}-?)\n(\d|-)/gi, '$1$2')
 		.replace(/<div><br><\/div>/gi, '')
 		.replace(/(\d+:\d+) +(\w+)/gi, '$1\t$2')
-		.replace(/(Morumbi|Benedito|Maria|Beija Flor|Residencial Nova Era|Jockey Park|Pacaembu II)[,	 ]*Uberaba/gi, '$1')
+		.replace(/(Morumbi|Benedito|Maria|Beija Flor|Residencial Nova Era|Jockey Park|Pacaembu II|Tamareiras|Bela|espanha|Copacabana|Girassóis IV|Marajo I)[,	 ]*Uberaba/gi, '$1')
+		.replace(/Uberaba[, \t]*(Jardim Marajo|Residencial Parque dos Girassóis III)/gi, '$1')
 		.replace(/(\d+\t ?(?:minas gerais|Morumbi))\t ?(\d+:\d+)/gi, '$1\t\t$2')
 		.replace(/(\d+\tCondomínio Portal Beija-Flor\t151)\tRua Professor Antônio Simões Borges/gi, '$1')
 		.replace(/<span style="white-space:pre">	<\/span>/gi, '\t')
@@ -54,12 +56,17 @@ function padronizaCircuit(text) {
 		.replace(/da s /gi, 'dos ')
 		.replace(/ n o /gi, ' no ')
 		.replace(/de\tPaiva/gi, 'de Paiva')
+		.replace(/\t(?=Godoy)/gi, ' ')
 		.replace(/^\n1/gi, '1')
 		.replace(/, (\d+)\b(?!;)/gi, '\t$1')
 		.replace(/(bloco)\n(\d+)/gi, '$1 $2')
 		.replace(/(\b\d+\t(?:R\.?|Rua|Av\.?|Avenida|Trav\.?|Travessa|Al\.?|Alameda|Estr\.?|Estrada)[^\t]*?) (\d+)(?=\t)/gi, '$1\t$2')
 		.replace(/(\b\d+\t[^\t]+\t\d+\t[^\t]+)\t(?=\d{2}:\d{2})/g,'$1\t\t')
 		.replace(/(ap ?\d+)\t+([A-Za-z]+)/g,'$1 $2')
+		.replace(/(\d+)\n(\d+)(?=\n)/g,'$1$2')
+		.replace(/([A-Za-z]+)\t(\d+:\d+\t\d+\d+)/g,'$1\t\t$2')
+		.replace(/([A-Za-zÀ-ÿ]+)\n([A-Za-zÀ-ÿ]+)/g,'$1$2')
+		
 		;
 	return text;
 }
@@ -209,6 +216,13 @@ function corrigirPalavras(texto) {
 		{ correto: 'Nova', base: 'Nova' },
 		{ correto: 'informado', base: 'informado' },
 		{ correto: 'horas', base: 'horas' },
+		{ correto: 'Boticário', base: 'Boticário' },
+		{ correto: 'Villefort', base: 'Villefort' },
+		{ correto: 'Copacabana', base: 'Copacabana' },
+		{ correto: 'Tamareiras', base: 'Tamareiras' },
+		{ correto: 'Bela', base: 'Bela' },
+		{ correto: 'Ilha', base: 'Ilha' },
+		{ correto: 'varejão', base: 'varejão' },
 	];
 
 	for (const { correto, base } of regras) {
