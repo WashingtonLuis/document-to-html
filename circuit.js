@@ -45,7 +45,7 @@ function padronizaCircuit(text) {
 		.replace(/(380\d{0,2}-?)\n(\d|-)/gi, '$1$2')
 		.replace(/<div><br><\/div>/gi, '')
 		.replace(/(\d+:\d+) +(\w+)/gi, '$1\t$2')
-		.replace(/(Morumbi|Benedito|Maria|Beija Flor|Residencial Nova Era|Jockey Park|Pacaembu II|Tamareiras|Bela|espanha|Copacabana|Girassóis IV|Marajo I)[,	 ]*Uberaba/gi, '$1')
+		.replace(/(Morumbi|Benedito|Maria|Beija Flor|Residencial Nova Era|Jockey Park|Pacaembu II|Tamareiras|Bela|espanha|Copacabana|Girassóis IV|Marajo I|Girassóis)[,	 ]*Uberaba/gi, '$1')
 		.replace(/Uberaba[, \t]*(Jardim Marajo|Residencial Parque dos Girassóis III)/gi, '$1')
 		.replace(/(\d+\t ?(?:minas gerais|Morumbi))\t ?(\d+:\d+)/gi, '$1\t\t$2')
 		.replace(/(\d+\tCondomínio Portal Beija-Flor\t151)\tRua Professor Antônio Simões Borges/gi, '$1')
@@ -223,6 +223,7 @@ function corrigirPalavras(texto) {
 		{ correto: 'Bela', base: 'Bela' },
 		{ correto: 'Ilha', base: 'Ilha' },
 		{ correto: 'varejão', base: 'varejão' },
+		{ correto: 'mercearia', base: 'mercearia' },
 	];
 
 	for (const { correto, base } of regras) {

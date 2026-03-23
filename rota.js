@@ -6,7 +6,7 @@ export function rota(text) {
 
 function padronizaRota(text) {
 	text = text
-		.replace(/<p>((?:R\.?|Rua|Av\.?|Avenida|Trav\.?|Travessa|Al\.?|Alameda|Estr\.?|Estrada)[^\t]*?) (\d+)/gi, '$1\t$2\t\t\t')
+		.replace(/<p>((?:R\.?|Rua|Av\.?|Avenida|Trav\.?|Travessa|Al\.?|Alameda|Estr\.?|Estrada)[^\t]*?) (\d+)/gi, '$1\t$2\t\t')
 		.replace(/<p>/gi, '')
 		.replace(/\n?<br>/gi, '')
 		.replace(/<\/p>/gi, '\n')
@@ -20,6 +20,7 @@ function padronizaRota(text) {
 		.replace(/(?:R(?:\.|ua)? )?Bahia/gi, 'R. Bahia')
 		.replace(/APRO/gi, 'Ap')
 		.replace(/Aguardando carregamento/gi, '')
+		.replace(/<div><\/div>/gi, '')
 		;
 	return text;
 }
