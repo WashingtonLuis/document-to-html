@@ -34,7 +34,7 @@ function padronizaCircuit(text) {
 		.replace(/apto\b|apartamento|apt\b|AP\b/gi, 'ap')
 		.replace(/[\t ]*(\d{2}:\d{2})[\t ]*/g, '\t$1\t')
 		.replace(/, Uberaba, /gi, '\t')
-		.replace(/\tUberaba\t/gi, '\t')
+		.replace(/\t(?:Uberaba|Uberlândia)\t/gi, '\t')
 		.replace(/(?<=\d+) (?=Rua|Avenida)/gi, '\t')
 		.replace(/(?<=(?:Avenida|Rua)[^,]*, ?\d+), ?/gi, '\t')
 		.replace(/(?<=(?:Avenida|Rua)[^,]*), ??/gi, '\t')
@@ -224,6 +224,10 @@ function corrigirPalavras(texto) {
 		{ correto: 'Ilha', base: 'Ilha' },
 		{ correto: 'varejão', base: 'varejão' },
 		{ correto: 'mercearia', base: 'mercearia' },
+		{ correto: 'Colinas', base: 'Colinas' },
+		{ correto: 'frangos', base: 'frangos' },
+		{ correto: 'Sete', base: 'Sete' },
+		{ correto: 'bloco', base: 'bloco' },
 	];
 
 	for (const { correto, base } of regras) {
