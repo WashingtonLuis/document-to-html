@@ -228,6 +228,8 @@ function corrigirPalavras(texto) {
 		{ correto: 'frangos', base: 'frangos' },
 		{ correto: 'Sete', base: 'Sete' },
 		{ correto: 'bloco', base: 'bloco' },
+		{ correto: 'Gomes', base: 'Gomes' },
+		{ correto: 'Simone', base: 'Simone' },
 	];
 
 	for (const { correto, base } of regras) {
