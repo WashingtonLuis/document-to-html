@@ -232,6 +232,8 @@ function corrigirPalavras(texto) {
 		{ correto: 'Simone', base: 'Simone' },
 		{ correto: 'casa', base: 'casa' },
 		{ correto: 'Graças', base: 'Graças' },
+		{ correto: 'errado', base: 'errado' },
+		{ correto: 'portaria', base: 'portaria' },
 	];
 
 	for (const { correto, base } of regras) {
