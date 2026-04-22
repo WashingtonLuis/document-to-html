@@ -1,5 +1,6 @@
 import { alteraElementos } from "./alteraElementos.js";
 import { circuit } from "./circuit.js";
+import { rotaCount } from "./rotaCount.js";
 import { rota } from "./rota.js";
 
 const latexAcentuacao = {
@@ -1624,6 +1625,14 @@ $(document).ready(function () {
 			$("#result").text(textareaValueEq);
 
 			navigator.clipboard.writeText(textareaValueEq);
+		} catch (error) {
+			console.error("Erro ao formatar o texto:", error);
+		}
+	});
+
+	$("#processarPDF").click(function () {
+		try {
+			rotaCount();
 		} catch (error) {
 			console.error("Erro ao formatar o texto:", error);
 		}
