@@ -237,6 +237,7 @@ function corrigirPalavras(texto) {
 		{ correto: 'cosmopolitan', base: 'cosmopolitan' },
 		{ correto: 'jogar', base: 'jogar' },
 		{ correto: 'garagem', base: 'garagem' },
+		{ correto: 'platina', base: 'platina' },
 	];
 
 	for (const { correto, base } of regras) {
