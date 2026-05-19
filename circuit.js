@@ -247,6 +247,9 @@ function corrigirPalavras(texto) {
 		{ correto: 'loja', base: 'loja' },
 		{ correto: 'estacionamento', base: 'estacionamento' },
 		{ correto: 'ao', base: 'ao' },
+		{ correto: 'Portal', base: 'Portal' },
+		{ correto: 'pet', base: 'pet' },
+		{ correto: 'Souza', base: 'Souza' },
 	];
 
 	for (const { correto, base } of regras) {
