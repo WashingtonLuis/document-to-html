@@ -251,6 +251,7 @@ function corrigirPalavras(texto) {
 		{ correto: 'pet', base: 'pet' },
 		{ correto: 'Souza', base: 'Souza' },
 		{ correto: 'Silvério', base: 'Silvério' },
+		{ correto: 'artesanal', base: 'artesanal' },
 	];
 
 	for (const { correto, base } of regras) {
