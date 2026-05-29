@@ -253,6 +253,7 @@ function corrigirPalavras(texto) {
 		{ correto: 'Silvério', base: 'Silvério' },
 		{ correto: 'artesanal', base: 'artesanal' },
 		{ correto: 'entregue', base: 'entregue' },
+		{ correto: 'cidade', base: 'cidade' },
 	];
 
 	for (const { correto, base } of regras) {
