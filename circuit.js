@@ -254,6 +254,8 @@ function corrigirPalavras(texto) {
 		{ correto: 'artesanal', base: 'artesanal' },
 		{ correto: 'entregue', base: 'entregue' },
 		{ correto: 'cidade', base: 'cidade' },
+		{ correto: 'Santos', base: 'Santos' },
+		{ correto: 'passar', base: 'passar' },
 	];
 
 	for (const { correto, base } of regras) {
