@@ -256,6 +256,7 @@ function corrigirPalavras(texto) {
 		{ correto: 'cidade', base: 'cidade' },
 		{ correto: 'Santos', base: 'Santos' },
 		{ correto: 'passar', base: 'passar' },
+		{ correto: 'Marcos', base: 'Marcos' },
 	];
 
 	for (const { correto, base } of regras) {
