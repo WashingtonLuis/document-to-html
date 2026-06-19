@@ -262,6 +262,8 @@ function corrigirPalavras(texto) {
 		{ correto: 'borracharia', base: 'borracharia' },
 		{ correto: 'Joaquim', base: 'Joaquim' },
 		{ correto: 'comércio', base: 'comércio' },
+		{ correto: 'macarrão', base: 'macarrão' },
+		{ correto: 'Teixeira', base: 'Teixeira' },
 	];
 
 	for (const { correto, base } of regras) {
