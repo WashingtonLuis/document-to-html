@@ -76,7 +76,7 @@ function voltaParenteses(input) {
 }
 
 function removeSpan(input) {
-	const output = input.replace(/<span(?! class="(?:d-none|fs-2 vertical-align-symbol|student-only|teacher-only|teacher-gap))[^<]*?>(?!<span)(.*?)<\/span>/gi, "$1");
+	const output = input.replace(/<span(?! class="(?:d-none|fs-2 vertical-align-symbol|student-only|teacher-only|teacher-gap|text-warning|text-danger))[^<]*?>(?!<span)(.*?)<\/span>/gi, "$1");
 	// const output = input.replace(/<span[^<]*?>(.*?[^<span>].*?)<\/span>/gi, "$1");
 	return output === input ? output : removeSpan(output);
 }
@@ -1101,7 +1101,7 @@ function _clear(str) {
 
 		.replace(/style="[^"]*?"(?!><\/iframe>)/gi, "")
 
-		.replace(/<(?!a)(\w+)\s*(?![^>]*\b(?:class\s*=\s*["']?\s*(?:text-danger|text-center|data-table|table-responsive|mx-auto|text-right|legend|url|img-center|img-right|img-left|box-item|d-none|d-print-block|d-print-none|youtube|box-book|mx-\d+|row|col-sm-\d+)\b|type="[1aAiI]"|colspan="\d"|rowspan="\d"|src="|exercise|exercise-circle|options|list-item|student-only|teacher-only|teacher-gap|balao|caixinha|caixinhax|linha|lacuna|espaco))[^>]*>/gi, "<$1>")
+		.replace(/<(?!a)(\w+)\s*(?![^>]*\b(?:class\s*=\s*["']?\s*(?:text-danger|text-center|data-table|table-responsive|mx-auto|text-right|legend|url|img-center|img-right|img-left|box-item|d-none|d-print-block|d-print-none|youtube|box-book|mx-\d+|row|col-sm-\d+|text-warning|text-danger)\b|type="[1aAiI]"|colspan="\d"|rowspan="\d"|src="|exercise|exercise-circle|options|list-item|student-only|teacher-only|teacher-gap|balao|caixinha|caixinhax|linha|lacuna|espaco|text-warning|text-danger))[^>]*>/gi, "<$1>")
 
 		.replace(/\<b\b[^>]*\>/gi, "<b>")
 		.replace(/\<li\b[^>]*\>/gi, "<li>")
@@ -1151,6 +1151,7 @@ function _clear(str) {
 		.replace(/<p> ?(<b>) ?/gi, "<p>$1")
 		.replace(/<b><br><\/b>/gi, "<br>")
 		.replace(/(?<!<p>)(<br>)(<\/b>)?(<\/p>)/gi, "$2$3$1");
+		
 	text = removeSpan(text);
 	text = removeTag(text);
 
