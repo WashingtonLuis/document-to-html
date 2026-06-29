@@ -1238,6 +1238,8 @@ function clear() {
 				.replace(/<span[^>]*class="[^"]*\bNUM-EXERCICIO\b[^"]*"[^>]*>(\d+)\.<\/span>/gi, "<b>$1)</b> ")
 				.replace(/<span[^>]*class="[^"]*\bCharOverride-(?:1|10)\b[^"]*"[^>]*>([\s\S]*?)<\/span>/gi, "<i>$1</i> ")
 				.replace(/<span[^>]*class="[^"]*\bCharOverride-(?:3)\b[^"]*"[^>]*>([\s\S]*?)<\/span>/gi, "<b>$1</b> ")
+				.replace(/<span[^>]*class="[^"]*\bCharOverride-(?:5|6)\b[^"]*"[^>]*>([\s\S]*?)<\/span>/gi, "<span class='text-warning'>$1</span> ")
+				.replace(/<span[^>]*class="[^"]*\bCharOverride-(?:2)\b[^"]*"[^>]*>([\s\S]*?)<\/span>/gi, "<span class='text-danger'>$1</span> ")
 				.replace(/<span[^>]*class="[^"]*\bLETRA-EXERCICIO\b[^"]*"[^>]*>([A-Z]\))<\/span>/gi, "$1 ")
 				.replace(/<span[^>]*class="[^"]*\bCAIXA-RESPOSTA\b[^"]*"[^>]*>\s*C\s*<\/span>/gi, "<img src='caixinha.png' height='35'> ")
 				.replace(/<[^>]*class="[^"]*\bMATERIAL-DIDATICO_BOX-ATIVIDADE\b[^"]*"[^>]*>[\s\S]*?<\/[^>]+>/gi, "<div class='mx-900 zoom img-center'><img src='espaco.png'></div>")
