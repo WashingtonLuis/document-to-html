@@ -280,6 +280,8 @@ function corrigirPalavras(texto) {
 		{ correto: 'Mônica', base: 'Mônica' },
 		{ correto: 'Bernadino', base: 'Bernadino' },
 		{ correto: 'Elza', base: 'Elza' },
+		{ correto: 'Cássio', base: 'Cássio' },
+		{ correto: 'Unidos', base: 'Unidos' },
 	];
 
 	for (const { correto, base } of regras) {
