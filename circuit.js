@@ -51,6 +51,7 @@ function padronizaCircuit(text) {
 		.replace(/(\d+\t ?(?:minas gerais|Morumbi))\t ?(\d+:\d+)/gi, '$1\t\t$2')
 		.replace(/(\d+\tCondomínio Portal Beija-Flor\t151)\tRua Professor Antônio Simões Borges/gi, '$1')
 		.replace(/(\d+\tRua Sarah? Abdanur\t\d+)\tRua Sarah? Abdanur/gi, '$1')
+		.replace(/(\d+\tAvenida Coronel Joaquim de O\. Prata\t\d+)\tAvenida Coronel Joaquim de Oliveira Prata	Parque[\t ]*/gi, '$1\t')
 		.replace(/<span style="white-space:pre">	<\/span>/gi, '\t')
 		.replace(/<br>\n?/gi, '')
 		.replace(/I I/g, 'II')
@@ -282,6 +283,15 @@ function corrigirPalavras(texto) {
 		{ correto: 'Elza', base: 'Elza' },
 		{ correto: 'Cássio', base: 'Cássio' },
 		{ correto: 'Unidos', base: 'Unidos' },
+		{ correto: 'muro', base: 'muro' },
+		{ correto: 'pequeno', base: 'pequeno' },
+		{ correto: 'pizzaria', base: 'pizzaria' },
+		{ correto: 'farmácia', base: 'farmácia' },
+		{ correto: 'entregar', base: 'entregar' },
+		{ correto: 'do', base: 'do' },
+		{ correto: 'Flamboyant', base: 'Flamboyant' },
+		{ correto: 'Eugênio', base: 'Eugênio' },
+		{ correto: 'Lago', base: 'Lago' },
 	];
 
 	for (const { correto, base } of regras) {
