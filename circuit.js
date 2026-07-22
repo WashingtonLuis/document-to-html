@@ -305,6 +305,7 @@ function corrigirPalavras(texto) {
 		{ correto: 'Luciano', base: 'Luciano' },
 		{ correto: 'Carolina', base: 'Carolina' },
 		{ correto: 'Alexandre', base: 'Alexandre' },
+		{ correto: 'supermercados', base: 'supermercados' },
 	];
 
 	for (const { correto, base } of regras) {
