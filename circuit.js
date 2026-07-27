@@ -309,6 +309,7 @@ function corrigirPalavras(texto) {
 		{ correto: 'Esposição', base: 'Esposição' },
 		{ correto: 'Bom', base: 'Bom' },
 		{ correto: 'Bandeirantes', base: 'Bandeirantes' },
+		{ correto: 'encontrado', base: 'encontrado' },
 	];
 
 	for (const { correto, base } of regras) {
