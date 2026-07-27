@@ -310,6 +310,11 @@ function corrigirPalavras(texto) {
 		{ correto: 'Bom', base: 'Bom' },
 		{ correto: 'Bandeirantes', base: 'Bandeirantes' },
 		{ correto: 'encontrado', base: 'encontrado' },
+		{ correto: 'piso', base: 'piso' },
+		{ correto: 'Sebastião', base: 'Sebastião' },
+		{ correto: 'Soares', base: 'Soares' },
+		{ correto: 'Champagnhat', base: 'Champagnhat' },
+		{ correto: 'Triana', base: 'Triana' },
 	];
 
 	for (const { correto, base } of regras) {
