@@ -331,6 +331,7 @@ function corrigirPalavras(texto) {
 		{ correto: 'achcar', base: 'achcar' },
 		{ correto: 'maquiagem', base: 'maquiagem' },
 		{ correto: 'Campos', base: 'Campos' },
+		{ correto: 'Ramos', base: 'Ramos' },
 	];
 
 	for (const { correto, base } of regras) {
