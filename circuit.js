@@ -336,6 +336,9 @@ function corrigirPalavras(texto) {
 		{ correto: 'Real', base: 'Real' },
 		{ correto: 'Vitoria', base: 'Vitoria' },
 		{ correto: 'transportadora', base: 'transportadora' },
+		{ correto: 'Francisco', base: 'Francisco' },
+		{ correto: 'Flores', base: 'Flores' },
+		{ correto: 'Faria', base: 'Faria' },
 	];
 
 	for (const { correto, base } of regras) {
