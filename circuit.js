@@ -61,6 +61,7 @@ function padronizaCircuit(text) {
 		.replace(/Rua B11\tParque das Laranjeiras/gi, 'Parque das Laranjeiras')
 		.replace(/Rua Doutor\tcidade Ozanan/gi, 'cidade Ozanan')
 		.replace(/de Aze\tConjunto Margarida Rosa Azevedo/gi, 'Conjunto Margarida Rosa Azevedo')
+		.replace(/Havan Uberaba\t507\tAvenida Márcia Helena Moreira Silva/gi, 'Avenida Márcia Helena Moreira Silva\t507')
 		.replace(/<span style="white-space:pre">	<\/span>/gi, '\t')
 		.replace(/<br>\n?/gi, '')
 		.replace(/I I/g, 'II')
