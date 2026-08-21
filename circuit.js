@@ -342,6 +342,7 @@ function corrigirPalavras(texto) {
 		{ correto: 'Faria', base: 'Faria' },
 		{ correto: 'Ipiranga', base: 'Ipiranga' },
 		{ correto: 'bairro', base: 'bairro' },
+		{ correto: 'lavanderia', base: 'lavanderia' },
 	];
 
 	for (const { correto, base } of regras) {
