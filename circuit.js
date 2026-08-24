@@ -57,12 +57,15 @@ function padronizaCircuit(text) {
 		.replace(/Rua Luciano Marajo de Carvalho\t(\d+)\tAvenida Luciano Marajó Carvalho/gi, 'Avenida Luciano Marajó Carvalho\t$1')
 		.replace(/Unique II\tQuinta da Boa Esperança/gi, 'Quinta da Boa Esperança')
 		.replace(/(?:Avenida|Av.) Dom Antônio Alberto Guimarães\t+Rezende/gi, 'Avenida Dom Antônio Alberto Guimarães Rezende')
-		.replace(/Rua Luís Sérgio de Sousa Oliveira\tParque das Laranjeiras/gi, 'Parque das Laranjeiras')
+		.replace(/Rua Luís Sérgio de Sousa Oliveira\t(?:Parque|PQ) das Laranjeiras/gi, 'Parque das Laranjeiras')
 		.replace(/Rua B11\tParque das Laranjeiras/gi, 'Parque das Laranjeiras')
 		.replace(/Rua Doutor\tcidade Ozanan/gi, 'cidade Ozanan')
 		.replace(/de Aze\tConjunto Margarida Rosa Azevedo/gi, 'Conjunto Margarida Rosa Azevedo')
 		.replace(/Havan Uberaba\t507\tAvenida Márcia Helena Moreira Silva/gi, 'Avenida Márcia Helena Moreira Silva\t507')
 		.replace(/(Cristal Garden\t\d)\tRodovia Edílson Lamartine Mendes/gi, '$1')
+		.replace(/(Chácara Quinta DEll Rey), Unnamed Road	(Quintas Del Rei)/gi, '$1\t\t$2')
+		.replace(/(Condomínio Terra Nova Uberaba	261)	Avenida Geraldo Formiga do Nascimento/gi, '$1')
+		.replace(/ R\. Daniel Bertoldi/gi, '\tRua Daniel Bertoldi')
 		.replace(/<span style="white-space:pre">	<\/span>/gi, '\t')
 		.replace(/<br>\n?/gi, '')
 		.replace(/I I/g, 'II')
@@ -346,6 +349,7 @@ function corrigirPalavras(texto) {
 		{ correto: 'lavanderia', base: 'lavanderia' },
 		{ correto: 'coqueiro', base: 'coqueiro' },
 		{ correto: 'Condomínio', base: 'Condomínio' },
+		{ correto: 'Formiga', base: 'Formiga' },
 	];
 
 	for (const { correto, base } of regras) {
