@@ -45,7 +45,7 @@ function padronizaCircuit(text) {
 		.replace(/(380\d{0,2}-?)\n(\d|-)/gi, '$1$2')
 		.replace(/<div><br><\/div>/gi, '')
 		.replace(/(\d+:\d+) +(\w+)/gi, '$1\t$2')
-		.replace(/(Morumbi|Benedito|Maria|Beija Flor|Residencial Nova Era|Jockey Park|Pacaembu II|Tamareiras|Bela|espanha|Copacabana|Girassóis IV|Marajo I|Girassóis|Olinda|Recanto das Torres|Guanabara|Eugenio|Costa Teles|Vila Esperança|Abadia|Amui ?(?:I+|IV)?|Glória|Mendes ?(?:I+)?|São José|Manhattan|Colibri|Independente|Unidos|Dominicanas|Vitoria|Azevedo|Ipiranga|Barbosa|I+|Américas|Sol|Flores|Laranjeiras)[,	 ]*Uberaba/gi, '$1')
+		.replace(/(Morumbi|Benedito|Maria|Beija Flor|Residencial Nova Era|Jockey Park|Pacaembu II|Tamareiras|Bela|espanha|Copacabana|Girassóis IV|Marajo I|Girassóis|Olinda|Recanto das Torres|Guanabara|Eugenio|Costa Teles|Vila Esperança|Abadia|Amui ?(?:I+|IV)?|Glória|Mendes ?(?:I+)?|São José|Manhattan|Colibri|Independente|Unidos|Dominicanas|Vitoria|Azevedo|Ipiranga|Barbosa|I+|Américas|Sol|Flores|Laranjeiras|Franco)[,	 ]*Uberaba/gi, '$1')
 		.replace(/Uberaba[, \t]*(Jardim Marajo|Residencial Parque dos Girassóis III)/gi, '$1')
 		.replace(/Palis de Oliveira[, \t]*(Conjunto Cassio Rezende)/gi, '$1')
 		.replace(/(\d+\t ?(?:minas gerais|Morumbi))\t ?(\d+:\d+)/gi, '$1\t\t$2')
@@ -62,6 +62,7 @@ function padronizaCircuit(text) {
 		.replace(/Rua Doutor\tcidade Ozanan/gi, 'cidade Ozanan')
 		.replace(/de Aze\tConjunto Margarida Rosa Azevedo/gi, 'Conjunto Margarida Rosa Azevedo')
 		.replace(/Havan Uberaba\t507\tAvenida Márcia Helena Moreira Silva/gi, 'Avenida Márcia Helena Moreira Silva\t507')
+		.replace(/(Cristal Garden\t\d)\tRodovia Edílson Lamartine Mendes/gi, '$1')
 		.replace(/<span style="white-space:pre">	<\/span>/gi, '\t')
 		.replace(/<br>\n?/gi, '')
 		.replace(/I I/g, 'II')
@@ -343,6 +344,8 @@ function corrigirPalavras(texto) {
 		{ correto: 'Ipiranga', base: 'Ipiranga' },
 		{ correto: 'bairro', base: 'bairro' },
 		{ correto: 'lavanderia', base: 'lavanderia' },
+		{ correto: 'coqueiro', base: 'coqueiro' },
+		{ correto: 'Condomínio', base: 'Condomínio' },
 	];
 
 	for (const { correto, base } of regras) {
