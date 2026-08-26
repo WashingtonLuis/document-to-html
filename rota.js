@@ -6,7 +6,9 @@ export function rota(text) {
 
 function padronizaRota(text) {
 	text = text
-		.replace(/<p>((?:R\.?|Rua|Av\.?|Avenida|Trav\.?|Travessa|Al\.?|Alameda|Estr\.?|Estrada)[^\t]*?) (\d+)/gi, '$1\t$2\t\t')
+		.replace(/- de \d+\/\d+ ao fim/gi, '')
+		.replace(/- de \d+ ao fim -/gi, '')
+		.replace(/<p>((?:R\.?|Rua|Av\.?|Avenida|Trav\.?|Travessa|Al\.?|Alameda|Estr\.?|Estrada)[^\t]*?)[ ,]*(\d+)/gi, '$1, $2\t\t\t\t\t')
 		.replace(/<p>/gi, '')
 		.replace(/\n?<br>/gi, '')
 		.replace(/<\/p>/gi, '\n')
@@ -19,9 +21,10 @@ function padronizaRota(text) {
 		.replace(/Avenida Nenê|e Sabino/gi, 'Av. Nenê Sabino')
 		.replace(/(?:R(?:\.|ua)? )?Bahia/gi, 'R. Bahia')
 		.replace(/APRO/gi, 'Ap')
+		.replace(/ s\/n/gi, '')
+		.replace(/Avenida Santos Dumont Clínica de olhos/gi, 'Clínica de olhos')
 		.replace(/Aguardando carregamento/gi, '')
-		.replace(/<div><\/div>/gi, '')
-		;
+		.replace(/<div><\/div>/gi, '');
 	return text;
 }
 
@@ -29,4 +32,3 @@ function removeQuebras(text) {
 	const output = text.replace(/\n{2,}/gi, '\n');
 	return output === text ? output : removeQuebras(output);
 }
-

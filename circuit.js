@@ -66,6 +66,8 @@ function padronizaCircuit(text) {
 		.replace(/(Chácara Quinta DEll Rey), Unnamed Road	(Quintas Del Rei)/gi, '$1\t\t$2')
 		.replace(/(Condomínio Terra Nova Uberaba	261)	Avenida Geraldo Formiga do Nascimento/gi, '$1')
 		.replace(/ R\. Daniel Bertoldi/gi, '\tRua Daniel Bertoldi')
+		.replace(/(Grupo RL Máquinas	65)	Avenida Márcia Helena Moreira Silva/gi, '$1')
+		.replace(/(Maqnelson Agrícola LTDA	1243)	BR-050/gi, '$1')
 		.replace(/<span style="white-space:pre">	<\/span>/gi, '\t')
 		.replace(/<br>\n?/gi, '')
 		.replace(/I I/g, 'II')
@@ -81,7 +83,8 @@ function padronizaCircuit(text) {
 		.replace(/(\b\d+\t[^\t]+\t\d+\t[^\t]+)\t(?=\d{2}:\d{2})/g,'$1\t\t')
 		.replace(/(ap ?\d+)\t+([A-Za-z]+)/g,'$1 $2')
 		.replace(/(\d+)\n(\d+)(?=\n)/g,'$1$2')
-		.replace(/([A-Za-z]+)\t(\d+:\d+\t\d+\d+)/g,'$1\t\t$2')
+		.replace(/([A-Za-z]+)\t(\d+:\d+\t\d+:\d+)/g,'$1\t\t$2')
+		.replace(/(\d+:\d+)\t{2,}(\d+:\d+)/g,'$1\t$2')
 		.replace(/([A-Za-zÀ-ÿ]+)\n([A-Za-zÀ-ÿ]+)/g,'$1$2')
 		
 		;
