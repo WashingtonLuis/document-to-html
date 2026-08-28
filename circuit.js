@@ -354,6 +354,7 @@ function corrigirPalavras(texto) {
 		{ correto: 'Condomínio', base: 'Condomínio' },
 		{ correto: 'Formiga', base: 'Formiga' },
 		{ correto: 'Porfírio', base: 'Porfírio' },
+		{ correto: 'Aparecida', base: 'Aparecida' },
 	];
 
 	for (const { correto, base } of regras) {
