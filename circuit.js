@@ -69,6 +69,8 @@ function padronizaCircuit(text) {
 		.replace(/(Grupo RL Máquinas	65)	Avenida Márcia Helena Moreira Silva/gi, '$1')
 		.replace(/(Maqnelson Agrícola LTDA	1243)	BR-050/gi, '$1')
 		.replace(/(83), (Parque das Laranjeiras I)/gi, '$1\t$2')
+		.replace(/(83), (Parque das Laranjeiras I)/gi, '$1\t$2')
+		.replace(/conveniência diesel graal\t380/gi, 'conveniência diesel graal\t\t\t380')
 		.replace(/<span style="white-space:pre">	<\/span>/gi, '\t')
 		.replace(/<br>\n?/gi, '')
 		.replace(/I I/g, 'II')
@@ -356,6 +358,8 @@ function corrigirPalavras(texto) {
 		{ correto: 'Formiga', base: 'Formiga' },
 		{ correto: 'Porfírio', base: 'Porfírio' },
 		{ correto: 'Aparecida', base: 'Aparecida' },
+		{ correto: 'tratores', base: 'tratores' },
+		{ correto: 'Franco', base: 'Franco' },
 	];
 
 	for (const { correto, base } of regras) {
