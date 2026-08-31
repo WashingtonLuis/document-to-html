@@ -76,7 +76,7 @@ function voltaParenteses(input) {
 }
 
 function removeSpan(input) {
-	const output = input.replace(/<span(?! class="(?:d-none|fs-2 vertical-align-symbol|student-only|teacher-only|teacher-gap|text-warning|text-danger))[^<]*?>(?!<span)(.*?)<\/span>/gi, "$1");
+	const output = input.replace(/<span(?! class=(?:"|')(?:d-none|fs-2 vertical-align-symbol|student-only|teacher-only|teacher-gap|text-warning|text-danger))[^<]*?>(?!<span)(.*?)<\/span>/gi, "$1");
 	// const output = input.replace(/<span[^<]*?>(.*?[^<span>].*?)<\/span>/gi, "$1");
 	return output === input ? output : removeSpan(output);
 }
@@ -1237,9 +1237,9 @@ function clear() {
 				.replace(/<p[^>]*class="[^"]*\btextos_titulos\b[^"]*"[^>]*>([\s\S]*?)<\/p>/gi, "<h5>$1</h5>")
 				.replace(/<img[^>]*\bsrc=['"][^'"]*Atividade_Oral[^'"]*['"][^>]*>/gi, "<img src='balao.png' height='35'> ")
 				.replace(/<span[^>]*class="[^"]*\bNUM-EXERCICIO\b[^"]*"[^>]*>(\d+)\.<\/span>/gi, "<b>$1)</b> ")
-				.replace(/<span[^>]*class="[^"]*\bCharOverride-(?:5|6)\b[^"]*"[^>]*>([\s\S]*?)<\/span>/gi, "<span class='text-warning'>$1</span> ")
-				.replace(/<span[^>]*class="[^"]*\bCharOverride-(?:26|27|28)\b[^"]*"[^>]*>([\s\S]*?)<\/span>/gi, "<span class='text-danger'>$1</span> ")
-				.replace(/<span[^>]*class="[^"]*\bCharOverride-(?:13)\b[^"]*"[^>]*>([\s\S]*?)<\/span>/gi, "<i>$1</i> ")
+				.replace(/<span[^>]*class="[^"]*\bCharOverride-\b(?:5|6)\b[^"]*"[^>]*>([\s\S]*?)<\/span>/gi, "<span class='text-warning'>$1</span> ")
+				.replace(/<span[^>]*class="[^"]*\bCharOverride-\b(?:26|27|28)\b[^"]*"[^>]*>([\s\S]*?)<\/span>/gi, "<span class='text-danger'>$1</span>")
+				.replace(/<span[^>]*class="[^"]*\bCharOverride-\b(?:13)\b[^"]*"[^>]*>([\s\S]*?)<\/span>/gi, "<i>$1</i> ")
 				.replace(/<span[^>]*class="[^"]*\b_idGenCharOverride-(?:2)\b[^"]*"[^>]*>([\s\S]*?)<\/span>/gi, "<i>$1</i> ")
 				.replace(/<span[^>]*class="[^"]*\bItalic\b[^"]*"[^>]*>([\s\S]*?)<\/span>/gi, "<i>$1</i> ")
 				.replace(/<span[^>]*class="[^"]*\bCharOverride-(?:1)\b[^"]*"[^>]*>([\s\S]*?)<\/span>/gi, "<b>$1</b> ")
