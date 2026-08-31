@@ -68,6 +68,7 @@ function padronizaCircuit(text) {
 		.replace(/ R\. Daniel Bertoldi/gi, '\tRua Daniel Bertoldi')
 		.replace(/(Grupo RL Máquinas	65)	Avenida Márcia Helena Moreira Silva/gi, '$1')
 		.replace(/(Maqnelson Agrícola LTDA	1243)	BR-050/gi, '$1')
+		.replace(/(83), (Parque das Laranjeiras I)/gi, '$1\t$2')
 		.replace(/<span style="white-space:pre">	<\/span>/gi, '\t')
 		.replace(/<br>\n?/gi, '')
 		.replace(/I I/g, 'II')

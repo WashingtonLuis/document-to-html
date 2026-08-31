@@ -1340,6 +1340,7 @@ function clear() {
 			.replace(/^(?:\n*<hr>\n*)/gi, "")
 			.replace(/(?<=<hr>)\s+(?=<h5>)/gi, "\n")
 			.replace(/(?<=<\/table>\s+)<br>\s+(?=<\/div>)/gi, "")
+			.replace(/(<td>[^<]*)<\/p>[\n\t]+<p>([^<]*<\/td>)/gi, "$1<br>$2")
 			.replace(/^\n/gi, "")
 			.replace(/<br>\s*<br>/gi, "<br>")
 			.replace(/^<br>\s?/gi, '');
