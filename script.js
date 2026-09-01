@@ -76,7 +76,7 @@ function voltaParenteses(input) {
 }
 
 function removeSpan(input) {
-	const output = input.replace(/<span(?! class=(?:"|')(?:d-none|fs-2 vertical-align-symbol|student-only|teacher-only|teacher-gap|text-warning|text-danger))[^<]*?>(?!<span)(.*?)<\/span>/gi, "$1");
+	const output = input.replace(/<span(?! class=["'](?:d-none|fs-2 vertical-align-symbol|student-only|teacher-only|teacher-gap|text-warning|text-danger))[^<]*?>(?!<span)(.*?)<\/span>/gi, "$1");
 	// const output = input.replace(/<span[^<]*?>(.*?[^<span>].*?)<\/span>/gi, "$1");
 	return output === input ? output : removeSpan(output);
 }
