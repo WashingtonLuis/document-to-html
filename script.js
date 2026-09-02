@@ -414,6 +414,7 @@ function nLatex(str) {
 		.replace(/\\pm/g, "±")
 		.replace(/\\in/g, "∈")
 		.replace(/\\rightleftarrows|⇄/g, " ⇄ ")
+		.replace(/\\div/g, " ÷ ")
 		// .replace(/≅|\\cong/g, " ≅ ")
 		// .replace(/≈|\\approx/g, " ≈ ")
 		.replace(/≅|\\cong\b|≈|\\approx\b|≃|\\simeq\b/g, " ≃ ")
