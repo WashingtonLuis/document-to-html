@@ -72,6 +72,8 @@ function padronizaCircuit(text) {
 		.replace(/(221), (Chácaras Recanto das Flores)/gi, '$1\t$2')
 		.replace(/de Aze[ \t]*(Conjunto Margarida Rosa Azevedo)/gi, '$1')
 		.replace(/conveniência diesel graal\t380/gi, 'conveniência diesel graal\t\t\t380')
+		.replace(/(Lets Express)\t(Logística e Transporte)\t(709)\tAvenida José Eustáquio de Melo/gi, '$1 $2\t$3')
+		.replace(/(Graal Antares)	 S\/N BR-050, (Hyléa Parque)/gi, '$1\t\t$2')
 		.replace(/<span style="white-space:pre">	<\/span>/gi, '\t')
 		.replace(/<br>\n?/gi, '')
 		.replace(/I I/g, 'II')
@@ -364,6 +366,8 @@ function corrigirPalavras(texto) {
 		{ correto: 'brecha', base: 'brecha' },
 		{ correto: 'registro', base: 'registro' },
 		{ correto: 'Coutinho', base: 'Coutinho' },
+		{ correto: 'Henrique', base: 'Henrique' },
+		{ correto: 'Marcelo', base: 'Marcelo' },
 	];
 
 	for (const { correto, base } of regras) {
