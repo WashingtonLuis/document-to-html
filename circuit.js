@@ -374,6 +374,9 @@ function corrigirPalavras(texto) {
 		{ correto: 'Mendes', base: 'Mendes' },
 		{ correto: 'Manhattan', base: 'Manhattan' },
 		{ correto: 'Eustáquio', base: 'Eustáquio' },
+		{ correto: 'Estrela', base: 'Estrela' },
+		{ correto: 'Vila', base: 'Vila' },
+		{ correto: 'distribuidora', base: 'distribuidora' },
 	];
 
 	for (const { correto, base } of regras) {
