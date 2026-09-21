@@ -68,6 +68,7 @@ function padronizaCircuit(text) {
 		.replace(/ R\. Daniel Bertoldi/gi, '\tRua Daniel Bertoldi')
 		.replace(/(Grupo RL Máquinas	65)	Avenida Márcia Helena Moreira Silva/gi, '$1')
 		.replace(/(Maqnelson Agrícola LTDA	1243)	BR-050/gi, '$1')
+		.replace(/(Maqnelson Agrícola LTDA	1243), (Parque das Américas)/gi, '$1\t$2')
 		.replace(/(83), (Parque das Laranjeiras I)/gi, '$1\t$2')
 		.replace(/(221), (Chácaras Recanto das Flores)/gi, '$1\t$2')
 		.replace(/de Aze[ \t]*(Conjunto Margarida Rosa Azevedo)/gi, '$1')
@@ -377,6 +378,8 @@ function corrigirPalavras(texto) {
 		{ correto: 'Estrela', base: 'Estrela' },
 		{ correto: 'Vila', base: 'Vila' },
 		{ correto: 'distribuidora', base: 'distribuidora' },
+		{ correto: 'prédio', base: 'prédio' },
+		{ correto: 'caixinha', base: 'caixinha' },
 	];
 
 	for (const { correto, base } of regras) {

@@ -1786,7 +1786,7 @@ $(document).ready(function () {
 					const imageName = `blo${bloco}-${counter.toString().padStart(2, "0")}.jpg`;
 					return `<div class='mx-400 img-center${tagsImg}'><img src='${imageName}'></div>`;
 				})
-				.replace(/<img src=['"]blo\d{1,2}-\d{2,3}\.(jpg|png)['"]\s*\/?>/gi, (match, extension) => {
+				.replace(/<img src=['"]blo\d{1,2}-\d{2,3}\.(jpg|png|svg)['"]\s*\/?>/gi, (match, extension) => {
 					// Reorganiza o nome das imagens, extraindo o tipo da imagem (jpg ou png)
 					const imageName = `blo${bloco}-${counter.toString().padStart(2, "0")}.${extension}`;
 					counter++;
