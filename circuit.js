@@ -77,6 +77,7 @@ function padronizaCircuit(text) {
 		.replace(/(Graal Antares)	 S\/N BR-050, (Hyléa Parque)/gi, '$1\t\t$2')
 		.replace(/(posto Graal)[\t ]*(Parque Hileia)/gi, '$1\t\t$2')
 		.replace(/(Ch Portal Sol)[\t ]*Conjunto Uberaba/gi, '$1')
+		.replace(/(Rua Professor Vereador Murilo Pacheco de)[\t ]*(Menezes)	(\d+)/gi, '$1 $2\t$3')
 		.replace(/<span style="white-space:pre">	<\/span>/gi, '\t')
 		.replace(/<br>\n?/gi, '')
 		.replace(/I I/g, 'II')
