@@ -80,6 +80,9 @@ function padronizaCircuit(text) {
 		.replace(/(Rua Professor Vereador Murilo Pacheco de)[\t ]*(Menezes)	(\d+)/gi, '$1 $2\t$3')
 		.replace(/(Empório Laranjeiras\t297)\tAvenida Orlando de Faria/gi, '$1')
 		.replace(/Quintas del rey\tQuintas Del Rey/gi, 'Quintas Del Rey')
+		.replace(/(\d+), (Parque das Laranjeiras)/gi, '$1\t$2')
+		.replace(/[\t ]*MG/gi, '\t\t\t')
+		.replace(/\n(?=[-(\t])/gi, '')
 		.replace(/<span style="white-space:pre">	<\/span>/gi, '\t')
 		.replace(/<br>\n?/gi, '')
 		.replace(/I I/g, 'II')
@@ -92,11 +95,13 @@ function padronizaCircuit(text) {
 		.replace(/, (\d+)\b(?!;)/gi, '\t$1')
 		.replace(/(bloco)\n(\d+)/gi, '$1 $2')
 		.replace(/(\b\d+\t(?:R\.?|Rua|Av\.?|Avenida|Trav\.?|Travessa|Al\.?|Alameda|Estr\.?|Estrada)[^\t]*?) (\d+)(?=\t)/gi, '$1\t$2')
+		.replace(/[\t ](\d+[\t ](?:R\.?|Rua|Av\.?|Avenida|Trav\.?|Travessa|Al\.?|Alameda|Estr\.?|Estrada)\b)/gi, '\n$1')
 		.replace(/(\b\d+\t[^\t]+\t\d+\t[^\t]+)\t(?=\d{2}:\d{2})/g,'$1\t\t')
 		.replace(/(ap ?\d+)\t+([A-Za-z]+)/g,'$1 $2')
 		.replace(/(\d+)\n(\d+)(?=\n)/g,'$1$2')
 		.replace(/([A-Za-z]+)\t(\d+:\d+\t\d+:\d+)/g,'$1\t\t$2')
 		.replace(/(\d+:\d+)\t{2,}(\d+:\d+)/g,'$1\t$2')
+		.replace(/\b((?<!-)\d+\t)(\d\d:\d\d\t\d\d:\d\d)/g,'$1\t\t$2')
 		.replace(/([A-Za-zÀ-ÿ]+)\n([A-Za-zÀ-ÿ]+)/g,'$1$2')
 		
 		;
@@ -379,10 +384,13 @@ function corrigirPalavras(texto) {
 		{ correto: 'Manhattan', base: 'Manhattan' },
 		{ correto: 'Eustáquio', base: 'Eustáquio' },
 		{ correto: 'Estrela', base: 'Estrela' },
+		{ correto: 'Vitória', base: 'Vitória' },
 		{ correto: 'Vila', base: 'Vila' },
 		{ correto: 'distribuidora', base: 'distribuidora' },
 		{ correto: 'prédio', base: 'prédio' },
 		{ correto: 'caixinha', base: 'caixinha' },
+		{ correto: 'barzinho', base: 'barzinho' },
+		{ correto: 'MG', base: 'MG' },
 	];
 
 	for (const { correto, base } of regras) {
