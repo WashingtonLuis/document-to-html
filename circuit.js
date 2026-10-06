@@ -391,6 +391,7 @@ function corrigirPalavras(texto) {
 		{ correto: 'caixinha', base: 'caixinha' },
 		{ correto: 'barzinho', base: 'barzinho' },
 		{ correto: 'MG', base: 'MG' },
+		{ correto: 'Boa', base: 'Boa' },
 	];
 
 	for (const { correto, base } of regras) {
