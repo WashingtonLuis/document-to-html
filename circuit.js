@@ -394,6 +394,7 @@ function corrigirPalavras(texto) {
 		{ correto: 'MG', base: 'MG' },
 		{ correto: 'Boa', base: 'Boa' },
 		{ correto: 'coqueiros', base: 'coqueiros' },
+		{ correto: 'garden', base: 'garden' },
 	];
 
 	for (const { correto, base } of regras) {
