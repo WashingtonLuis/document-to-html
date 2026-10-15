@@ -82,6 +82,11 @@ function padronizaCircuit(text) {
 		.replace(/Quintas del rey\tQuintas Del Rey/gi, 'Quintas Del Rey')
 		.replace(/(\d+), (Parque das Laranjeiras)/gi, '$1\t$2')
 		.replace(/Engenheiro Evaristo de Paula[\t ]+Felicíssimo/gi, 'Engenheiro Evaristo de Paula Felicíssimo')
+		.replace(/(Estância dos Ipês	)minas Gerais/gi, '$1\t')
+		.replace(/(Estância dos Ipês)\t+(\d\d:\d\d)/gi, '$1\t\t\t\t$2')
+		.replace(/(Alonso Téles Mendes)[ \n]*(\d{3,})\t+/gi, '$1\t$2\t')
+		.replace(/(Aurotec)\t(Avenida Márcia Helena Moreira Silva)\tCondomínio Residencial Mário Franco/gi, '$1\t\t$2')
+		.replace(/(\d+), (Jardim Ipiranga)/gi, '$1\t$2')
 		.replace(/[\t ]*MG/gi, '\t\t\t')
 		.replace(/\n(?=[-(\t])/gi, '')
 		.replace(/<span style="white-space:pre">	<\/span>/gi, '\t')
@@ -395,6 +400,8 @@ function corrigirPalavras(texto) {
 		{ correto: 'Boa', base: 'Boa' },
 		{ correto: 'coqueiros', base: 'coqueiros' },
 		{ correto: 'garden', base: 'garden' },
+		{ correto: 'Pontes', base: 'Pontes' },
+		{ correto: 'lateral', base: 'lateral' },
 	];
 
 	for (const { correto, base } of regras) {
