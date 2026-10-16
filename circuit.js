@@ -87,6 +87,7 @@ function padronizaCircuit(text) {
 		.replace(/(Alonso Téles Mendes)[ \n]*(\d{3,})\t+/gi, '$1\t$2\t')
 		.replace(/(Aurotec)\t(Avenida Márcia Helena Moreira Silva)\tCondomínio Residencial Mário Franco/gi, '$1\t\t$2')
 		.replace(/(\d+), (Jardim Ipiranga)/gi, '$1\t$2')
+		.replace(/Uberaba\tminas Gerais/gi, '')
 		.replace(/[\t ]*MG/gi, '\t\t\t')
 		.replace(/\n(?=[-(\t])/gi, '')
 		.replace(/<span style="white-space:pre">	<\/span>/gi, '\t')
@@ -109,6 +110,7 @@ function padronizaCircuit(text) {
 		.replace(/(\d+:\d+)\t{2,}(\d+:\d+)/g,'$1\t$2')
 		.replace(/\b((?<!-)\d+\t)(\d\d:\d\d\t\d\d:\d\d)/g,'$1\t\t$2')
 		.replace(/([A-Za-zÀ-ÿ]+)\n([A-Za-zÀ-ÿ]+)/g,'$1$2')
+		.replace(/&amp;/g,'&')
 		
 		;
 	return text;
@@ -404,6 +406,8 @@ function corrigirPalavras(texto) {
 		{ correto: 'lateral', base: 'lateral' },
 		{ correto: 'diesel', base: 'diesel' },
 		{ correto: 'Gonçalves', base: 'Gonçalves' },
+		{ correto: 'Pacheco', base: 'Pacheco' },
+		{ correto: 'Amaral', base: 'Amaral' },
 	];
 
 	for (const { correto, base } of regras) {
