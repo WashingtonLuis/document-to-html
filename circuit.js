@@ -79,7 +79,7 @@ function padronizaCircuit(text) {
 		.replace(/(Ch Portal Sol)[\t ]*Conjunto Uberaba/gi, '$1')
 		.replace(/(Rua Professor Vereador Murilo Pacheco de)[\t ]*(Menezes)	(\d+)/gi, '$1 $2\t$3')
 		.replace(/(Empório Laranjeiras\t297)\tAvenida Orlando de Faria/gi, '$1')
-		.replace(/Quintas del rey\tQuintas Del Rey/gi, 'Quintas Del Rey')
+		.replace(/Quintas del rey[\t ]*Quintas Del Rey/gi, 'Quintas Del Rey')
 		.replace(/(\d+), (Parque das Laranjeiras)/gi, '$1\t$2')
 		.replace(/Engenheiro Evaristo de Paula[\t ]+Felicíssimo/gi, 'Engenheiro Evaristo de Paula Felicíssimo')
 		.replace(/((?:Estância dos Ipês|Condomínio Residencial Mário Franco)	)minas Gerais/gi, '$1\t')
