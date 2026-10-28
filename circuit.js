@@ -413,6 +413,8 @@ function corrigirPalavras(texto) {
 		{ correto: 'gohr', base: 'gohr' },
 		{ correto: 'posto', base: 'posto' },
 		{ correto: 'Induberaba', base: 'Induberaba' },
+		{ correto: 'Paiva', base: 'Paiva' },
+		{ correto: 'Cunha', base: 'Cunha' },
 	];
 
 	for (const { correto, base } of regras) {
