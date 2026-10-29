@@ -86,6 +86,9 @@ function padronizaCircuit(text) {
 		.replace(/(?<=(?:^|\n)\d+\t)(Estância dos Ipês|Condomínio Residencial Mário Franco)\t+(\d\d:\d\d)/gi, '$1\t\t\t\t$2')
 		.replace(/(Alonso Téles Mendes)[ \n]*(\d{3,})\t+/gi, '$1\t$2\t')
 		.replace(/(Aurotec)\t(Avenida Márcia Helena Moreira Silva)\tCondomínio Residencial Mário Franco/gi, '$1\t\t$2')
+		.replace(/(Rua Luís Próspero)[\n\t]*(\d+)\t+Rua Luiz Próspero/gi, '$1\t$2')
+		.replace(/(P3)[\n\t]*(\d+)\t+Rua Lourival Pereira Gomes/gi, '$1\t$2')
+		.replace(/(Rua Luis Sérgio de Souza Oliveira)\n(\d+)\t+/gi, '$1\t$2\t')
 		.replace(/(\d+), (Jardim Ipiranga)/gi, '$1\t$2')
 		.replace(/(Damha I*) Residencial Uberaba/gi, '$1')
 		.replace(/Uberaba\tminas Gerais/gi, '')
@@ -417,6 +420,8 @@ function corrigirPalavras(texto) {
 		{ correto: 'Cunha', base: 'Cunha' },
 		{ correto: 'Onofre', base: 'Onofre' },
 		{ correto: 'Mário', base: 'Mário' },
+		{ correto: 'beleza', base: 'beleza' },
+		{ correto: 'oficina', base: 'oficina' },
 	];
 
 	for (const { correto, base } of regras) {
