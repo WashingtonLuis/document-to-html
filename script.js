@@ -746,6 +746,7 @@ function manual(str) {
 		.replace(/(?<!p>|div>)(?:<br>)?(<b>)(\d+\))\s*(<\/b>)/gi, "<p>$1$2$3</p>")
 		.replace(/(?<=<p><b>\d+\)<\/b>)\s*<br\s*\/?>\s*(?=<img)/gi, "</p>\n<p>")
 		.replace(/(?<=\))(?=\w)/gi, " ")
+		.replace(/<img\b(?:[^>"']|"[^"]*"|'[^']*')*>/gi, "##")
 		.replace(/<\/h5>\s*<br\s*\/?>\s*<h5>/gi, "</h5>\n<h5>");
 
 	const termos = ["Resposta pessoal", "Respostas pessoais", "Resposta circunstancial", "Respostas circunstanciais", "Observação", "Resposta esperada"];
