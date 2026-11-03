@@ -71,6 +71,7 @@ function padronizaCircuit(text) {
 		.replace(/(Maqnelson Agrícola LTDA	1243), (Parque das Américas)/gi, '$1\t$2')
 		.replace(/(83), (Parque das Laranjeiras I)/gi, '$1\t$2')
 		.replace(/(221), (Chácaras Recanto das Flores)/gi, '$1\t$2')
+		.replace(/Parque Rural (Fazendinha Era Uma Vez)	 Conceição Aveiro[\n\t]*(278)	Rua Maria Helena de Oliveira Aveiro/gi, '$1\t$2')
 		.replace(/de Aze[ \t]*(Conjunto Margarida Rosa Azevedo)/gi, '$1')
 		.replace(/conveniência diesel graal\t380/gi, 'conveniência diesel graal\t\t\t380')
 		.replace(/(Lets Express)\t(Logística e Transporte)\t(709)\tAvenida José Eustáquio de Melo/gi, '$1 $2\t$3')
@@ -82,15 +83,20 @@ function padronizaCircuit(text) {
 		.replace(/Quintas del rey[\t ]*Quintas Del Rey/gi, 'Quintas Del Rey')
 		.replace(/(\d+), (Parque das Laranjeiras)/gi, '$1\t$2')
 		.replace(/Engenheiro Evaristo de Paula[\t ]+Felicíssimo/gi, 'Engenheiro Evaristo de Paula Felicíssimo')
+		.replace(/(Residencial Mario Franco)[\n\t]*105	Rua Dez	Condomínio Residencial Mário Franco/gi, '$1')
 		.replace(/((?:Estância dos Ipês|Condomínio Residencial Mário Franco)\t)minas Gerais/gi, '$1\t')
-		.replace(/(?<=(?:^|\n)\d+\t)(Estância dos Ipês|Condomínio Residencial Mário Franco)\t+(\d\d:\d\d)/gi, '$1\t\t\t\t$2')
+		.replace(/(?<=(?:^|\n)\d+\t)(Condomínio Estância dos Ipês|Estância dos Ipês|Condomínio Residencial M[áa]rio Franco|Residencial M[áa]rio Franco)\t+(\d\d:\d\d)/gi, '$1\t\t\t\t$2')
 		.replace(/(Alonso Téles Mendes)[ \n]*(\d{3,})\t+/gi, '$1\t$2\t')
 		.replace(/(Aurotec)\t(Avenida Márcia Helena Moreira Silva)\tCondomínio Residencial Mário Franco/gi, '$1\t\t$2')
 		.replace(/(Rua Luís Próspero)[\n\t]*(\d+)\t+Rua Luiz Próspero/gi, '$1\t$2')
 		.replace(/(P3)[\n\t]*(\d+)\t+Rua Lourival Pereira Gomes/gi, '$1\t$2')
 		.replace(/(Rua Luis Sérgio de Souza Oliveira)\n(\d+)\t+/gi, '$1\t$2\t')
 		.replace(/(\d+), (Jardim Ipiranga)/gi, '$1\t$2')
-		.replace(/(Damha I*) Residencial Uberaba/gi, '$1')
+		.replace(/cidade (Ozanan),?/gi, '$1')
+		.replace(/Loteamento (das Américas)/gi, '$1')
+		.replace(/Conjunto Margarida Rosa de Aze\b/gi, 'Conjunto Margarida Rosa Azevedo')
+		.replace(/Laranjeiras,/gi, 'Laranjeiras')
+		.replace(/(Damha I*) Residencial Uberaba/gi, '$1') 
 		.replace(/Uberaba\tminas Gerais/gi, '')
 		.replace(/[\t ]*MG/gi, '\t\t\t')
 		.replace(/\n(?=[-(\t])/gi, '')
@@ -422,6 +428,10 @@ function corrigirPalavras(texto) {
 		{ correto: 'Mário', base: 'Mário' },
 		{ correto: 'beleza', base: 'beleza' },
 		{ correto: 'oficina', base: 'oficina' },
+		{ correto: 'Correia', base: 'Correia' },
+		{ correto: 'Chacaras', base: 'Chácaras' },
+		{ correto: 'Vitoria', base: 'Vitória' },
+		{ correto: 'Aze', base: 'Aze' },
 	];
 
 	for (const { correto, base } of regras) {
