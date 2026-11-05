@@ -432,6 +432,7 @@ function corrigirPalavras(texto) {
 		{ correto: 'Chacaras', base: 'Chácaras' },
 		{ correto: 'Vitoria', base: 'Vitória' },
 		{ correto: 'Aze', base: 'Aze' },
+		{ correto: 'lanchinho', base: 'lanchinho' },
 	];
 
 	for (const { correto, base } of regras) {
