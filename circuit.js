@@ -91,6 +91,7 @@ function padronizaCircuit(text) {
 		.replace(/(Rua Luís Próspero)[\n\t]*(\d+)\t+Rua Luiz Próspero/gi, '$1\t$2')
 		.replace(/(P3)[\n\t]*(\d+)\t+Rua Lourival Pereira Gomes/gi, '$1\t$2')
 		.replace(/(Rua Luis Sérgio de Souza Oliveira)\n(\d+)\t+/gi, '$1\t$2\t')
+		.replace(/(MARELI Transportes & Logística)\tAv José[\n ]+(10)\t(Avenida André Crozara)\t+Residencial Mario Franco/gi, '$1\t$2\t$3')
 		.replace(/(\d+), (Jardim Ipiranga)/gi, '$1\t$2')
 		.replace(/cidade (Ozanan),?/gi, '$1')
 		.replace(/Loteamento (das Américas)/gi, '$1')
@@ -121,7 +122,8 @@ function padronizaCircuit(text) {
 		.replace(/\b((?<!-)\d+\t)(\d\d:\d\d\t\d\d:\d\d)/g,'$1\t\t$2')
 		.replace(/([A-Za-zÀ-ÿ]+)\n([A-Za-zÀ-ÿ]+)/g,'$1$2')
 		.replace(/&amp;/g,'&')
-		
+		.replace(/(MARELI Transportes & Logística)[\n ]+(10)\t(Avenida André Crozara)/gi, '$1\t$2\t$3')
+		.replace(/\n(\d+[a-z])/g, '\t$1')
 		;
 	return text;
 }
@@ -433,6 +435,8 @@ function corrigirPalavras(texto) {
 		{ correto: 'Vitoria', base: 'Vitória' },
 		{ correto: 'Aze', base: 'Aze' },
 		{ correto: 'lanchinho', base: 'lanchinho' },
+		{ correto: 'André', base: 'André' },
+		{ correto: 'Andre', base: 'Andre' },
 	];
 
 	for (const { correto, base } of regras) {
