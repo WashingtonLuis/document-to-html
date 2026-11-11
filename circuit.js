@@ -437,6 +437,8 @@ function corrigirPalavras(texto) {
 		{ correto: 'lanchinho', base: 'lanchinho' },
 		{ correto: 'André', base: 'André' },
 		{ correto: 'Andre', base: 'Andre' },
+		{ correto: 'Pereira', base: 'Pereira' },
+		{ correto: 'imperial', base: 'imperial' },
 	];
 
 	for (const { correto, base } of regras) {
