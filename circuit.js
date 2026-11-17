@@ -67,6 +67,7 @@ function padronizaCircuit(text) {
 		.replace(/(Condomínio Terra Nova Uberaba	261)	Avenida Geraldo Formiga do Nascimento/gi, '$1')
 		.replace(/ R\. Daniel Bertoldi/gi, '\tRua Daniel Bertoldi')
 		.replace(/(Grupo RL Máquinas	65)	Avenida Márcia Helena Moreira Silva/gi, '$1')
+		.replace(/(LB diesel mecânica Pesada)\n(153)	Rua Clara Alves de Mello/gi, '$1\t$2')
 		.replace(/(Maqnelson Agrícola LTDA	1243)	BR-050/gi, '$1')
 		.replace(/(Maqnelson Agrícola LTDA	1243), (Parque das Américas)/gi, '$1\t$2')
 		.replace(/(83), (Parque das Laranjeiras I)/gi, '$1\t$2')
@@ -97,6 +98,7 @@ function padronizaCircuit(text) {
 		.replace(/Loteamento (das Américas)/gi, '$1')
 		.replace(/Conjunto Margarida Rosa de Aze\b/gi, 'Conjunto Margarida Rosa Azevedo')
 		.replace(/Laranjeiras,/gi, 'Laranjeiras')
+		.replace(/bairro Laranjeiras/gi, 'Laranjeiras')
 		.replace(/(Damha I*) Residencial Uberaba/gi, '$1') 
 		.replace(/Uberaba\tminas Gerais/gi, '')
 		.replace(/[\t ]*MG/gi, '\t\t\t')
@@ -124,6 +126,7 @@ function padronizaCircuit(text) {
 		.replace(/&amp;/g,'&')
 		.replace(/(MARELI Transportes & Logística)[\n ]+(10)\t(Avenida André Crozara)/gi, '$1\t$2\t$3')
 		.replace(/\n(\d+[a-z])/g, '\t$1')
+		.replace(/(\d\d:\d\d)(\d+)/gi, '$1\t$2')
 		;
 	return text;
 }
@@ -443,6 +446,10 @@ function corrigirPalavras(texto) {
 		{ correto: 'Sérgio', base: 'Sérgio' },
 		{ correto: 'Tavares', base: 'Tavares' },
 		{ correto: 'Lage', base: 'Lage' },
+		{ correto: 'computadores', base: 'computadores' },
+		{ correto: 'Carvalho', base: 'Carvalho' },
+		{ correto: 'baracat', base: 'baracat' },
+		{ correto: 'pelo', base: 'pelo' },
 	];
 
 	for (const { correto, base } of regras) {
