@@ -85,8 +85,11 @@ function padronizaCircuit(text) {
 		.replace(/(\d+), (Parque das Laranjeiras)/gi, '$1\t$2')
 		.replace(/Engenheiro Evaristo de Paula[\t ]+Felicíssimo/gi, 'Engenheiro Evaristo de Paula Felicíssimo')
 		.replace(/(Residencial Mario Franco)[\n\t]*105	Rua Dez	Condomínio Residencial Mário Franco/gi, '$1')
-		.replace(/((?:Estância dos Ipês|Condomínio Residencial Mário Franco)\t)minas Gerais/gi, '$1\t')
-		.replace(/(?<=(?:^|\n)\d+\t)(Condomínio Estância dos Ipês|Estância dos Ipês|Condomínio Residencial M[áa]rio Franco|Residencial M[áa]rio Franco)\t+(\d\d:\d\d)/gi, '$1\t\t\t\t$2')
+		.replace(/(Residencial Estância dos Ipês),\t+-427, Residencial, Uberaba,minas Gerais/gi, '$1\t')
+		.replace(/(Residencial Estância dos Ipês),\t+-427, Residencial\tminas Gerais/gi, '$1\t')
+		.replace(/((?:Estância dos Ipês|Residencial Estância dos Ipês|Condomínio Residencial Mário Franco)\t)minas Gerais/gi, '$1\t')
+		.replace(/(?<=(?:^|\n)\d+\t)(Condomínio Estância dos Ipês|Estância dos Ipês|Residencial Estância dos Ipês|Condomínio Residencial M[áa]rio Franco|Residencial M[áa]rio Franco)\t+(\d{5}-\d{3})/gi, '$1\t\t\t$2')
+		.replace(/(?<=(?:^|\n)\d+\t)(Condomínio Estância dos Ipês|Estância dos Ipês|Residencial Estância dos Ipês|Condomínio Residencial M[áa]rio Franco|Residencial M[áa]rio Franco)\t+(\d\d:\d\d)/gi, '$1\t\t\t\t$2')
 		.replace(/(Alonso Téles Mendes)[ \n]*(\d{3,})\t+/gi, '$1\t$2\t')
 		.replace(/(Aurotec)\t(Avenida Márcia Helena Moreira Silva)\tCondomínio Residencial Mário Franco/gi, '$1\t\t$2')
 		.replace(/(Rua Luís Próspero)[\n\t]*(\d+)\t+Rua Luiz Próspero/gi, '$1\t$2')
@@ -458,6 +461,11 @@ function corrigirPalavras(texto) {
 		{ correto: 'Dom', base: 'Dom' },
 		{ correto: 'Rua', base: 'Rua' },
 		{ correto: 'palmeira', base: 'palmeira' },
+		{ correto: 'Waldemar', base: 'Waldemar' },
+		{ correto: 'Morais', base: 'Morais' },
+		{ correto: 'Cristovão', base: 'Cristovão' },
+		{ correto: 'Lamartine', base: 'Lamartine' },
+		{ correto: 'fundo', base: 'fundo' },
 	];
 
 	for (const { correto, base } of regras) {
