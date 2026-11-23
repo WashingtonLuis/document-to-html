@@ -455,6 +455,9 @@ function corrigirPalavras(texto) {
 		{ correto: 'Almeida', base: 'Almeida' },
 		{ correto: 'Ferrete', base: 'Ferrete' },
 		{ correto: 'Guimarães', base: 'Guimarães' },
+		{ correto: 'Dom', base: 'Dom' },
+		{ correto: 'Rua', base: 'Rua' },
+		{ correto: 'palmeira', base: 'palmeira' },
 	];
 
 	for (const { correto, base } of regras) {
